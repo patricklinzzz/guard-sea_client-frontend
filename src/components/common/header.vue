@@ -22,6 +22,7 @@ import { RouterLink } from 'vue-router'
 <style scoped>
 header {
     background-color: #303030;
+
     div {
         max-width: 1200px;
         height: 85px;
@@ -38,7 +39,10 @@ header {
             display: flex;
             align-items: center;
             gap: 30px;
-            /* text; */
+
+            a {
+                color: #fff;
+            }
         }
 
     }
