@@ -1,8 +1,8 @@
-
 body {
     font-family: $font-sans;
     font-size: $p-desktop;
     line-height: $line-height-relaxed;
+
     @include respond(md) {
         font-size: $p-mobile;
     }
@@ -35,7 +35,7 @@ h2 {
 h3 {
     font-family: $font-sans;
     font-size: $h3-desktop;
-    letter-spacing:$letter-spacing-base; 
+    letter-spacing: $letter-spacing-base;
 
     @include respond(md) {
         font-size: $h3-mobile;
