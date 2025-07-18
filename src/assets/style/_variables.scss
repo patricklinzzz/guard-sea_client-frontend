@@ -157,7 +157,9 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
 // =======================
 
 // Input
-$input-height: 48px; // 輸入框高度（桌機 & 手機一致，保護一致性）
+$input-height-desktop: 48px; // 輸入框高度（桌機）
+$input-height-mobile: 44px; // 輸入框高度（手機）
+
 
 // Button
 $button-height-desktop: 48px; // 桌機按鈕
