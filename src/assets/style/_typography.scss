@@ -2,25 +2,25 @@
 @use './mixins' as *;
 
 body {
-font-family: $font-sans;
-  font-size: $p-mobile; // ✅ 先寫手機
-line-height: $line-height-relaxed;
+  font-family: $font-sans;
+  font-size: $p-mobile;
+  line-height: $line-height-relaxed;
 
-@include respond(md) {
-    font-size: $p-desktop; // ✅ 再加桌機
-}
+  @include respond(md) {
+    font-size: $p-desktop;
+  }
 }
 
 h1 {
-font-family: $font-serif-tc;
-font-size: $h1-mobile; // ✅ 手機優先
-font-weight: $font-bold;
-letter-spacing: $letter-spacing-wide;
-line-height: $line-height-normal;
+  font-family: $font-serif-tc;
+  font-size: $h1-mobile;
+  font-weight: $font-bold;
+  letter-spacing: $letter-spacing-wide;
+  line-height: $line-height-normal;
 
-@include respond(md) {
+  @include respond(md) {
     font-size: $h1-desktop;
-}
+  }
 }
 
 h2 {

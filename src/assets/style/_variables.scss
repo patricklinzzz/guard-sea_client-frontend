@@ -1,9 +1,9 @@
 // =======================
 // 字型 Font Families
 // =======================
-$font-sans: 'Noto Sans', sans-serif;        // 主要字體（H3、p、sub）
-$font-serif-tc: 'Noto Serif TC', serif;     // 標題（H1、H2）
-$font-serif: 'Noto Serif', serif;           // 英文學名
+$font-sans: 'Noto Sans', sans-serif; // 主要字體（H3、p、sub）
+$font-serif-tc: 'Noto Serif TC', serif; // 標題（H1、H2）
+$font-serif: 'Noto Serif', serif; // 英文學名
 // 英文學名：搭配 font-style: italic;
 
 // =======================
@@ -15,135 +15,135 @@ $font-bold: 700;
 // =======================
 // 文字大小（桌機）Font Sizes (Desktop) → rem
 // =======================
-$h1-desktop: 2.5rem;   // 40px
-$h2-desktop: 2rem;     // 32px
-$h3-desktop: 1.5rem;   // 24px
-$p-desktop: 1.25rem;   // 20px
-$sub-desktop: 1rem;    // 16px
+$h1-desktop: 2.5rem; // 40px
+$h2-desktop: 2rem; // 32px
+$h3-desktop: 1.5rem; // 24px
+$p-desktop: 1.25rem; // 20px
+$sub-desktop: 1rem; // 16px
 
 // =======================
 // 文字大小（手機）Font Sizes (Mobile) → rem
 // =======================
 $h1-mobile: 1.6875rem; // 27px
-$h2-mobile: 1.25rem;   // 20px
-$h3-mobile: 1.125rem;  // 18px
-$p-mobile: 1rem;       // 16px
+$h2-mobile: 1.25rem; // 20px
+$h3-mobile: 1.125rem; // 18px
+$p-mobile: 1rem; // 16px
 $sub-mobile: 0.875rem; // 14px
 
 // =======================
 // 行距 Line Heights
 // =======================
-$line-height-normal: 145%;  // 適合一般文字呈現
+$line-height-normal: 145%; // 適合一般文字呈現
 $line-height-relaxed: 160%; // 適合內文
-$line-height-loose: 170%;   // 適合長段內文
+$line-height-loose: 170%; // 適合長段內文
 
 // =======================
 // 品牌顏色 Brand Colors
 // =======================
 
 // 主色 Primary Colors
-$color-blue: #2A658D;           // 基礎藍
-$color-blue-dark: #012038;      // 深藍
-$color-blue-extra-dark: #001526;   // 深黑藍
+$color-blue: #2a658d; // 基礎藍
+$color-blue-dark: #012038; // 深藍
+$color-blue-extra-dark: #001526; // 深黑藍
 
 // 輔色 Secondary Colors
-$color-skyblue: #76C6E8;        // 天藍
-$color-skyblue-light: #D0ECF9;  // 淺天藍
+$color-skyblue: #76c6e8; // 天藍
+$color-skyblue-light: #d0ecf9; // 淺天藍
 
 // 強調色 Warning / CTA Colors
-$color-yellow: #F7AA2A;       // 黃色
-$color-orange: #EC6C26;       // 橘色
+$color-yellow: #f7aa2a; // 黃色
+$color-orange: #ec6c26; // 橘色
 
 // =======================
 // 無彩色系 Neutral Colors
 // =======================
-$color-black: #333333;    // 黑色
-$color-gray: #999999;    // 灰色
-$color-gray-light: #F8F9FA;    // 超淺灰
-$color-white: #FFFFFF;       // 白色
+$color-black: #333333; // 黑色
+$color-gray: #999999; // 灰色
+$color-gray-light: #f8f9fa; // 超淺灰
+$color-white: #ffffff; // 白色
 
 // =======================
 // Hover & Active Colors
 // =======================
 
 // 輔色 Secondary Colors
-$color-skyblue-hover: #56AACD;   // Skyblue Hover (亮度 -12%)
-$color-skyblue-active: #3F8EAF;  // Skyblue Active (亮度 -20%)
+$color-skyblue-hover: #56aacd; // Skyblue Hover (亮度 -12%)
+$color-skyblue-active: #3f8eaf; // Skyblue Active (亮度 -20%)
 
 // 強調色 Warning / CTA Colors
 // 強調色 Warning / CTA Colors
-$color-yellow-hover: #D49328;   // Yellow Hover (亮度 -12%)
-$color-yellow-active: #BF7A1E;  // Yellow Active (亮度 -20%)
+$color-yellow-hover: #d49328; // Yellow Hover (亮度 -12%)
+$color-yellow-active: #bf7a1e; // Yellow Active (亮度 -20%)
 
-$color-orange-hover: #CF5F1F;   // Orange Hover (亮度 -12%)
-$color-orange-active: #BA4B16;  // Orange Active (亮度 -20%)
+$color-orange-hover: #cf5f1f; // Orange Hover (亮度 -12%)
+$color-orange-active: #ba4b16; // Orange Active (亮度 -20%)
 
 // =======================
 // 文字顏色 Text Colors
 // =======================
-$color-text-main: $color-black;           // 主要文字（標題、內文）
-$color-text-sub: $color-gray;             // 次要文字（提示文字、輸入框）
-$color-text-white: $color-white;          // 白色文字
-$color-text-light: $color-skyblue-light;  // 淺藍文字（不是純白的文字）
-$color-text-highlight: $color-orange;     // 強調文字（重點詞、CTA）
+$color-text-main: $color-black; // 主要文字（標題、內文）
+$color-text-sub: $color-gray; // 次要文字（提示文字、輸入框）
+$color-text-white: $color-white; // 白色文字
+$color-text-light: $color-skyblue-light; // 淺藍文字（不是純白的文字）
+$color-text-highlight: $color-orange; // 強調文字（重點詞、CTA）
 
 // =======================
 // 字距 Font letter-spacing
 // =======================
 
-$letter-spacing-tight: -0.5px;    //  
-$letter-spacing-normal: 1px;      // 內文
-$letter-spacing-base: 2px;        // 小標題
-$letter-spacing-wide: 5px;        // 次標題
+$letter-spacing-tight: -0.5px; //
+$letter-spacing-normal: 1px; // 內文
+$letter-spacing-base: 2px; // 小標題
+$letter-spacing-wide: 5px; // 次標題
 $letter-spacing-extra-wide: 10px; // Hero、大標題（有空格感）
 
 // =======================
 // Semantic Colors (語意化)
 // =======================
-$color-primary: $color-blue;  // 主色
-$color-secondary: $color-skyblue;  // 輔色
-$color-accent: $color-orange;  // 強調色
+$color-primary: $color-blue; // 主色
+$color-secondary: $color-skyblue; // 輔色
+$color-accent: $color-orange; // 強調色
 
 // =======================
 // 狀態顏色 Success / Error / Info
 // =======================
-$color-success: #28A745;    // 成功
-$color-error: #DC3545;      // 錯誤
-$color-info: #17A2B8;       // 提示
+$color-success: #28a745; // 成功
+$color-error: #dc3545; // 錯誤
+$color-info: #17a2b8; // 提示
 
 // =======================
 // Background Colors
 // =======================
 
-$color-bg-base: $color-white;             // 預設頁面背景（白色）
-$color-bg-light: $color-gray-light;       // 淺灰背景（分隔區塊或卡片）
-$color-bg-primary: $color-blue;           // 主色背景
+$color-bg-base: $color-white; // 預設頁面背景（白色）
+$color-bg-light: $color-gray-light; // 淺灰背景（分隔區塊或卡片）
+$color-bg-primary: $color-blue; // 主色背景
 $color-bg-primary-dark: $color-blue-dark; // 深藍背景
 $color-bg-primary-extra-dark: $color-blue-extra-dark; // 極深藍背景（首頁用）
 
 // =======================
 // 圓角 Border Radius
 // =======================
-$border-radius-sm: 4px;     // 小圓角（按鈕、輸入框、文字框）
-$border-radius-md: 8px;     // 中圓角（卡片、區塊）
-$border-radius-round: 50%;   // 圓形（圓形按鈕、頭像）
+$border-radius-sm: 4px; // 小圓角（按鈕、輸入框、文字框）
+$border-radius-md: 8px; // 中圓角（卡片、區塊）
+$border-radius-round: 50%; // 圓形（圓形按鈕、頭像）
 
 // =======================
 // 邊框顏色 Border Colors
 // =======================
-$border-color-blue: $color-blue;         // 藍色邊框
-$border-color-orange: $color-orange;     // 橘色邊框
-$border-color-yellow: $color-yellow;     // 黃色邊框
-$border-color-black:$color-black;    // 黑色邊框
-$border-color-gray:$color-gray;      // 灰色邊框
-$border-color-white:$color-white;    // 白色邊框
+$border-color-blue: $color-blue; // 藍色邊框
+$border-color-orange: $color-orange; // 橘色邊框
+$border-color-yellow: $color-yellow; // 黃色邊框
+$border-color-black: $color-black; // 黑色邊框
+$border-color-gray: $color-gray; // 灰色邊框
+$border-color-white: $color-white; // 白色邊框
 
 // =======================
 // 邊框 Border Widths
 // =======================
-$border-hairline: 1px;  // 分隔線、輕邊框
-$border-base: 1.5px;    // 基本狀態（按鈕、卡片一般狀態）
-$border-bold: 2px;      // 強調邊框（Hover / Active 狀態）
+$border-hairline: 1px; // 分隔線、輕邊框
+$border-base: 1.5px; // 基本狀態（按鈕、卡片一般狀態）
+$border-bold: 2px; // 強調邊框（Hover / Active 狀態）
 
 // =======================
 // 陰影 Shadow
@@ -160,11 +160,9 @@ $shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
 $input-height-desktop: 48px; // 輸入框高度（桌機）
 $input-height-mobile: 44px; // 輸入框高度（手機）
 
-
 // Button
 $button-height-desktop: 48px; // 桌機按鈕
-$button-height-mobile: 44px;  // 手機按鈕
-
+$button-height-mobile: 44px; // 手機按鈕
 
 // =======================
 // 斷點 Breakpoints

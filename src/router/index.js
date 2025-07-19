@@ -15,7 +15,7 @@ const router = createRouter({
     {
       path: '/edu',
       name: 'educate',
-      component: () => import('@/views/Educate/EducateView.vue')
+      component: () => import('@/views/Educate/EducateView.vue'),
     },
     {
       path: '/edu/species',

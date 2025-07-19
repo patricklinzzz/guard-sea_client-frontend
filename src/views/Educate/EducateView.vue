@@ -1,6 +1,5 @@
 <script setup></script>
 
-
 <template>
   <h3>暫時的導覽列，之後header的dropdown設計完後這頁可以刪掉</h3>
   <nav>
@@ -11,10 +10,10 @@
 </template>
 
 <style lang="scss" scoped>
-nav{
-  a{
-    display: block;
-    margin-top: 10px;
+  nav {
+    a {
+      display: block;
+      margin-top: 10px;
+    }
   }
-}
 </style>
