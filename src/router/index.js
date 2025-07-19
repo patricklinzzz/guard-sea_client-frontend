@@ -3,7 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import SpeciesView from '@/views/Educate/SpeciesView.vue'
 import CausesView from '@/views/Educate/ExtinctionCausesView.vue'
 import QuizView from '@/views/Educate/QuizView.vue'
-
+import PorductListView from '@/views/Product/PorductListView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -32,6 +32,12 @@ const router = createRouter({
       name: 'quiz',
       component: QuizView,
     },
+    {
+      path: '/productlist',
+      name: 'ProductList',
+      component: PorductListView,
+    },
+
     // {
     //   path: '/about',
     //   name: 'about',
