@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
         <div>
             <router-link to="/"><img src="../../assets/images/logo.png" alt=""></router-link>
             <nav>
-                <router-link to="/">教育</router-link>
+                <router-link to="/edu">教育</router-link>
                 <router-link to="/">商品</router-link>
                 <router-link to="/">活動</router-link>
                 <router-link to="/">最新消息</router-link>

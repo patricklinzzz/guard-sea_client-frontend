@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <h2>quizz</h2>
+  <h2>滅絕原因</h2>
 </template>
 
 <style lang='scss' scoped>
