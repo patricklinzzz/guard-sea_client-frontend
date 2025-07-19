@@ -4,8 +4,8 @@ import { RouterLink } from 'vue-router'
 
 <template>
     <header>
-        <div>
-            <router-link to="/"><img src="../../assets/images/logo.png" alt=""></router-link>
+        <div id="navbar">
+            <router-link to="/"><img src="../../assets/images/logo.png" alt="" id="logo"></router-link>
             <nav id="desktop_nav">
                 <router-link to="/edu">教育</router-link>
                 <router-link to="/">商品</router-link>
