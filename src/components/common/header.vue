@@ -20,7 +20,7 @@
         </router-link>
       </nav>
       <nav id="mobile_nav">
-        <router-link to="/">
+        <router-link to="/login">
           <img src="../../assets/images/header/icon_memder.svg" alt="" width="40" />
         </router-link>
         <router-link to="/">
