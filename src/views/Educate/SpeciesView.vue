@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <h2>quizz</h2>
+  <h1>圖鑑</h1>
 </template>
 
 <style lang="scss" scoped></style>
