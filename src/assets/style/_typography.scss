@@ -3,64 +3,65 @@
 
 body {
   font-family: $font-sans;
-  font-size: $p-mobile;
+  font-size: $p-desktop;
   line-height: $line-height-relaxed;
 
   @include respond(md) {
-    font-size: $p-desktop;
+    font-size: $p-mobile;
   }
 }
 
 h1 {
   font-family: $font-serif-tc;
-  font-size: $h1-mobile;
+  font-size: $h1-desktop;
   font-weight: $font-bold;
   letter-spacing: $letter-spacing-wide;
   line-height: $line-height-normal;
 
   @include respond(md) {
-    font-size: $h1-desktop;
+    font-size: $h1-mobile;
   }
 }
 
 h2 {
   font-family: $font-serif-tc;
-  font-size: $h2-mobile;
+  font-size: $h2-desktop;
   font-weight: $font-bold;
   letter-spacing: $letter-spacing-wide;
   line-height: $line-height-normal;
 
   @include respond(md) {
-    font-size: $h2-desktop;
+    font-size: $h2-mobile;
   }
 }
 
 h3 {
   font-family: $font-sans;
-  font-size: $h3-mobile;
+  font-size: $h3-desktop;
   letter-spacing: $letter-spacing-base;
 
   @include respond(md) {
-    font-size: $h3-desktop;
+    font-size: $h3-mobile;
   }
 }
 
+
 p {
   font-family: $font-sans;
-  font-size: $p-mobile;
+  font-size: $p-desktop;
   letter-spacing: $letter-spacing-normal;
   line-height: $line-height-relaxed;
 
   @include respond(md) {
-    font-size: $p-desktop;
+    font-size: $p-mobile;
   }
 }
 
 .sub-text {
-  font-size: $sub-mobile;
+  font-size: $sub-desktop;
   color: $color-text-sub;
 
   @include respond(md) {
-    font-size: $sub-desktop;
+    font-size: $sub-mobile;
   }
 }
