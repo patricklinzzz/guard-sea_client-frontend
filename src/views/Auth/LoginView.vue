@@ -67,12 +67,10 @@ const togglePasswordVisibility = () => {
 
 const handleLogin = () => {
   console.log('Logging in with:', email.value, password.value, rememberMe.value);
-  alert('登入功能僅為展示');
 };
 </script>
 
 <style lang="scss" scoped>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
 
 $primary-bg: #0D2A40;
