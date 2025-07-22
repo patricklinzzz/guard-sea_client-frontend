@@ -4,6 +4,10 @@ import SpeciesView from '@/views/Educate/SpeciesView.vue'
 import CausesView from '@/views/Educate/ExtinctionCausesView.vue'
 import QuizView from '@/views/Educate/QuizView.vue'
 import PorductListView from '@/views/Product/PorductListView.vue'
+import NewListView from '@/views/New/NewListView.vue'
+import NewInsideView from '@/views/New/NewInsideView.vue'
+import AboutView from '@/views/About/AboutView.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -37,11 +41,34 @@ const router = createRouter({
       name: 'ProductList',
       component: PorductListView,
     },
+<<<<<<< HEAD
     {
       path: '/login',
       name: 'login',
       component: () => import('@/views/Auth/LoginView.vue'),
     },
+=======
+      {
+      path: '/new',
+      name: 'newlist',
+      component: NewListView,
+    },
+       {
+      path: '/new/:id',
+      name: 'newinside',
+      component: NewInsideView,
+      props: true,
+    },
+    ,
+       {
+      path: '/about',
+      name: 'about',
+      component: AboutView,
+      
+    },
+    
+
+>>>>>>> ee04b73ece56ec3b88419c44ac79c1fd75c1397e
     // {
     //   path: '/about',
     //   name: 'about',
