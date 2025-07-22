@@ -57,9 +57,6 @@ const handleTransitionEnd = (swiper) => {
   </swiper>
 </template>
 
-<<<<<<< HEAD
-<style lang="scss" scoped></style>
-=======
 <style lang="scss" scoped>
 * {
   width: fit-content;
@@ -91,4 +88,3 @@ button {
 }
 
 </style>
->>>>>>> B
