@@ -8,7 +8,7 @@
       <router-link to="/"><img src="../../assets/images/logo.png" alt="" id="logo" /></router-link>
       <nav id="desktop_nav">
         <router-link to="/edu">教育</router-link>
-        <router-link to="/">商品</router-link>
+        <router-link to="/productlist">商品</router-link>
         <router-link to="/">活動</router-link>
         <router-link to="/">最新消息</router-link>
         <router-link to="/">關於我們</router-link>

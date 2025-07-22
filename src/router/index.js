@@ -3,7 +3,9 @@ import HomeView from '@/views/HomeView.vue'
 import SpeciesView from '@/views/Educate/SpeciesView.vue'
 import CausesView from '@/views/Educate/ExtinctionCausesView.vue'
 import QuizView from '@/views/Educate/QuizView.vue'
-import PorductListView from '@/views/Product/PorductListView.vue'
+import ProductListView from '@/views/Product/ProductListView.vue'
+import ProductDetailView from '@/views/Product//ProductDetailView.vue'
+import CartView from '@/views/Product/CartView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -34,8 +36,24 @@ const router = createRouter({
     },
     {
       path: '/productlist',
-      name: 'ProductList',
-      component: PorductListView,
+      name: 'productlist',
+      component: ProductListView,
+    },
+    {
+      path: '/productlist/:id',
+      name: 'productdetail',
+      component: ProductDetailView,
+      props: true,
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: CartView,
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFuond',
+      component: () => import('@/views/404View.vue'),
     },
 
     // {
