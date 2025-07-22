@@ -1,0 +1,62 @@
+<script setup>
+import { defineProps, defineEmits } from 'vue';
+const props = defineProps({
+    variant: {
+        type: String,
+        default: 'default',
+        validator: (value) => ['default', 'round'].includes(value)
+    }
+});
+
+const emit = defineEmits(['click']);
+const handleClick = (event) => {
+    emit('click', event);
+};
+</script>
+
+<template>
+    <button :class="['button', `button--${variant}`]" @click="handleClick">
+        <slot></slot>
+    </button>
+</template>
+
+<style scoped lang="scss">
+.button {
+    cursor: pointer;
+    border: none;
+    color: #FFF;
+    font-weight: bold;
+    font-size: v.$p-mobile;
+    background-color: v.$color-orange;
+    padding: 11px 18px;
+    line-height: v.$line-height-relaxed;
+    letter-spacing: v.$letter-spacing-normal;
+    border-radius: v.$border-radius-sm;
+
+    &:hover {
+        background-color: v.$color-orange-hover;
+    }
+
+    &:active {
+        background-color: v.$color-orange-active;
+    }
+
+    @include respond(md) {
+        padding: 9px 18px;
+    }
+
+    &--round {
+        border-radius: v.$border-radius-round;
+        width: 47px;
+        height: 47px;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @include respond(md) {
+            width: 21px;
+            height: 21px;
+        }
+    }
+}
+</style>
