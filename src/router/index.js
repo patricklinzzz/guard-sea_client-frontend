@@ -3,7 +3,7 @@ import HomeView from '@/views/HomeView.vue'
 import SpeciesView from '@/views/Educate/SpeciesView.vue'
 import CausesView from '@/views/Educate/ExtinctionCausesView.vue'
 import QuizView from '@/views/Educate/QuizView.vue'
-import PorductListView from '@/views/Product/PorductListView.vue'
+import ProductListView from '@/views/Product/PorductListView.vue'
 import NewListView from '@/views/New/NewListView.vue'
 import NewInsideView from '@/views/New/NewInsideView.vue'
 import AboutView from '@/views/About/AboutView.vue'
@@ -38,28 +38,42 @@ const router = createRouter({
     },
     {
       path: '/productlist',
-      name: 'ProductList',
-      component: PorductListView,
+      name: 'productlist',
+      component: ProductListView,
     },
-      {
+    {
+      path: '/productlist/:id',
+      name: 'productdetail',
+      component: ProductDetailView,
+      props: true,
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: CartView,
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFuond',
+      component: () => import('@/views/404View.vue'),
+    },
+    {
       path: '/new',
       name: 'newlist',
       component: NewListView,
     },
-       {
+    {
       path: '/new/:id',
       name: 'newinside',
       component: NewInsideView,
       props: true,
     },
     ,
-       {
+    {
       path: '/about',
       name: 'about',
       component: AboutView,
-      
     },
-    
 
     // {
     //   path: '/about',

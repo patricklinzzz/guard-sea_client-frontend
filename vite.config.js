@@ -15,7 +15,7 @@ export default defineConfig({
       scss: {
         additionalData: `
           @use '@/assets/style/mixins' as *;
-          @use '@/assets/style/variables' as v; // 如果你也有變數檔案
+          @use '@/assets/style/variables' as v;
         `
       }
     }
