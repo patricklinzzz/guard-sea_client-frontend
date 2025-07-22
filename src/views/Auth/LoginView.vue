@@ -49,38 +49,45 @@
       </div>
     </main>
 
+    <!-- 3. 已移除海床元素，讓背景色統一 -->
+
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 
+// 表單數據
 const email = ref('');
 const password = ref('');
 const rememberMe = ref(false);
 const passwordFieldType = ref('password');
 
-
+// 密碼可見性切換
 const togglePasswordVisibility = () => {
   passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password';
 };
 
 const handleLogin = () => {
+  // 登入邏輯
   console.log('Logging in with:', email.value, password.value, rememberMe.value);
+  alert('登入功能僅為展示');
 };
 </script>
 
 <style lang="scss" scoped>
+// 為了方便展示，這裡使用 Font Awesome CDN，建議您在專案中自行管理 Icon。
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
-
+// --- 變數定義 ---
 $primary-bg: #0D2A40;
-$accent-color: #FFC107;
+$accent-color: #FFC107; // 金黃色，用於按鈕
 $text-color: #FFFFFF;
 $input-bg: #FFFFFF;
 $input-text-color: #333;
 $divider-color: #5A7A90;
 
-
+// --- 頁面基本設定 ---
 .login-page {
   background-color: $primary-bg;
   color: $text-color;
@@ -88,13 +95,13 @@ $divider-color: #5A7A90;
   width: 100%;
   font-family: 'Helvetica Neue', 'Arial', '微軟正黑體', sans-serif;
   display: flex;
-  align-items: center; 
-  justify-content: center; 
+  align-items: center; // 垂直置中
+  justify-content: center; // 水平置中
   position: relative;
   overflow: hidden;
 }
 
-
+// 背景裝飾
 .background-overlay {
   position: absolute;
   top: 0;
@@ -105,7 +112,7 @@ $divider-color: #5A7A90;
   pointer-events: none;
 }
 
-
+// Main Content 
 .login-main {
   display: flex;
   width: 100%;
@@ -276,7 +283,31 @@ $divider-color: #5A7A90;
 }
 
 
+// --- RWD 響應式設計 ---
 
+
+@media (max-width: 992px) {
+  .login-page {
+    align-items: flex-start;
+    padding-top: 10vh;
+  }
+
+  .login-main {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .welcome-section {
+    display: none;
+  }
+
+  .form-section {
+    flex: none;
+    width: 100%;
+    max-width: 400px;
+    padding: 0 30px;
+  }
+}
 
 @media (max-width: 320px) {
   .login-page {
