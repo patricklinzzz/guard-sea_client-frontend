@@ -41,13 +41,11 @@ const router = createRouter({
       name: 'ProductList',
       component: PorductListView,
     },
-<<<<<<< HEAD
     {
       path: '/login',
       name: 'login',
       component: () => import('@/views/Auth/LoginView.vue'),
     },
-=======
       {
       path: '/new',
       name: 'newlist',
@@ -68,7 +66,6 @@ const router = createRouter({
     },
     
 
->>>>>>> ee04b73ece56ec3b88419c44ac79c1fd75c1397e
     // {
     //   path: '/about',
     //   name: 'about',
