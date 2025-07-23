@@ -68,10 +68,10 @@ const dropdown_arrow = computed(() => {
             </div>
           </transition>
         </div>
-        <router-link to="/">商品</router-link>
+        <router-link to="/productlist">商品</router-link>
         <router-link to="/">活動</router-link>
-        <router-link to="/">最新消息</router-link>
-        <router-link to="/">關於我們</router-link>
+        <router-link to="/new">最新消息</router-link>
+        <router-link to="/about">關於我們</router-link>
         <router-link to="/">
           <i class="fa-solid fa-user"></i>
         </router-link>

@@ -1,6 +1,6 @@
 <script setup>
   // goals: button on diff views,  disable swipe,  button change on Arrow
-  
+
   import { ref, onMounted } from 'vue'
   import { RouterLink } from 'vue-router'
   import { gsap } from 'gsap'
@@ -11,6 +11,7 @@
   import 'swiper/css/navigation'
   import Arrow from '@/components/icons/arrow.vue'
   import Bubble from '@/components/edu/bubble.vue'
+  import Button from '@/components/buttons/button.vue'
   const modules = [Navigation]
   gsap.registerPlugin(TextPlugin)
   const a = () => {
@@ -22,8 +23,10 @@
     swiper_cur.value = swiper
   }
   const causeList = ['海洋汙染', '過度捕撈', '生境破壞', '海洋汙染', '過度捕撈', '生境破壞']
+  const links = ['pollution','overfishing','degradation']
   const index_now = ref(0)
   const cause_title = ref(null)
+  const dynamic_link = ref('./causes/pollution')
   const init_title = (el) => {
     cause_title.value = el ? el : null
     console.log(cause_title.value)
@@ -48,6 +51,7 @@
   const arrow_pressed = (isRight) => {
     index_now.value = isRight ? index_now.value + 1 : index_now.value - 1
     index_now.value = index_now.value < 0 ? 2 : index_now.value % 3
+    dynamic_link.value = './causes/' + links[index_now.value]
     text_tween.value[index_now.value].play()
     text_tween.value[index_now.value].restart()
   }
@@ -80,7 +84,9 @@
     </swiper-slide>
   </swiper>
   <h1 class="cause" :ref="(el) => init_title(el)">海洋汙染</h1>
-  <button @click="a">了解更多</button>
+  <router-link :to="dynamic_link" custom v-slot="{ navigate }">
+    <Button @click="navigate">了解更多</Button>
+  </router-link>
   <div class="arrows">
     <Arrow
       class="left_arrow"
