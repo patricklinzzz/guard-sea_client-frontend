@@ -72,7 +72,7 @@ const dropdown_arrow = computed(() => {
         <router-link to="/">活動</router-link>
         <router-link to="/new">最新消息</router-link>
         <router-link to="/about">關於我們</router-link>
-        <router-link to="/">
+        <router-link to="/login">
           <i class="fa-solid fa-user"></i>
         </router-link>
         <router-link to="/">
@@ -81,8 +81,8 @@ const dropdown_arrow = computed(() => {
       </nav>
       <!-- 手機導覽列 -->
       <nav id="mobile_nav">
-        <router-link to="/">
-          <i class="fa-solid fa-user"></i>
+        <router-link to="/login">
+          <img src="../../assets/images/header/icon_memder.svg" alt="" width="40" />
         </router-link>
         <router-link to="/">
           <i class="fa-solid fa-cart-shopping"></i>

@@ -57,7 +57,7 @@ function changeArea(area) {
         :class="['area-btn', { active: currentArea === area }]"
         @click="changeArea(area)"
       >
-        {{ area }}
+        <h3>{{ area }}</h3>
       </button>
     </nav>
 
@@ -83,13 +83,9 @@ function changeArea(area) {
 
 <style lang="scss" scoped>
 .wrapper::before{
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-color: v.$color-blue-dark ;
-  z-index: -1;
-  pointer-events: none;
+@include bg-layer-fixed-dark;
 }
+
 main {
   background-color: v.$color-blue-dark;
   min-height: 100vh;
@@ -101,20 +97,39 @@ main {
     padding: 0 16px;
     max-width: 1200px;
     .area-nav{
-    margin: 0 auto;
-    left: 0;
-    right: 0;
     display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 16px auto;
+    }
+  .area-btn {
+    all: unset;
+    background-color: transparent;
+    color: v.$color-white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    outline: none;
+    box-shadow: none;
+    padding: 3px 4px;
+
+  &:hover {
+    background-color:v.$color-skyblue;
+  }
+    }
 }
     .gallery {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-columns: repeat(auto-fit, minmax(140px, 2fr));
-      gap: 5px;
-      text-align: center;
-    }
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); // 手機：2欄
+  gap: 5px;
+  text-align: center;
+
+  @media (min-width: v.$breakpoint-md) {
+    grid-template-columns: repeat(4, 1fr); // 桌面：4欄
   }
 }
+  }
+
 
 h2,
 h3,
@@ -136,8 +151,6 @@ h2 {
   height: auto;
   object-fit: cover;
 }
-
-
 
 
 

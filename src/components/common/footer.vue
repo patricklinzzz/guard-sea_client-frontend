@@ -32,8 +32,8 @@ footer {
     background-repeat: no-repeat;
     background-size: cover;
     height: 415px;
-    
-    @include respond(md) {
+
+    @include respond(sm) {
         background-image: url(../../assets/images/footer/footer_bg2.svg);
         height: 327px;
         background-size: contain;
@@ -49,7 +49,7 @@ footer {
         justify-content: flex-end;
         margin: auto;
 
-        @include respond(md) {
+        @include respond(sm) {
             align-items: flex-start;
             gap: 10px;
         }
@@ -67,7 +67,7 @@ footer {
     justify-content: space-around;
     flex-wrap: wrap;
 
-    @include respond(md) {
+    @include respond(sm) {
         flex-direction: column;
         align-items: flex-start;
         width: 90vw;
@@ -85,8 +85,7 @@ footer {
         align-items: center;
 
         img {
-            @include respond(md) {
-                width: 28px;
+            @include respond(sm) {                width: 28px;
             }
         }
     }
