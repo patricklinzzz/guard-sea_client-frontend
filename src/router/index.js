@@ -10,6 +10,7 @@ import NewListView from '@/views/New/NewListView.vue'
 import NewInsideView from '@/views/New/NewInsideView.vue'
 import AboutView from '@/views/About/AboutView.vue'
 import RegisterView from '@/views/Auth/RegisterView.vue';
+import EventListView from '@/views/Event/EventListView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -76,30 +77,19 @@ const router = createRouter({
       component: NewInsideView,
       props: true,
     },
-    ,
     {
       path: '/about',
       name: 'about',
       component: AboutView,
     },
-    {
-      path: '/edu/causes/pollution',
-      name: 'pollution',
-      component: () => import('@/views/Educate/Causes/PollutionView.vue'),
-    },
-    {
-      path: '/edu/causes/overfishing',
-      name: 'overfishing',
-      component: () => import('@/views/Educate/Causes/OverfishingView.vue'),
-    },
-    {
-      path: '/edu/causes/degradation',
-      name: 'degradation',
-      component: () => import('@/views/Educate/Causes/DegradationView.vue'),
-    },
       {
       path: '/register',
       component: RegisterView
+    },
+      {
+      path: '/event',
+      name: 'event',
+      component: EventListView
     }
 
     // {
