@@ -82,6 +82,24 @@ const router = createRouter({
       name: 'about',
       component: AboutView,
     },
+<<<<<<< HEAD
+=======
+    {
+      path: '/edu/causes/pollution',
+      name: 'pollution',
+      component: () => import('@/views/Educate/Causes/PollutionView.vue'),
+    },
+    {
+      path: '/edu/causes/overfishing',
+      name: 'overfishing',
+      component: () => import('@/views/Educate/Causes/OverfishingView.vue'),
+    },
+    {
+      path: '/edu/causes/degradation',
+      name: 'degradation',
+      component: () => import('@/views/Educate/Causes/DegradationView.vue'),
+    },
+>>>>>>> dev
       {
       path: '/register',
       component: RegisterView
