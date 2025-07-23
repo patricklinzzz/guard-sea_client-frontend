@@ -7,6 +7,7 @@ import PorductListView from '@/views/Product/PorductListView.vue'
 import NewListView from '@/views/New/NewListView.vue'
 import NewInsideView from '@/views/New/NewInsideView.vue'
 import AboutView from '@/views/About/AboutView.vue'
+import RegisterView from '@/views/Auth/RegisterView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,7 +65,10 @@ const router = createRouter({
       component: AboutView,
       
     },
-    
+      {
+      path: '/register',
+      component: RegisterView
+    }
 
     // {
     //   path: '/about',
