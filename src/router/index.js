@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import SpeciesView from '@/views/Educate/SpeciesView.vue'
-import CausesView from '@/views/Educate/ExtinctionCausesView.vue'
+import CausesView from '@/views/Educate/CausesOverviewView.vue'
 import QuizView from '@/views/Educate/QuizView.vue'
 import PorductListView from '@/views/Product/PorductListView.vue'
 import NewListView from '@/views/New/NewListView.vue'
