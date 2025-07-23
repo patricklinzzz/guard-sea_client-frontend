@@ -438,7 +438,4 @@ const handleRegister = () => {
     box-sizing: border-box;
   }
 }
-.footer-wrapper::before {
-  @include bg-layer-fixed-dark;
-}
 </style>

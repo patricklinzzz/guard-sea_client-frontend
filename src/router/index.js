@@ -82,8 +82,6 @@ const router = createRouter({
       name: 'about',
       component: AboutView,
     },
-<<<<<<< HEAD
-=======
     {
       path: '/edu/causes/pollution',
       name: 'pollution',
@@ -99,7 +97,6 @@ const router = createRouter({
       name: 'degradation',
       component: () => import('@/views/Educate/Causes/DegradationView.vue'),
     },
->>>>>>> dev
       {
       path: '/register',
       component: RegisterView
