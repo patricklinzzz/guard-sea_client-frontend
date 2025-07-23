@@ -1,8 +1,8 @@
 <template>
-  <div class="login-page">
+  <div class="login-page wrapper">
     <div class="background-overlay"></div>
 
-    <main class="login-main">
+    <main class="login-main ">
       <div class="welcome-section">
         <h1>Welcome !</h1>
         <div class="diver-container">
@@ -14,7 +14,6 @@
           <img src="@/assets/images/member-system/bubble.png" alt="bubble" class="bubble bubble-5" />
         </div>
       </div>
-
       <div class="form-section">
         <h2>登入</h2>
         <form @submit.prevent="handleLogin">
@@ -49,7 +48,7 @@
           <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
         </div>
          <div class="register-link">
-            還沒有帳戶嗎? 還沒有帳戶嗎？<router-link to="/register">立即註冊</router-link>
+            還沒有帳戶嗎? <router-link to="/register">立即註冊</router-link>
         </div>
       </div>
     </main>
@@ -74,62 +73,62 @@ const handleLogin = () => {
 };
 </script>
 
-<style lang="scss" scoped>
-$color-black: #333333;
-$color-gray: #999999;
-$primary-bg: #012038;
-$accent-color: #F7AA2A;
-$text-color: #FFFFFF;
-$input-bg: #FFFFFF;
-$input-text-color: $color-black;
-$divider-color: $color-gray;
+<style scoped lang="scss">
+@use '@/assets/style/variables' as *;
+@use '@/assets/style/mixins' as *;
 
+.wrapper::before {
+    @include bg-layer-fixed-dark;
+}
 .login-page {
-  background-color: $primary-bg;
-  color: $text-color;
+  background-color: $color-bg-primary-dark;
+  color: $color-text-white;
   min-height: 100vh;
-  width: 100%;
-  font-family: 'Helvetica Neue', 'Arial', '微軟正黑體', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
+  font-family: $font-sans;
 }
 
 .background-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, #ffffff0d 0%, rgba(255, 255, 255, 0) 60%);
-  pointer-events: none;
+  @include bg-layer-fixed-dark;
 }
 
 .login-main {
   display: flex;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: $container;
+  padding: 20px;
+  gap: 100px;
   align-items: center;
   justify-content: center;
-  padding: 20px;
   z-index: 5;
-  gap: 100px;
 }
 
 .welcome-section {
-  flex: 0 0 auto;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding-right: 0;
+
+  // h1: 左側主標 Welcome
   h1 {
-    font-size: 48px;
-    font-weight: bold;
+    font-size: $h1-desktop;
+    font-family: $font-serif-tc;
+    font-weight: $font-bold;
+    letter-spacing: $letter-spacing-wide;
+    line-height: $line-height-normal;
     margin-bottom: 20px;
+
+    @include respond(md) {
+      font-size: $h1-mobile;
+    }
+  }
+
+  @include respond(md) {
+    display: none;
   }
 }
 
@@ -155,132 +154,125 @@ $divider-color: $color-gray;
   position: absolute;
   z-index: 0;
 }
-
-.bubble-1 {
-  width: 30px;
-  top: 115px;
-  left: -100px;
-}
-.bubble-2 {
-  width: 20px;
-  top: 205px;
-  left: -20px;
-}
-.bubble-3 {
-  width: 25px;
-  top: 340px;
-  left: -60px;
-}
-.bubble-4 {
-  width: 22px;
-  top: 365px;
-  left: 295px;
-}
-.bubble-5 {
-  width: 15px;
-  top: 280px;
-  left: 365px;
-}
+.bubble-1 { width: 30px; top: 115px; left: -100px; }
+.bubble-2 { width: 20px; top: 205px; left: -20px; }
+.bubble-3 { width: 25px; top: 340px; left: -60px; }
+.bubble-4 { width: 22px; top: 365px; left: 295px; }
+.bubble-5 { width: 15px; top: 280px; left: 365px; }
 
 .form-section {
-  flex: 0 0 auto;
-  padding: 0;
   width: 400px;
   max-width: 450px;
 
+  // h2: 右側主標「登入」
   h2 {
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 30px;
+    font-size: $h1-desktop;
+    font-family: $font-serif-tc;
+    font-weight: $font-bold;
+    letter-spacing: $letter-spacing-wide;
+    line-height: $line-height-normal;
     text-align: center;
+    margin-bottom: 30px;
+
+    @include respond(md) {
+      font-size: $h1-mobile;
+    }
   }
 
   .form-group {
     margin-bottom: 20px;
-  }
 
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-  }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: $p-desktop;
+      font-family: $font-sans;
+      color: $color-white;
+      line-height: $line-height-relaxed;
 
-  input:not([type="checkbox"]) {
-    width: 100%;
-    padding: 12px 15px;
-    background-color: $input-bg;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-    color: $input-text-color;
-    box-sizing: border-box;
-  }
+      @include respond(md) {
+        font-size: $p-mobile;
+      }
+    }
 
+    input:not([type="checkbox"]) {
+      width: 100%;
+      padding: 12px 15px;
+      background-color: $color-white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: $p-desktop;
+      color: $color-black;
+
+      @include respond(md) {
+        font-size: $p-mobile;
+      }
+    }
+  }
 
   input[type="checkbox"] {
     appearance: none;
-    -webkit-appearance: none;
     width: 18px;
     height: 18px;
-    border: 1px solid $divider-color;
+    border: 1px solid $color-gray;
     border-radius: 4px;
-    background-color: $input-bg; 
-    vertical-align: middle;
-    cursor: pointer;
-    margin: 0;
+    background-color: $color-white;
     position: relative;
-    top: -1px;
-    transition: all 0.2s;
-  }
+    cursor: pointer;
 
-  input[type="checkbox"]:checked {
-    background-color: $accent-color;
-    border-color: $accent-color;
-  }
+    &:checked {
+      background-color: $color-accent;
+      border-color: $color-accent;
 
-  input[type="checkbox"]:checked::after {
-    content: '';
-    position: absolute;
-    left: 6px;
-    top: 2px;
-    width: 4px;
-    height: 9px;
-    border: solid $primary-bg;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+      &::after {
+        content: '';
+        position: absolute;
+        left: 6px;
+        top: 2px;
+        width: 4px;
+        height: 9px;
+        border: solid $color-bg-primary-dark;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+    }
   }
 
   .password-wrapper {
     position: relative;
-  }
 
-  .toggle-password {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: $color-gray;
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: $color-gray;
+    }
   }
 
   .form-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 14px;
+    font-size: $p-desktop;
     margin-bottom: 30px;
+
+    @include respond(md) {
+      font-size: $p-mobile;
+    }
   }
 
   .remember-me {
     display: flex;
     align-items: center;
     gap: 8px;
-    width: auto;
   }
 
   .forgot-password {
-    color: $text-color;
+    color: $color-text-white;
     text-decoration: none;
+
     &:hover {
       text-decoration: underline;
     }
@@ -289,43 +281,60 @@ $divider-color: $color-gray;
   .btn-login {
     width: 100%;
     padding: 15px;
-    background-color: $accent-color;
+    background-color: $color-accent;
     border: none;
-    border-radius: 8px;
-    color: $primary-bg;
-    font-size: 18px;
-    font-weight: bold;
+    border-radius: $border-radius-md;
+    color: $color-white;
+    font-size: $p-desktop;
+    font-weight: $font-bold;
     cursor: pointer;
-    transition: background-color 0.3s;
+
     &:hover {
-      background-color: darken($accent-color, 10%);
+      background-color: $color-yellow-hover;
+    }
+
+    @include respond(md) {
+      font-size: $p-mobile;
     }
   }
 
   .social-login-divider {
     margin: 30px 0;
-    text-align: center;
-    color: $divider-color;
     display: flex;
     align-items: center;
     gap: 15px;
+
+    .sub-text {
+      font-size: $sub-desktop;
+      color: $color-text-sub;
+
+      @include respond(md) {
+        font-size: $sub-mobile;
+      }
+    }
+
     &::before,
     &::after {
       content: '';
       flex-grow: 1;
       height: 1px;
-      background-color: $divider-color;
+      background-color: $color-text-sub;
     }
   }
 
   .register-link {
     text-align: center;
     margin-top: 30px;
-    font-size: 14px;
+    font-size: $p-desktop;
+
+    @include respond(md) {
+      font-size: $p-mobile;
+    }
+
     a {
-      color: $accent-color;
+      color: $color-accent;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: $font-bold;
     }
   }
 
@@ -333,61 +342,50 @@ $divider-color: $color-gray;
     display: flex;
     justify-content: center;
     gap: 20px;
-  }
 
-  .social-icon {
-    color: #FFFFFF;
-    font-size: 24px;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    transition: filter 0.3s;
-    border: none;
-    &:hover {
-      filter: brightness(0.9);
+    .social-icon {
+      font-size: 24px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      color: $color-white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      transition: filter 0.3s;
+
+      &:hover {
+        filter: brightness(0.9);
+      }
+
+      &.google { background-color: #DB4437; }
+      &.line { background-color: #00B900; }
+      &.facebook { background-color: #1877F2; }
     }
   }
 
-  .social-icon.google {
-    background-color: #DB4437;
-  }
-
-  .social-icon.line {
-    background-color: #00B900;
-  }
-
-  .social-icon.facebook {
-    background-color: #1877F2;
-  }
-
-  @media (max-width: 320px) {
+  @include respond(sm) {
     padding: 0 20px;
-    h2 {
-      font-size: 28px;
-    }
+
     .form-options {
       flex-direction: column;
       align-items: flex-start;
       gap: 10px;
     }
+
     .social-login-icons {
       gap: 15px;
-    }
-    .social-icon {
-      width: 45px;
-      height: 45px;
-      font-size: 20px;
+
+      .social-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+      }
     }
   }
 }
 
-@media (max-width: 768px) {
-  .welcome-section {
-    display: none;
-  }
-}
 </style>
+
+
