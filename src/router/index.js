@@ -45,13 +45,11 @@ const router = createRouter({
       component: ProductListView,
     },
     {
-<<<<<<< HEAD
       path: '/login',
       name: 'login',
       component: () => import('@/views/Auth/LoginView.vue'),
     },
       {
-=======
       path: '/productlist/:id',
       name: 'productdetail',
       component: ProductDetailView,
@@ -68,7 +66,6 @@ const router = createRouter({
       component: () => import('@/views/404View.vue'),
     },
     {
->>>>>>> f07cb02621ac6acbba774aa300a10768ec84d38e
       path: '/new',
       name: 'newlist',
       component: NewListView,
@@ -85,13 +82,10 @@ const router = createRouter({
       name: 'about',
       component: AboutView,
     },
-<<<<<<< HEAD
       {
       path: '/register',
       component: RegisterView
     }
-=======
->>>>>>> f07cb02621ac6acbba774aa300a10768ec84d38e
 
     // {
     //   path: '/about',
