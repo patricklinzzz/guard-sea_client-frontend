@@ -7,6 +7,11 @@
         <h1>Welcome !</h1>
         <div class="diver-container">
           <img src="@/assets/images/member-system/diver.png" alt="Scuba Diver" class="diver-img">
+          <img src="@/assets/images/member-system/bubble.png" alt="bubble" class="bubble bubble-1" />
+          <img src="@/assets/images/member-system/bubble.png" alt="bubble" class="bubble bubble-2" />
+          <img src="@/assets/images/member-system/bubble.png" alt="bubble" class="bubble bubble-3" />
+          <img src="@/assets/images/member-system/bubble.png" alt="bubble" class="bubble bubble-4" />
+          <img src="@/assets/images/member-system/bubble.png" alt="bubble" class="bubble bubble-5" />
         </div>
       </div>
 
@@ -39,55 +44,46 @@
           <span>或其他方式登入</span>
         </div>
         <div class="social-login-icons">
-          <a href="#" class="social-icon"><i class="fab fa-google"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-line"></i></a>
-          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon google"><i class="fab fa-google"></i></a>
+          <a href="#" class="social-icon line"><i class="fab fa-line"></i></a>
+          <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
         </div>
          <div class="register-link">
-            還沒有帳戶嗎? <a href="#">立即註冊</a>
+            還沒有帳戶嗎? 還沒有帳戶嗎？<router-link to="/register">立即註冊</router-link>
         </div>
       </div>
     </main>
-
-    <!-- 3. 已移除海床元素，讓背景色統一 -->
-
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 
-// 表單數據
 const email = ref('');
 const password = ref('');
 const rememberMe = ref(false);
 const passwordFieldType = ref('password');
 
-// 密碼可見性切換
 const togglePasswordVisibility = () => {
   passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password';
 };
 
 const handleLogin = () => {
-  // 登入邏輯
   console.log('Logging in with:', email.value, password.value, rememberMe.value);
   alert('登入功能僅為展示');
 };
 </script>
 
 <style lang="scss" scoped>
-// 為了方便展示，這裡使用 Font Awesome CDN，建議您在專案中自行管理 Icon。
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
-
-// --- 變數定義 ---
-$primary-bg: #0D2A40;
-$accent-color: #FFC107; // 金黃色，用於按鈕
+$color-black: #333333;
+$color-gray: #999999;
+$primary-bg: #012038;
+$accent-color: #F7AA2A;
 $text-color: #FFFFFF;
 $input-bg: #FFFFFF;
-$input-text-color: #333;
-$divider-color: #5A7A90;
+$input-text-color: $color-black;
+$divider-color: $color-gray;
 
-// --- 頁面基本設定 ---
 .login-page {
   background-color: $primary-bg;
   color: $text-color;
@@ -95,62 +91,101 @@ $divider-color: #5A7A90;
   width: 100%;
   font-family: 'Helvetica Neue', 'Arial', '微軟正黑體', sans-serif;
   display: flex;
-  align-items: center; // 垂直置中
-  justify-content: center; // 水平置中
+  align-items: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
 }
 
-// 背景裝飾
 .background-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 60%);
+  background: radial-gradient(circle, #ffffff0d 0%, rgba(255, 255, 255, 0) 60%);
   pointer-events: none;
 }
 
-// Main Content 
 .login-main {
   display: flex;
   width: 100%;
-  max-width: 1200px; 
+  max-width: 1200px;
   margin: 0 auto;
   align-items: center;
   justify-content: center;
   padding: 20px;
   z-index: 5;
+  gap: 100px;
 }
 
 .welcome-section {
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
-  padding-right: 5%;
-
+  padding-right: 0;
   h1 {
     font-size: 48px;
     font-weight: bold;
-    margin-bottom: 20px; 
-  }
-  
-  .diver-container {
-    position: relative;
-    .diver-img {
-      max-width: 450px;
-      width: 100%;
-    }
+    margin-bottom: 20px;
   }
 }
 
+.diver-container {
+  position: relative;
+  width: 450px;
+  height: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 40px;
+  left: 30px;
+
+  .diver-img {
+    max-width: 100%;
+    transform: scaleX(-1);
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.bubble {
+  position: absolute;
+  z-index: 0;
+}
+
+.bubble-1 {
+  width: 30px;
+  top: 115px;
+  left: -100px;
+}
+.bubble-2 {
+  width: 20px;
+  top: 205px;
+  left: -20px;
+}
+.bubble-3 {
+  width: 25px;
+  top: 340px;
+  left: -60px;
+}
+.bubble-4 {
+  width: 22px;
+  top: 365px;
+  left: 295px;
+}
+.bubble-5 {
+  width: 15px;
+  top: 280px;
+  left: 365px;
+}
+
 .form-section {
-  flex: 1;
-  padding: 0 5%;
+  flex: 0 0 auto;
+  padding: 0;
+  width: 400px;
   max-width: 450px;
 
   h2 {
@@ -162,33 +197,70 @@ $divider-color: #5A7A90;
 
   .form-group {
     margin-bottom: 20px;
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-    input {
-      width: 100%;
-      padding: 12px 15px;
-      background-color: $input-bg;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-      color: $input-text-color;
-      box-sizing: border-box;
-    }
   }
-  
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+
+  input:not([type="checkbox"]) {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: $input-bg;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    color: $input-text-color;
+    box-sizing: border-box;
+  }
+
+
+  input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid $divider-color;
+    border-radius: 4px;
+    background-color: $input-bg; 
+    vertical-align: middle;
+    cursor: pointer;
+    margin: 0;
+    position: relative;
+    top: -1px;
+    transition: all 0.2s;
+  }
+
+  input[type="checkbox"]:checked {
+    background-color: $accent-color;
+    border-color: $accent-color;
+  }
+
+  input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 4px;
+    height: 9px;
+    border: solid $primary-bg;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
   .password-wrapper {
     position: relative;
-    .toggle-password {
-      position: absolute;
-      top: 50%;
-      right: 15px;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: #888;
-    }
+  }
+
+  .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: $color-gray;
   }
 
   .form-options {
@@ -197,20 +269,20 @@ $divider-color: #5A7A90;
     align-items: center;
     font-size: 14px;
     margin-bottom: 30px;
+  }
 
-    .remember-me {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: auto;
+  }
 
-    .forgot-password {
-      color: $text-color;
-      text-decoration: none;
-      &:hover {
-        text-decoration: underline;
-      }
+  .forgot-password {
+    color: $text-color;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
     }
   }
 
@@ -229,7 +301,7 @@ $divider-color: #5A7A90;
       background-color: darken($accent-color, 10%);
     }
   }
-  
+
   .social-login-divider {
     margin: 30px 0;
     text-align: center;
@@ -237,7 +309,8 @@ $divider-color: #5A7A90;
     display: flex;
     align-items: center;
     gap: 15px;
-    &::before, &::after {
+    &::before,
+    &::after {
       content: '';
       flex-grow: 1;
       height: 1px;
@@ -245,31 +318,6 @@ $divider-color: #5A7A90;
     }
   }
 
-  .social-login-icons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    .social-icon {
-      color: $text-color;
-      font-size: 24px;
-      border: 1px solid $divider-color;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-decoration: none;
-      transition: all 0.3s;
-      
-      &:hover {
-        color: $primary-bg;
-        background-color: $text-color;
-        border-color: $text-color;
-      }
-    }
-  }
-  
   .register-link {
     text-align: center;
     margin-top: 30px;
@@ -280,40 +328,43 @@ $divider-color: #5A7A90;
       font-weight: bold;
     }
   }
-}
 
-
-// --- RWD 響應式設計 ---
-
-
-@media (max-width: 992px) {
-  .login-page {
-    align-items: flex-start;
-    padding-top: 10vh;
+  .social-login-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
   }
 
-  .login-main {
-    flex-direction: column;
-    justify-content: flex-start;
+  .social-icon {
+    color: #FFFFFF;
+    font-size: 24px;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    transition: filter 0.3s;
+    border: none;
+    &:hover {
+      filter: brightness(0.9);
+    }
   }
 
-  .welcome-section {
-    display: none;
+  .social-icon.google {
+    background-color: #DB4437;
   }
 
-  .form-section {
-    flex: none;
-    width: 100%;
-    max-width: 400px;
-    padding: 0 30px;
+  .social-icon.line {
+    background-color: #00B900;
   }
-}
 
-@media (max-width: 320px) {
-  .login-page {
-    padding-top: 5vh;
+  .social-icon.facebook {
+    background-color: #1877F2;
   }
-  .form-section {
+
+  @media (max-width: 320px) {
     padding: 0 20px;
     h2 {
       font-size: 28px;
@@ -325,12 +376,18 @@ $divider-color: #5A7A90;
     }
     .social-login-icons {
       gap: 15px;
-      .social-icon {
-        width: 45px;
-        height: 45px;
-        font-size: 20px;
-      }
     }
+    .social-icon {
+      width: 45px;
+      height: 45px;
+      font-size: 20px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome-section {
+    display: none;
   }
 }
 </style>
