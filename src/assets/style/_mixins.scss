@@ -1,15 +1,18 @@
+@use 'variables' as v;
+//RWD
 @mixin respond($breakpoint) {
-
-    // @if $breakpoint == sm {
-    //     @media (max-width: 576px) { @content; }
-    // }
     @if $breakpoint==md {
         @media (max-width: 768px) {
             @content;
         }
     }
 }
-
-// @else if $breakpoint == lg {
-//     @media (max-width: 1024px) { @content; }
-// }
+//背景色
+@mixin bg-layer-fixed-dark {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-color: v.$color-blue-dark;
+    z-index: -1;
+    pointer-events: none;
+}

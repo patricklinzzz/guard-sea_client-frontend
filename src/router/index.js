@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import SpeciesView from '@/views/Educate/SpeciesView.vue'
-import CausesView from '@/views/Educate/ExtinctionCausesView.vue'
+import CausesView from '@/views/Educate/CausesOverviewView.vue'
 import QuizView from '@/views/Educate/QuizView.vue'
-import PorductListView from '@/views/Product/PorductListView.vue'
+import ProductListView from '@/views/Product/ProductListView.vue'
+import ProductDetailView from '@/views/Product/ProductDetailView.vue'
+import CartView from '@/views/Product/CartView.vue'
 import NewListView from '@/views/New/NewListView.vue'
 import NewInsideView from '@/views/New/NewInsideView.vue'
 import AboutView from '@/views/About/AboutView.vue'
@@ -39,36 +41,57 @@ const router = createRouter({
     },
     {
       path: '/productlist',
-      name: 'ProductList',
-      component: PorductListView,
+      name: 'productlist',
+      component: ProductListView,
     },
     {
+<<<<<<< HEAD
       path: '/login',
       name: 'login',
       component: () => import('@/views/Auth/LoginView.vue'),
     },
       {
+=======
+      path: '/productlist/:id',
+      name: 'productdetail',
+      component: ProductDetailView,
+      props: true,
+    },
+    {
+      path: '/cart',
+      name: 'cart',
+      component: CartView,
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('@/views/404View.vue'),
+    },
+    {
+>>>>>>> f07cb02621ac6acbba774aa300a10768ec84d38e
       path: '/new',
       name: 'newlist',
       component: NewListView,
     },
-       {
+    {
       path: '/new/:id',
       name: 'newinside',
       component: NewInsideView,
       props: true,
     },
     ,
-       {
+    {
       path: '/about',
       name: 'about',
       component: AboutView,
-      
     },
+<<<<<<< HEAD
       {
       path: '/register',
       component: RegisterView
     }
+=======
+>>>>>>> f07cb02621ac6acbba774aa300a10768ec84d38e
 
     // {
     //   path: '/about',
