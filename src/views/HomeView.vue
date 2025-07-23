@@ -14,7 +14,8 @@ const say456 = () => {
 <template>
   <main>
     <Button @click="say123">確定報名</Button>
-
+    <Button variant="gray">回活動頁面</Button>
+    <Button variant="transparent">加入購物車</Button>
     <Button variant="round" @click="say456"><i class="fa-solid fa-chevron-right"></i></Button>
     <p>{{ message }}</p>
   </main>
