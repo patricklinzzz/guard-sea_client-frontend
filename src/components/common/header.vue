@@ -82,7 +82,7 @@ const dropdown_arrow = computed(() => {
       <!-- 手機導覽列 -->
       <nav id="mobile_nav">
         <router-link to="/login">
-          <img src="../../assets/images/header/icon_memder.svg" alt="" width="40" />
+          <i class="fa-solid fa-user"></i>
         </router-link>
         <router-link to="/">
           <i class="fa-solid fa-cart-shopping"></i>
