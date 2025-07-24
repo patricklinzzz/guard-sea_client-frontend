@@ -52,7 +52,7 @@ const dropdown_arrow = computed(() => {
   <header>
     <!-- 電腦導覽列 -->
     <div id="navbar">
-      <router-link to="/"><img src="../../assets/images/logo.png" alt="" id="logo" /></router-link>
+      <router-link to="/"><img src="../../assets/images/logo.svg" alt="" id="logo" /></router-link>
 
       <nav id="desktop_nav">
         <!-- 教育hover下拉選單 -->

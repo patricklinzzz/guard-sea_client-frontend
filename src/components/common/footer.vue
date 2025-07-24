@@ -4,7 +4,7 @@
   <footer>
     <div id="container">
       <div id="footer_img">
-        <img src="../../assets/images/logo_white.png" alt="" />
+        <img src="../../assets/images/logo_white.svg" alt="" />
         <div id="social_media_icon">
           <a href=""><img src="../../assets/images/footer/line.svg" alt="" /></a>
           <a href=""><img src="../../assets/images/footer/facebook.svg" alt="" /></a>
@@ -67,12 +67,17 @@
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-
+    #logo {
+        width: 200px;
+    }
     @include respond(md) {
-      flex-direction: column;
-      align-items: flex-start;
-      width: 90vw;
-      gap: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 90vw;
+        gap: 10px;
+        #logo {
+        width: 200px;
+    }
     }
   }
 
