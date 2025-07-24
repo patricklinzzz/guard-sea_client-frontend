@@ -11,29 +11,36 @@ const animals = [
     id: 1,
     name: '綠蠵龜',
     english: 'Chelonia mydas',
-    img: new URL('@/assets/images/Educate/Marinelife/CheloniaMydas.png', import.meta.url).href,
+    img: new URL('@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas.png', import.meta.url).href,
     area: '廣泛海域',
   },
   {
     id: 2,
-    name: '藍鯨',
-    english: 'Blue Whale',
-    img: new URL('@/assets/images/Educate/Marinelife/CheloniaMydas.png', import.meta.url).href,
-    area: '廣泛海域',
+    name: '海獺',
+    english: 'Enhydra lutris',
+    img: new URL('@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris.png', import.meta.url).href,
+    area: '北太平洋',
   },
   {
     id: 3,
-    name: '抹香鯨',
-    english: 'Sperm Whale',
-    img: new URL('@/assets/images/Educate/Marinelife/CheloniaMydas.png', import.meta.url).href,
-    area: '廣泛海域',
+    name: '皇帝企鵝',
+    english: 'Aptenodytes_forsteri',
+    img: new URL('@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri.png', import.meta.url).href,
+    area: '極地海域',
   },
   {
     id: 4,
-    name: '帝王企鵝',
-    english: 'Emperor Penguin',
-    img: new URL('@/assets/images/Educate/Marinelife/CheloniaMydas.png', import.meta.url).href,
-    area: '極地海域',
+    name: '隆頭鸚哥魚',
+    english: 'Bolbometopon_muricatum',
+    img: new URL('@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum.png', import.meta.url).href,
+    area: '印度太平洋',
+  },
+  {
+    id: 5,
+    name: '鋸鰩',
+    english: 'ristis pristis',
+    img: new URL('@/assets/images/Educate/Special_Region/Pristis_pristis.png', import.meta.url).href,
+    area: '特殊海域',
   },
 ];
 
@@ -116,7 +123,10 @@ main {
   &:hover {
     background-color:v.$color-skyblue;
   }
-    }
+  //   &:active {
+  //   background-color:v.$color-skyblue;
+  // }
+  //   }
 }
     .gallery {
   display: grid;
@@ -128,6 +138,7 @@ main {
     grid-template-columns: repeat(4, 1fr); // 桌面：4欄
   }
 }
+  }
   }
 
 
