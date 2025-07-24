@@ -2,16 +2,36 @@
   <div class="login-page wrapper">
     <div class="background-overlay"></div>
 
-    <main class="login-main ">
+    <main class="login-main">
       <div class="welcome-section">
         <h1>Welcome !</h1>
         <div class="diver-container">
-          <img src="@/assets/images/member-system/diver.png" alt="Scuba Diver" class="diver-img">
-          <img src="@/assets/images/member-system/bubble.png" alt="bubble" class="bubble bubble-1" />
-          <img src="@/assets/images/member-system/bubble.png" alt="bubble" class="bubble bubble-2" />
-          <img src="@/assets/images/member-system/bubble.png" alt="bubble" class="bubble bubble-3" />
-          <img src="@/assets/images/member-system/bubble.png" alt="bubble" class="bubble bubble-4" />
-          <img src="@/assets/images/member-system/bubble.png" alt="bubble" class="bubble bubble-5" />
+          <img src="@/assets/images/member-system/diver.png" alt="Scuba Diver" class="diver-img" />
+          <img
+            src="@/assets/images/member-system/bubble.png"
+            alt="bubble"
+            class="bubble bubble-1"
+          />
+          <img
+            src="@/assets/images/member-system/bubble.png"
+            alt="bubble"
+            class="bubble bubble-2"
+          />
+          <img
+            src="@/assets/images/member-system/bubble.png"
+            alt="bubble"
+            class="bubble bubble-3"
+          />
+          <img
+            src="@/assets/images/member-system/bubble.png"
+            alt="bubble"
+            class="bubble bubble-4"
+          />
+          <img
+            src="@/assets/images/member-system/bubble.png"
+            alt="bubble"
+            class="bubble bubble-5"
+          />
         </div>
       </div>
       <div class="form-section">
@@ -19,23 +39,25 @@
         <form @submit.prevent="handleLogin">
           <div class="form-group">
             <label for="email">電子郵件</label>
-            <input type="email" id="email" v-model="email" required>
+            <input type="email" id="email" v-model="email" required />
           </div>
           <div class="form-group">
             <label for="password">密碼</label>
             <div class="password-wrapper">
-              <input :type="passwordFieldType" id="password" v-model="password" required>
+              <input :type="passwordFieldType" id="password" v-model="password" required />
               <span class="toggle-password" @click="togglePasswordVisibility">
-                <i :class="passwordFieldType === 'password' ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                <i
+                  :class="passwordFieldType === 'password' ? 'fas fa-eye-slash' : 'fas fa-eye'"
+                ></i>
               </span>
             </div>
           </div>
           <div class="form-options">
             <label class="remember-me">
-              <input type="checkbox" v-model="rememberMe">
+              <input type="checkbox" v-model="rememberMe" />
               記住我
             </label>
-            <a href="#" class="forgot-password">忘記密碼?</a>
+            <router-link to="/forgot-password" class="forgot-password">忘記密碼？</router-link>
           </div>
           <button type="submit" class="btn-login">登入</button>
         </form>
@@ -47,8 +69,9 @@
           <a href="#" class="social-icon line"><i class="fab fa-line"></i></a>
           <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
         </div>
-         <div class="register-link">
-            還沒有帳戶嗎? <router-link to="/register">立即註冊</router-link>
+        <div class="register-link">
+          還沒有帳戶嗎?
+          <router-link to="/register">立即註冊</router-link>
         </div>
       </div>
     </main>
@@ -56,336 +79,363 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+  import { ref } from 'vue'
 
-const email = ref('');
-const password = ref('');
-const rememberMe = ref(false);
-const passwordFieldType = ref('password');
+  const email = ref('')
+  const password = ref('')
+  const rememberMe = ref(false)
+  const passwordFieldType = ref('password')
 
-const togglePasswordVisibility = () => {
-  passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password';
-};
+  const togglePasswordVisibility = () => {
+    passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password'
+  }
 
-const handleLogin = () => {
-  console.log('Logging in with:', email.value, password.value, rememberMe.value);
-  alert('登入功能僅為展示');
-};
+  const handleLogin = () => {
+    console.log('Logging in with:', email.value, password.value, rememberMe.value)
+    alert('登入功能僅為展示')
+  }
 </script>
 
 <style scoped lang="scss">
-@use '@/assets/style/variables' as *;
-@use '@/assets/style/mixins' as *;
+  @use '@/assets/style/variables' as *;
+  @use '@/assets/style/mixins' as *;
 
-.wrapper::before {
+  .wrapper::before {
     @include bg-layer-fixed-dark;
-}
-.login-page {
-  background-color: $color-bg-primary-dark;
-  color: $color-text-white;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  font-family: $font-sans;
-}
-
-.background-overlay {
-  @include bg-layer-fixed-dark;
-}
-
-.login-main {
-  display: flex;
-  width: 100%;
-  max-width: $container;
-  padding: 20px;
-  gap: 100px;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-}
-
-.welcome-section {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  // h1: 左側主標 Welcome
-  h1 {
-    font-size: $h1-desktop;
-    font-family: $font-serif-tc;
-    font-weight: $font-bold;
-    letter-spacing: $letter-spacing-wide;
-    line-height: $line-height-normal;
-    margin-bottom: 20px;
-
-    @include respond(md) {
-      font-size: $h1-mobile;
-    }
   }
-
-  @include respond(md) {
-    display: none;
-  }
-}
-
-.diver-container {
-  position: relative;
-  width: 450px;
-  height: 450px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  bottom: 40px;
-  left: 30px;
-
-  .diver-img {
-    max-width: 100%;
-    transform: scaleX(-1);
-    position: relative;
-    z-index: 1;
-  }
-}
-
-.bubble {
-  position: absolute;
-  z-index: 0;
-}
-.bubble-1 { width: 30px; top: 115px; left: -100px; }
-.bubble-2 { width: 20px; top: 205px; left: -20px; }
-.bubble-3 { width: 25px; top: 340px; left: -60px; }
-.bubble-4 { width: 22px; top: 365px; left: 295px; }
-.bubble-5 { width: 15px; top: 280px; left: 365px; }
-
-.form-section {
-  width: 400px;
-  max-width: 450px;
-
-  // h2: 右側主標「登入」
-  h2 {
-    font-size: $h1-desktop;
-    font-family: $font-serif-tc;
-    font-weight: $font-bold;
-    letter-spacing: $letter-spacing-wide;
-    line-height: $line-height-normal;
-    text-align: center;
-    margin-bottom: 30px;
-
-    @include respond(md) {
-      font-size: $h1-mobile;
-    }
-  }
-
-  .form-group {
-    margin-bottom: 20px;
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: $p-desktop;
-      font-family: $font-sans;
-      color: $color-white;
-      line-height: $line-height-relaxed;
-
-      @include respond(md) {
-        font-size: $p-mobile;
-      }
-    }
-
-    input:not([type="checkbox"]) {
-      width: 100%;
-      padding: 12px 15px;
-      background-color: $color-white;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: $p-desktop;
-      color: $color-black;
-
-      @include respond(md) {
-        font-size: $p-mobile;
-      }
-    }
-  }
-
-  input[type="checkbox"] {
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 1px solid $color-gray;
-    border-radius: 4px;
-    background-color: $color-white;
-    position: relative;
-    cursor: pointer;
-
-    &:checked {
-      background-color: $color-accent;
-      border-color: $color-accent;
-
-      &::after {
-        content: '';
-        position: absolute;
-        left: 6px;
-        top: 2px;
-        width: 4px;
-        height: 9px;
-        border: solid $color-bg-primary-dark;
-        border-width: 0 2px 2px 0;
-        transform: rotate(45deg);
-      }
-    }
-  }
-
-  .password-wrapper {
-    position: relative;
-
-    .toggle-password {
-      position: absolute;
-      top: 50%;
-      right: 15px;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: $color-gray;
-    }
-  }
-
-  .form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: $p-desktop;
-    margin-bottom: 30px;
-
-    @include respond(md) {
-      font-size: $p-mobile;
-    }
-  }
-
-  .remember-me {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .forgot-password {
+  .login-page {
+    background-color: $color-bg-primary-dark;
     color: $color-text-white;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .btn-login {
-    width: 100%;
-    padding: 15px;
-    background-color: $color-accent;
-    border: none;
-    border-radius: $border-radius-md;
-    color: $color-white;
-    font-size: $p-desktop;
-    font-weight: $font-bold;
-    cursor: pointer;
-
-    &:hover {
-      background-color: $color-yellow-hover;
-    }
-
-    @include respond(md) {
-      font-size: $p-mobile;
-    }
-  }
-
-  .social-login-divider {
-    margin: 30px 0;
+    min-height: 100vh;
     display: flex;
     align-items: center;
-    gap: 15px;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    font-family: $font-sans;
+  }
 
-    .sub-text {
-      font-size: $sub-desktop;
-      color: $color-text-sub;
+  .background-overlay {
+    @include bg-layer-fixed-dark;
+  }
+
+  .login-main {
+    display: flex;
+    width: 100%;
+    max-width: $container;
+    padding: 20px;
+    gap: 100px;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+  }
+
+  .welcome-section {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // h1: 左側主標 Welcome
+    h1 {
+      font-size: $h1-desktop;
+      font-family: $font-serif-tc;
+      font-weight: $font-bold;
+      letter-spacing: $letter-spacing-wide;
+      line-height: $line-height-normal;
+      margin-bottom: 20px;
 
       @include respond(md) {
-        font-size: $sub-mobile;
+        font-size: $h1-mobile;
       }
     }
-
-    &::before,
-    &::after {
-      content: '';
-      flex-grow: 1;
-      height: 1px;
-      background-color: $color-text-sub;
-    }
-  }
-
-  .register-link {
-    text-align: center;
-    margin-top: 30px;
-    font-size: $p-desktop;
 
     @include respond(md) {
-      font-size: $p-mobile;
-    }
-
-    a {
-      color: $color-accent;
-      text-decoration: none;
-      font-weight: $font-bold;
+      display: none;
     }
   }
 
-  .social-login-icons {
+  .diver-container {
+    position: relative;
+    width: 450px;
+    height: 450px;
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 20px;
+    bottom: 40px;
+    left: 30px;
 
-    .social-icon {
-      font-size: 24px;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      color: $color-white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-decoration: none;
-      transition: filter 0.3s;
+    .diver-img {
+      max-width: 100%;
+      transform: scaleX(-1);
+      position: relative;
+      z-index: 1;
+    }
+  }
 
-      &:hover {
-        filter: brightness(0.9);
+  .bubble {
+    position: absolute;
+    z-index: 0;
+  }
+  .bubble-1 {
+    width: 30px;
+    top: 115px;
+    left: -100px;
+  }
+  .bubble-2 {
+    width: 20px;
+    top: 205px;
+    left: -20px;
+  }
+  .bubble-3 {
+    width: 25px;
+    top: 340px;
+    left: -60px;
+  }
+  .bubble-4 {
+    width: 22px;
+    top: 365px;
+    left: 295px;
+  }
+  .bubble-5 {
+    width: 15px;
+    top: 280px;
+    left: 365px;
+  }
+
+  .form-section {
+    width: 400px;
+    max-width: 450px;
+
+    // h2: 右側主標「登入」
+    h2 {
+      font-size: $h1-desktop;
+      font-family: $font-serif-tc;
+      font-weight: $font-bold;
+      letter-spacing: $letter-spacing-wide;
+      line-height: $line-height-normal;
+      text-align: center;
+      margin-bottom: 30px;
+
+      @include respond(md) {
+        font-size: $h1-mobile;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: $p-desktop;
+        font-family: $font-sans;
+        color: $color-white;
+        line-height: $line-height-relaxed;
+
+        @include respond(md) {
+          font-size: $p-mobile;
+        }
       }
 
-      &.google { background-color: #DB4437; }
-      &.line { background-color: #00B900; }
-      &.facebook { background-color: #1877F2; }
-    }
-  }
+      input:not([type='checkbox']) {
+        width: 100%;
+        padding: 12px 15px;
+        background-color: $color-white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: $p-desktop;
+        color: $color-black;
 
-  @include respond(sm) {
-    padding: 0 20px;
+        @include respond(md) {
+          font-size: $p-mobile;
+        }
+      }
+    }
+
+    input[type='checkbox'] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 1px solid $color-gray;
+      border-radius: 4px;
+      background-color: $color-white;
+      position: relative;
+      cursor: pointer;
+
+      &:checked {
+        background-color: $color-accent;
+        border-color: $color-accent;
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: 6px;
+          top: 2px;
+          width: 4px;
+          height: 9px;
+          border: solid $color-bg-primary-dark;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
+        }
+      }
+    }
+
+    .password-wrapper {
+      position: relative;
+
+      .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: $color-gray;
+      }
+    }
 
     .form-options {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: $p-desktop;
+      margin-bottom: 30px;
+
+      @include respond(md) {
+        font-size: $p-mobile;
+      }
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .forgot-password {
+      color: $color-text-white;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 15px;
+      background-color: $color-accent;
+      border: none;
+      border-radius: $border-radius-md;
+      color: $color-white;
+      font-size: $p-desktop;
+      font-weight: $font-bold;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $color-yellow-hover;
+      }
+
+      @include respond(md) {
+        font-size: $p-mobile;
+      }
+    }
+
+    .social-login-divider {
+      margin: 30px 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+
+      .sub-text {
+        font-size: $sub-desktop;
+        color: $color-text-sub;
+
+        @include respond(md) {
+          font-size: $sub-mobile;
+        }
+      }
+
+      &::before,
+      &::after {
+        content: '';
+        flex-grow: 1;
+        height: 1px;
+        background-color: $color-text-sub;
+      }
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 30px;
+      font-size: $p-desktop;
+
+      @include respond(md) {
+        font-size: $p-mobile;
+      }
+
+      a {
+        color: $color-accent;
+        text-decoration: none;
+        font-weight: $font-bold;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
 
     .social-login-icons {
-      gap: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
 
       .social-icon {
-        width: 45px;
-        height: 45px;
-        font-size: 20px;
+        font-size: 24px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        color: $color-white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        transition: filter 0.3s;
+
+        &:hover {
+          filter: brightness(0.9);
+        }
+
+        &.google {
+          background-color: #db4437;
+        }
+        &.line {
+          background-color: #00b900;
+        }
+        &.facebook {
+          background-color: #1877f2;
+        }
+      }
+    }
+
+    @include respond(sm) {
+      padding: 0 20px;
+
+      .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .social-login-icons {
+        gap: 15px;
+
+        .social-icon {
+          width: 45px;
+          height: 45px;
+          font-size: 20px;
+        }
       }
     }
   }
-}
-
 </style>
-
-

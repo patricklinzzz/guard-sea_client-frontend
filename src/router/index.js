@@ -9,9 +9,9 @@ import CartView from '@/views/Product/CartView.vue'
 import NewListView from '@/views/New/NewListView.vue'
 import NewInsideView from '@/views/New/NewInsideView.vue'
 import AboutView from '@/views/About/AboutView.vue'
-import RegisterView from '@/views/Auth/RegisterView.vue';
+import RegisterView from '@/views/Auth/RegisterView.vue'
 import EventListView from '@/views/Event/EventListView.vue'
-
+import ForgotPasswordView from '@/views/Auth/ForgotPassword.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -50,7 +50,7 @@ const router = createRouter({
       name: 'login',
       component: () => import('@/views/Auth/LoginView.vue'),
     },
-      {
+    {
       path: '/productlist/:id',
       name: 'productdetail',
       component: ProductDetailView,
@@ -82,15 +82,20 @@ const router = createRouter({
       name: 'about',
       component: AboutView,
     },
-      {
+    {
       path: '/register',
-      component: RegisterView
+      component: RegisterView,
     },
-      {
+    {
       path: '/event',
       name: 'event',
-      component: EventListView
-    }
+      component: EventListView,
+    },
+    {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: ForgotPasswordView,
+    },
 
     // {
     //   path: '/about',
