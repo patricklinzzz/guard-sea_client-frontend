@@ -68,10 +68,10 @@ const dropdown_arrow = computed(() => {
             </div>
           </transition>
         </div>
-        <router-link to="/">商品</router-link>
-        <router-link to="/">活動</router-link>
-        <router-link to="/">最新消息</router-link>
-        <router-link to="/">關於我們</router-link>
+        <router-link to="/productlist">商品</router-link>
+        <router-link to="/event">活動</router-link>
+        <router-link to="/new">最新消息</router-link>
+        <router-link to="/about">關於我們</router-link>
         <router-link to="/login">
           <i class="fa-solid fa-user"></i>
         </router-link>
@@ -82,7 +82,7 @@ const dropdown_arrow = computed(() => {
       <!-- 手機導覽列 -->
       <nav id="mobile_nav">
         <router-link to="/login">
-          <img src="../../assets/images/header/icon_memder.svg" alt="" width="40" />
+          <i class="fa-solid fa-user"></i>
         </router-link>
         <router-link to="/">
           <i class="fa-solid fa-cart-shopping"></i>
