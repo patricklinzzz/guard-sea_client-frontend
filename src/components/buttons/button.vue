@@ -79,10 +79,10 @@
       color: v.$color-black;
       box-sizing: border-box;
       &:hover {
-        background-color: v.$color-gray-light;
+        background-color: v.$color-gray;
       }
       &:active {
-        background-color: #f4f4f4;
+        background-color: v.$color-black;
       }
     }
   }
