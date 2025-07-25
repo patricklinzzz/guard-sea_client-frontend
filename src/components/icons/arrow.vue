@@ -14,7 +14,7 @@ defineProps(['direction'])
   >
     <path
       d="M1.71289 25.1419L13.3796 13.4753L1.71289 1.80859"
-      stroke="black"
+      stroke="white"
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
