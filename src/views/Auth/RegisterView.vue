@@ -4,7 +4,16 @@
 
     <main class="auth-main">
       <div class="welcome-section">
-        <h1 class="welcome-title">Join us !</h1>
+        <!-- 
+          【修改 1/2】:
+          - 將兩個 h1 合併為一個。
+          - 不再使用 v-if，改用 :class 動態綁定一個 'is-hidden' class。
+          - 當 currentMode 為 'forgotPassword' 時，這個 h1 會被加上 'is-hidden' class。
+        -->
+        <h1 class="welcome-title" :class="{ 'is-hidden': currentMode === 'forgotPassword' }">
+          {{ currentMode === 'login' ? 'Welcome' : 'Join us !' }}
+        </h1>
+
         <div class="diver-container">
           <img src="@/assets/images/member-system/diver.png" alt="Scuba Diver" class="diver-img" />
           <img
@@ -263,7 +272,20 @@
       font-family: 'Times New Roman', Times, serif;
       font-size: 48px;
       font-style: italic;
+      // 為了讓隱藏效果更平滑，可以加上 transition
+      transition: visibility 0.2s ease;
     }
+
+    /* 
+      【修改 2/2】:
+      - 新增 .is-hidden class 的樣式。
+      - `visibility: hidden` 會讓元素看不見，但它佔用的空間依然保留。
+      - 這就是能讓圖片保持不動的關鍵。
+    */
+    .welcome-title.is-hidden {
+      visibility: hidden;
+    }
+
     @include respond(md) {
       display: none;
     }
