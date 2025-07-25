@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="form-section">
-        <h2>登入</h2>
+        <h1 class="form-title">登入</h1>
         <form @submit.prevent="handleLogin">
           <div class="form-group">
             <label for="email">電子郵件</label>
@@ -138,16 +138,7 @@
 
     // h1: 左側主標 Welcome
     h1 {
-      font-size: $h1-desktop;
-      font-family: $font-serif-tc;
-      font-weight: $font-bold;
-      letter-spacing: $letter-spacing-wide;
-      line-height: $line-height-normal;
       margin-bottom: 20px;
-
-      @include respond(md) {
-        font-size: $h1-mobile;
-      }
     }
 
     @include respond(md) {
@@ -208,18 +199,9 @@
     max-width: 450px;
 
     // h2: 右側主標「登入」
-    h2 {
-      font-size: $h1-desktop;
-      font-family: $font-serif-tc;
-      font-weight: $font-bold;
-      letter-spacing: $letter-spacing-wide;
-      line-height: $line-height-normal;
+    .form-title {
       text-align: center;
       margin-bottom: 30px;
-
-      @include respond(md) {
-        font-size: $h1-mobile;
-      }
     }
 
     .form-group {

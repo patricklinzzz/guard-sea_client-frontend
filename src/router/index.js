@@ -11,8 +11,13 @@ import NewInsideView from '@/views/New/NewInsideView.vue'
 import AboutView from '@/views/About/AboutView.vue'
 import RegisterView from '@/views/Auth/RegisterView.vue'
 import EventListView from '@/views/Event/EventListView.vue'
+<<<<<<< HEAD
 import EventDetail from '@/views/Event/EventDetail.vue'
 import ForgotPasswordView from '@/views/Auth/ForgotPassword.vue'
+=======
+import SpeciesinfoView from '@/views/Educate/SpeciesinfoView.vue'
+
+>>>>>>> 4de463d9a963d515cbfec8af06f13e78cfc8f294
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -45,11 +50,6 @@ const router = createRouter({
       path: '/productlist',
       name: 'productlist',
       component: ProductListView,
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/Auth/LoginView.vue'),
     },
     {
       path: '/productlist/:id',
@@ -102,8 +102,11 @@ const router = createRouter({
       path: '/forgot-password',
       name: 'forgot-password',
       component: ForgotPasswordView,
+      path: '/edu/species/:id',
+      name: 'speciesinfo',
+      component: SpeciesinfoView,
+      props: true,
     },
-
     // {
     //   path: '/about',
     //   name: 'about',

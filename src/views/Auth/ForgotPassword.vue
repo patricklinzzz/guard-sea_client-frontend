@@ -36,7 +36,7 @@
       </div>
 
       <div class="form-section">
-        <h2>忘記密碼</h2>
+        <h1>忘記密碼</h1>
         <p class="subtitle subtitle--white">密碼重設信將寄至您的信箱</p>
         <form @submit.prevent="handlePasswordReset">
           <div class="form-group">
@@ -115,11 +115,6 @@
     align-items: center;
 
     h1 {
-      font-size: $h1-desktop;
-      font-family: $font-serif-tc;
-      font-weight: $font-bold;
-      letter-spacing: $letter-spacing-wide;
-      line-height: $line-height-normal;
       margin-bottom: 20px;
       visibility: hidden;
     }
@@ -183,16 +178,7 @@
     text-align: center;
 
     h2 {
-      font-size: $h1-desktop;
-      font-family: $font-serif-tc;
-      font-weight: $font-bold;
-      letter-spacing: $letter-spacing-wide;
-      line-height: $line-height-normal;
       margin-bottom: 15px;
-
-      @include respond(md) {
-        font-size: $h1-mobile;
-      }
     }
 
     .subtitle {
