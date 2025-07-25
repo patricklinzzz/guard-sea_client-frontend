@@ -1,13 +1,12 @@
 <template>
-  <div class="register-page wrapper">
+  <div class="auth-page wrapper">
     <div class="background-overlay"></div>
 
-    <main class="register-main">
+    <main class="auth-main">
       <div class="welcome-section">
-        <h1>Join us !</h1>
+        <h1 class="welcome-title">Join us !</h1>
         <div class="diver-container">
           <img src="@/assets/images/member-system/diver.png" alt="Scuba Diver" class="diver-img" />
-
           <img
             src="@/assets/images/member-system/bubble.png"
             alt="bubble"
@@ -37,66 +36,132 @@
       </div>
 
       <div class="form-section">
-        <h2>註冊</h2>
-        <form @submit.prevent="handleRegister">
-          <div class="form-group">
-            <label for="name">姓名</label>
-            <input type="text" id="name" v-model="name" required />
-          </div>
-
-          <div class="form-group">
-            <label for="gender">性別</label>
-            <select id="gender" v-model="gender" required>
-              <option disabled value="">請選擇</option>
-              <option>男</option>
-              <option>女</option>
-              <option>不透露</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="email">電子郵件</label>
-            <div class="input-with-button">
-              <input type="email" id="email" v-model="email" required />
-              <button type="button" class="btn-verify">發送驗證碼</button>
+        <transition name="fade" mode="out-in">
+          <div v-if="currentMode === 'login'" key="login">
+            <h2>登入</h2>
+            <form @submit.prevent="handleLogin">
+              <div class="form-group">
+                <label for="login-email">電子郵件</label>
+                <input type="email" id="login-email" v-model="email" required />
+              </div>
+              <div class="form-group">
+                <label for="login-password">密碼</label>
+                <div class="password-wrapper">
+                  <input
+                    :type="passwordFieldType"
+                    id="login-password"
+                    v-model="password"
+                    required
+                  />
+                  <span class="toggle-password" @click="togglePasswordVisibility">
+                    <i
+                      :class="passwordFieldType === 'password' ? 'fas fa-eye-slash' : 'fas fa-eye'"
+                    ></i>
+                  </span>
+                </div>
+              </div>
+              <div class="form-options-login">
+                <label class="remember-me">
+                  <input type="checkbox" v-model="rememberMe" />
+                  記住我
+                </label>
+                <a href="#" class="forgot-password" @click.prevent="changeMode('forgotPassword')">
+                  忘記密碼？
+                </a>
+              </div>
+              <button type="submit" class="btn-submit">登入</button>
+            </form>
+            <div class="switch-mode-link">
+              還沒有帳戶嗎?
+              <a @click="changeMode('register')">立即註冊</a>
+            </div>
+            <div class="social-login-wrapper">
+              <div class="social-login-divider"><span class="sub-text">或其他方式</span></div>
+              <div class="social-login-icons">
+                <a href="#" class="social-icon google"><i class="fab fa-google"></i></a>
+                <a href="#" class="social-icon line"><i class="fab fa-line"></i></a>
+                <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+              </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="password">密碼</label>
-            <div class="password-wrapper">
-              <input :type="passwordFieldType" id="password" v-model="password" required />
-              <span class="toggle-password" @click="togglePasswordVisibility">
-                <i
-                  :class="passwordFieldType === 'password' ? 'fas fa-eye-slash' : 'fas fa-eye'"
-                ></i>
-              </span>
+          <div v-else-if="currentMode === 'register'" key="register">
+            <h2>註冊</h2>
+            <form @submit.prevent="handleRegister">
+              <div class="form-group">
+                <label for="name">姓名</label>
+                <input type="text" id="name" v-model="name" required />
+              </div>
+              <div class="form-group">
+                <label for="gender">性別</label>
+                <input type="text" id="gender" v-model="gender" required />
+              </div>
+              <div class="form-group">
+                <label for="register-email">電子郵件</label>
+                <div class="input-with-button">
+                  <input type="email" id="register-email" v-model="email" required />
+                  <button type="button" class="btn-verify" @click="sendVerificationCode">
+                    發送驗證碼
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="register-password">密碼</label>
+                <div class="password-wrapper">
+                  <input
+                    :type="passwordFieldType"
+                    id="register-password"
+                    v-model="password"
+                    required
+                  />
+                  <span class="toggle-password" @click="togglePasswordVisibility">
+                    <i
+                      :class="passwordFieldType === 'password' ? 'fas fa-eye-slash' : 'fas fa-eye'"
+                    ></i>
+                  </span>
+                </div>
+              </div>
+              <div class="terms-agreement">
+                <label class="remember-me">
+                  <input type="checkbox" v-model="termsAccepted" />
+                  <span class="sub-text">我已閱讀並同意服務條款與隱私政策</span>
+                </label>
+              </div>
+              <button type="submit" class="btn-submit">註冊</button>
+            </form>
+            <div class="login-link">
+              已有帳戶？
+              <a @click="changeMode('login')">請在此登入</a>
+            </div>
+            <div class="social-login-wrapper">
+              <div class="social-login-divider"><span class="sub-text">或其他方式</span></div>
+              <div class="social-login-icons">
+                <a href="#" class="social-icon google"><i class="fab fa-google"></i></a>
+                <a href="#" class="social-icon line"><i class="fab fa-line"></i></a>
+                <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+              </div>
             </div>
           </div>
 
-          <div class="form-options terms-agreement">
-            <label class="remember-me">
-              <input type="checkbox" v-model="termsAccepted" />
-              <span class="sub-text">我已閱讀並同意服務條款與隱私政策</span>
-            </label>
+          <div v-else key="forgotPassword">
+            <h2>忘記密碼</h2>
+            <p class="form-subtitle">密碼重設信將寄至您的信箱</p>
+            <form @submit.prevent="handleForgotPassword">
+              <div class="form-group">
+                <label for="forgot-email">電子郵件</label>
+                <input
+                  type="email"
+                  id="forgot-email"
+                  v-model="email"
+                  required
+                  placeholder="電子郵件"
+                />
+              </div>
+              <button type="submit" class="btn-submit">確認</button>
+            </form>
+            <a class="back-to-login-link" @click="changeMode('login')">回登入</a>
           </div>
-
-          <button type="submit" class="btn-submit">註冊</button>
-        </form>
-
-        <div class="login-link">
-          已有帳戶？
-          <router-link to="/login">請在此登入。</router-link>
-        </div>
-
-        <div class="social-login-divider">
-          <span>或其他方式註冊</span>
-        </div>
-        <div class="social-login-icons">
-          <a href="#" class="social-icon google"><i class="fab fa-google"></i></a>
-          <a href="#" class="social-icon line"><i class="fab fa-line"></i></a>
-          <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
-        </div>
+        </transition>
       </div>
     </main>
   </div>
@@ -105,16 +170,32 @@
 <script setup>
   import { ref } from 'vue'
 
-  const name = ref('')
-  const gender = ref('')
+  const currentMode = ref('login')
   const email = ref('')
   const password = ref('')
-  const termsAccepted = ref(false)
-
   const passwordFieldType = ref('password')
+  const name = ref('')
+  const gender = ref('')
+  const termsAccepted = ref(false)
+  const rememberMe = ref(false)
+
+  const changeMode = (mode) => {
+    currentMode.value = mode
+    email.value = ''
+    password.value = ''
+    name.value = ''
+    gender.value = ''
+    termsAccepted.value = false
+    rememberMe.value = false
+  }
 
   const togglePasswordVisibility = () => {
     passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password'
+  }
+
+  const handleLogin = () => {
+    console.log('Logging in with:', email.value, password.value, rememberMe.value)
+    alert('登入功能僅為展示')
   }
 
   const handleRegister = () => {
@@ -122,14 +203,18 @@
       alert('請先閱讀並同意服務條款與隱私政策')
       return
     }
-    console.log('Registering with:', {
-      name: name.value,
-      gender: gender.value,
-      email: email.value,
-      password: password.value,
-      terms: termsAccepted.value,
-    })
+    console.log('Registering with:', name.value, gender.value, email.value, password.value)
     alert('註冊功能僅為展示')
+  }
+
+  const handleForgotPassword = () => {
+    console.log('Password reset requested for:', email.value)
+    alert('密碼重設信已寄出（此為展示訊息）')
+  }
+
+  const sendVerificationCode = () => {
+    console.log('Sending verification code to:', email.value)
+    alert('哈哈不給你')
   }
 </script>
 
@@ -137,7 +222,10 @@
   @use '@/assets/style/variables' as *;
   @use '@/assets/style/mixins' as *;
 
-  .register-page {
+  .wrapper::before {
+    @include bg-layer-fixed-dark;
+  }
+  .auth-page {
     background-color: $color-bg-primary-dark;
     color: $color-text-white;
     min-height: 100vh;
@@ -146,29 +234,23 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
-    font-family: $font-sans;
-
-    padding-bottom: 80px;
   }
-
   .background-overlay {
     @include bg-layer-fixed-dark;
   }
 
-  .register-main {
+  .auth-main {
     display: flex;
     width: 100%;
     max-width: $container;
     padding: 20px;
     gap: 100px;
-    align-items: center;
+
+    align-items: flex-start;
     justify-content: center;
     z-index: 5;
-
-    @include respond(md) {
-      flex-direction: column;
-      gap: 20px;
-    }
+    margin-top: 5rem;
+    margin-bottom: 8rem;
   }
 
   .welcome-section {
@@ -176,11 +258,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    h1 {
+    .welcome-title {
       margin-bottom: 20px;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 48px;
+      font-style: italic;
     }
-
     @include respond(md) {
       display: none;
     }
@@ -193,9 +276,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    bottom: 40px;
-    left: 30px;
-
+    animation: floatAnimation 5s ease-in-out infinite;
     .diver-img {
       max-width: 100%;
       transform: scaleX(-1);
@@ -203,7 +284,6 @@
       z-index: 1;
     }
   }
-
   .bubble {
     position: absolute;
     z-index: 0;
@@ -234,188 +314,174 @@
     left: 365px;
   }
 
+  @keyframes floatAnimation {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
   .form-section {
     width: 400px;
     max-width: 450px;
+    min-height: 650px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     h2 {
       text-align: center;
       margin-bottom: 30px;
     }
-
     .form-group {
       margin-bottom: 20px;
-
       label {
         display: block;
         margin-bottom: 8px;
-      }
-
-      input:not([type='checkbox']),
-      select {
-        width: 100%;
-        padding: 12px 15px;
-        background-color: $color-white;
-        border: 1px solid #ccc;
-        border-radius: 8px;
+        color: $color-text-white;
+        font-family: $font-sans;
         font-size: $p-desktop;
-        color: $color-black;
-        box-sizing: border-box;
-        font-family: inherit;
-
         @include respond(md) {
           font-size: $p-mobile;
         }
       }
-
-      select {
-        appearance: none;
-        -webkit-appearance: none;
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-        background-repeat: no-repeat;
-        background-position: right 0.75rem center;
-        background-size: 16px 12px;
+      input:not([type='checkbox']) {
+        width: 100%;
+        padding: 12px 15px;
+        background-color: $color-white;
+        border: $border-hairline solid $border-color-gray;
+        border-radius: $border-radius-md;
+        font-size: $p-desktop;
+        color: $color-black;
       }
-
-      .input-with-button {
-        position: relative;
-
-        input {
-          padding-right: 120px;
-        }
-
-        .btn-verify {
+    }
+    input[type='checkbox'] {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border: $border-hairline solid $color-gray;
+      border-radius: $border-radius-sm;
+      background-color: $color-white;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-right: 8px;
+      &:checked {
+        background-color: $color-accent;
+        border-color: $color-accent;
+        &::after {
+          content: '';
           position: absolute;
-          top: 50%;
-          right: 6px;
-          transform: translateY(-50%);
-          height: 32px;
-          padding: 0 15px;
-          background-color: $color-white;
-          color: $color-black;
-          border: 1px solid #ccc;
-          border-radius: $border-radius-sm;
-          cursor: pointer;
-          font-size: $sub-desktop;
-
-          &:hover {
-            background-color: $color-gray-light;
-          }
-        }
-      }
-
-      .password-wrapper {
-        position: relative;
-
-        .toggle-password {
-          position: absolute;
-          top: 50%;
-          right: 15px;
-          transform: translateY(-50%);
-          cursor: pointer;
-          color: $color-gray;
+          left: 6px;
+          top: 2px;
+          width: 4px;
+          height: 9px;
+          border: solid $color-bg-primary-dark;
+          border-width: 0 2px 2px 0;
+          transform: rotate(45deg);
         }
       }
     }
-
-    .form-options {
-      margin-bottom: 30px;
-      text-align: left;
-      padding-left: 12px;
-    }
-    .sub-text {
-      color: $color-white;
+    .password-wrapper {
+      position: relative;
+      .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: $color-gray;
+      }
     }
     .remember-me {
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 8px;
+      cursor: pointer;
+    }
 
-      input[type='checkbox'] {
-        appearance: none;
-        width: 18px;
-        height: 18px;
-        border: 1px solid $color-gray;
-        border-radius: 4px;
-        background-color: $color-white;
-        position: relative;
+    .form-options-login {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      .forgot-password {
+        color: $color-text-white;
+        text-decoration: none;
         cursor: pointer;
-
-        &:checked {
-          background-color: $color-accent;
-          border-color: $color-accent;
-
-          &::after {
-            content: '';
-            position: absolute;
-            left: 6px;
-            top: 2px;
-            width: 4px;
-            height: 9px;
-            border: solid $color-bg-primary-dark;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-          }
+        &:hover {
+          text-decoration: underline;
         }
       }
+    }
+    .terms-agreement {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 30px;
     }
 
     .btn-submit {
       width: 100%;
       padding: 15px;
-      background-color: $color-accent;
+      background-color: $color-yellow;
       border: none;
       border-radius: $border-radius-md;
       color: $color-white;
       font-size: $p-desktop;
       font-weight: $font-bold;
       cursor: pointer;
-
       &:hover {
-        background-color: $color-orange-hover;
-      }
-
-      @include respond(md) {
-        font-size: $p-mobile;
+        background-color: $color-yellow-hover;
       }
     }
 
+    .switch-mode-link,
     .login-link {
       text-align: center;
-      margin: 20px 0;
-      font-size: $p-desktop;
-      color: $color-white;
-
-      @include respond(md) {
-        font-size: $p-mobile;
-      }
-
+      margin-top: 30px;
       a {
-        color: $color-white;
+        color: $color-text-highlight;
         text-decoration: none;
         font-weight: $font-bold;
-
+        cursor: pointer;
+        margin-left: 5px;
         &:hover {
           text-decoration: underline;
         }
       }
     }
 
+    .form-subtitle {
+      text-align: center;
+      color: $color-text-sub;
+      margin-bottom: 30px;
+    }
+    .back-to-login-link {
+      display: block;
+      text-align: center;
+      margin-top: 30px;
+      color: $color-text-white;
+      cursor: pointer;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .social-login-wrapper {
+      margin-top: auto;
+      padding-top: 30px;
+    }
     .social-login-divider {
-      margin: 30px 0;
       display: flex;
       align-items: center;
       gap: 15px;
-
-      .sub-text {
-        font-size: $sub-desktop;
-        color: $color-text-sub;
-
-        @include respond(md) {
-          font-size: $sub-mobile;
-        }
-      }
-
+      margin-bottom: 20px;
       &::before,
       &::after {
         content: '';
@@ -424,12 +490,10 @@
         background-color: $color-text-sub;
       }
     }
-
     .social-login-icons {
       display: flex;
       justify-content: center;
       gap: 20px;
-
       .social-icon {
         font-size: 24px;
         width: 50px;
@@ -441,11 +505,9 @@
         align-items: center;
         text-decoration: none;
         transition: filter 0.3s;
-
         &:hover {
           filter: brightness(0.9);
         }
-
         &.google {
           background-color: #db4437;
         }
@@ -458,13 +520,41 @@
       }
     }
 
-    @include respond(md) {
-      width: 100%;
-      padding: 0 20px;
-      box-sizing: border-box;
+    .input-with-button {
+      position: relative;
+
+      input {
+        width: 100%;
+        padding-right: 140px;
+      }
+
+      .btn-verify {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        padding: 8px 12px;
+        background-color: $color-white;
+        border: $border-hairline solid $border-color-gray;
+        border-radius: $border-radius-sm;
+        font-size: $sub-desktop;
+        color: $color-black;
+        cursor: pointer;
+        white-space: nowrap;
+
+        &:hover {
+          background-color: darken($color-white, 5%);
+        }
+      }
     }
   }
-  .wrapper::before {
-    @include bg-layer-fixed-dark;
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.2s ease;
+  }
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
   }
 </style>

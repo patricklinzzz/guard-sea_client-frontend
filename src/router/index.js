@@ -46,11 +46,6 @@ const router = createRouter({
       component: ProductListView,
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/Auth/LoginView.vue'),
-    },
-    {
       path: '/productlist/:id',
       name: 'productdetail',
       component: ProductDetailView,
@@ -90,11 +85,6 @@ const router = createRouter({
       path: '/event',
       name: 'event',
       component: EventListView,
-    },
-    {
-      path: '/forgot-password',
-      name: 'forgot-password',
-      component: ForgotPasswordView,
     },
 
     // {
