@@ -11,6 +11,7 @@ import NewInsideView from '@/views/New/NewInsideView.vue'
 import AboutView from '@/views/About/AboutView.vue'
 import RegisterView from '@/views/Auth/RegisterView.vue'
 import EventListView from '@/views/Event/EventListView.vue'
+import EventDetail from '@/views/Event/EventDetail.vue'
 import ForgotPasswordView from '@/views/Auth/ForgotPassword.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -90,6 +91,12 @@ const router = createRouter({
       path: '/event',
       name: 'event',
       component: EventListView,
+    },
+    {
+      path: '/event:id',
+      name: 'EventDetail',
+      component: EventDetail,
+      props: true
     },
     {
       path: '/forgot-password',
