@@ -1,58 +1,58 @@
 <script setup>
-import { RouterLink } from 'vue-router'
-import { computed, ref } from 'vue'
+  import { RouterLink } from 'vue-router'
+  import { computed, ref } from 'vue'
 
-//手機menu
-const menu_open = ref(false)
-const toggle_menu = () => {
-  menu_open.value = !menu_open.value
-}
-//漢堡與x切換
-const change_ham_icon = computed(() => {
-  if (menu_open.value) {
-    return "fa-solid fa-xmark"
-  } else {
-    return "fa-solid fa-bars"
+  //手機menu
+  const menu_open = ref(false)
+  const toggle_menu = () => {
+    menu_open.value = !menu_open.value
   }
-})
-//桌面版教育下拉選單
-const isedu_dropdown = ref(false)
-const open_edu_dropdown = () => {
-  if (window.innerWidth >= 768) {
-    isedu_dropdown.value = true
+  //漢堡與x切換
+  const change_ham_icon = computed(() => {
+    if (menu_open.value) {
+      return 'fa-solid fa-xmark'
+    } else {
+      return 'fa-solid fa-bars'
+    }
+  })
+  //桌面版教育下拉選單
+  const isedu_dropdown = ref(false)
+  const open_edu_dropdown = () => {
+    if (window.innerWidth >= 768) {
+      isedu_dropdown.value = true
+    }
   }
-}
-// 滑鼠離開時關閉下拉菜單
-const close_edu_dropdown = () => {
-  if (window.innerWidth >= 768) {
-    isedu_dropdown.value = false
+  // 滑鼠離開時關閉下拉菜單
+  const close_edu_dropdown = () => {
+    if (window.innerWidth >= 768) {
+      isedu_dropdown.value = false
+    }
   }
-}
-// 點擊連結後關閉下拉選單以及選單內教育的>
-const edu_linkclick = () => {
-  menu_open.value = false
-  dropdown_open.value = false
-}
+  // 點擊連結後關閉下拉選單以及選單內教育的>
+  const edu_linkclick = () => {
+    menu_open.value = false
+    dropdown_open.value = false
+  }
 
-//手機版教育下拉選單
-const dropdown_open = ref(false)
-const toggle_dropdown = () => {
-  dropdown_open.value = !dropdown_open.value
-}
-const dropdown_arrow = computed(() => {
-  if (dropdown_open.value) {
-    return "fa-solid fa-caret-up"
-  } else {
-    return "fa-solid fa-caret-up fa-flip-vertical"
+  //手機版教育下拉選單
+  const dropdown_open = ref(false)
+  const toggle_dropdown = () => {
+    dropdown_open.value = !dropdown_open.value
   }
-})
+  const dropdown_arrow = computed(() => {
+    if (dropdown_open.value) {
+      return 'fa-solid fa-caret-up'
+    } else {
+      return 'fa-solid fa-caret-up fa-flip-vertical'
+    }
+  })
 </script>
 
 <template>
   <header>
     <!-- 電腦導覽列 -->
     <div id="navbar">
-      <router-link to="/"><img src="../../assets/images/logo.png" alt="" id="logo" /></router-link>
+      <router-link to="/"><img src="../../assets/images/logo.svg" alt="" id="logo" /></router-link>
 
       <nav id="desktop_nav">
         <!-- 教育hover下拉選單 -->
@@ -72,7 +72,7 @@ const dropdown_arrow = computed(() => {
         <router-link to="/event">活動</router-link>
         <router-link to="/new">最新消息</router-link>
         <router-link to="/about">關於我們</router-link>
-        <router-link to="/login">
+        <router-link to="/register">
           <i class="fa-solid fa-user"></i>
         </router-link>
         <router-link to="/">
@@ -114,190 +114,189 @@ const dropdown_arrow = computed(() => {
 </template>
 
 <style scoped lang="scss">
-header {
-  background-color: v.$color-blue-dark;
-  position: relative;
+  header {
+    background-color: v.$color-blue-dark;
+    position: relative;
 
-  #navbar {
-    max-width: 1200px;
-    height: 85px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: auto;
-    padding-left: 30px;
-    padding-right: 30px;
-
-    @include respond(md) {
-      padding-left: 15px;
-      padding-right: 15px;
-    }
-
-    img {
-      display: flex;
-      justify-content: center;
-    }
-
-    #logo {
-      width: 100%;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-    }
-
-    #desktop_nav {
-      display: flex;
-      align-items: center;
-      gap: 30px;
-      height: 100%;
-
-      @include respond(md) {
-        display: none;
-      }
-
-      a {
-        color: #fff;
-        text-decoration-line: none;
-      }
-
-      #edu_dropdown {
-        height: 100%;
-        position: relative;
-
-        a {
-          height: 100%;
-          display: flex;
-          align-items: center;
-        }
-
-        #edu_dropdown_menu {
-          position: absolute;
-          top: 70px;
-          z-index: 999;
-
-          a {
-            width: 100%;
-            padding: 5px 20px;
-            white-space: nowrap;
-            background-color: v.$color-blue;
-          }
-        }
-      }
-    }
-
-    #mobile_nav {
-      display: none;
-      align-items: center;
-      gap: 20px;
-      height: 100%;
-
-      @include respond(md) {
-        display: flex;
-      }
-
-      a,
-      i {
-        color: #fff;
-        text-decoration-line: none;
-      }
-
-      i {
-        font-size: 20px;
-      }
-    }
-  }
-}
-
-#md_menu {
-  position: absolute;
-  top: 85px;
-  background-color: v.$color-blue-dark;
-  width: 100vw;
-  height: calc(100vh - 85px);
-  z-index: 1000;
-
-  &>ul {
-    margin: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    ul {
-      li {
-        a {
-          color: #fff;
-          text-decoration-line: none;
-          padding-left: 3em;
-        }
-      }
-    }
-
-    #md_edu_dropdown {
+    #navbar {
+      max-width: 1200px;
+      height: 85px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0;
+      margin: auto;
+      padding-left: 30px;
+      padding-right: 30px;
 
-      a {
-        width: auto;
-        flex-grow: 0;
+      @include respond(md) {
+        padding-left: 15px;
+        padding-right: 15px;
       }
 
-      i {
-        text-align: right;
-        font-size: 30px;
-        flex-grow: 1;
+      img {
+        display: flex;
+        justify-content: center;
       }
 
-    }
+      #logo {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+      }
 
-    &>*,
-    &>*>a {
-      width: 100%;
-      font-size: 20px;
-      letter-spacing: 1%;
-      line-height: 150%;
-      color: #fff;
-      padding: 10px 0;
-      border-bottom: 1px solid #fff;
-      text-decoration-line: none;
-    }
+      #desktop_nav {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        height: 100%;
 
-    a:last-child,
-    &>*>a {
-      border: 0;
+        @include respond(md) {
+          display: none;
+        }
+
+        a {
+          color: #fff;
+          text-decoration-line: none;
+        }
+
+        #edu_dropdown {
+          height: 100%;
+          position: relative;
+
+          a {
+            height: 100%;
+            display: flex;
+            align-items: center;
+          }
+
+          #edu_dropdown_menu {
+            position: absolute;
+            top: 70px;
+            z-index: 999;
+
+            a {
+              width: 100%;
+              padding: 5px 20px;
+              white-space: nowrap;
+              background-color: v.$color-blue;
+            }
+          }
+        }
+      }
+
+      #mobile_nav {
+        display: none;
+        align-items: center;
+        gap: 20px;
+        height: 100%;
+
+        @include respond(md) {
+          display: flex;
+        }
+
+        a,
+        i {
+          color: #fff;
+          text-decoration-line: none;
+        }
+
+        i {
+          font-size: 20px;
+        }
+      }
     }
   }
-}
 
-a:hover,
-i:hover {
-  color: v.$color-skyblue !important;
-}
+  #md_menu {
+    position: absolute;
+    top: 85px;
+    background-color: v.$color-blue-dark;
+    width: 100vw;
+    height: calc(100vh - 85px);
+    z-index: 1000;
 
-// 漢堡動畫
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
+    & > ul {
+      margin: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
+      ul {
+        li {
+          a {
+            color: #fff;
+            text-decoration-line: none;
+            padding-left: 3em;
+          }
+        }
+      }
 
-// 教育下拉選單動畫
-.slide-fade-enter-active {
-  transition: all 0.3s ease-out;
-}
+      #md_edu_dropdown {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0;
 
-.slide-fade-leave-active {
-  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
-}
+        a {
+          width: auto;
+          flex-grow: 0;
+        }
 
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateY(-20%);
-  opacity: 0;
-}
+        i {
+          text-align: right;
+          font-size: 30px;
+          flex-grow: 1;
+        }
+      }
+
+      & > *,
+      & > * > a {
+        width: 100%;
+        font-size: 20px;
+        letter-spacing: 1%;
+        line-height: 150%;
+        color: #fff;
+        padding: 10px 0;
+        border-bottom: 1px solid #fff;
+        text-decoration-line: none;
+      }
+
+      a:last-child,
+      & > * > a {
+        border: 0;
+      }
+    }
+  }
+
+  a:hover,
+  i:hover {
+    color: v.$color-skyblue !important;
+  }
+
+  // 漢堡動畫
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.2s ease;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  // 教育下拉選單動畫
+  .slide-fade-enter-active {
+    transition: all 0.3s ease-out;
+  }
+
+  .slide-fade-leave-active {
+    transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+
+  .slide-fade-enter-from,
+  .slide-fade-leave-to {
+    transform: translateY(-20%);
+    opacity: 0;
+  }
 </style>

@@ -9,8 +9,9 @@ import CartView from '@/views/Product/CartView.vue'
 import NewListView from '@/views/New/NewListView.vue'
 import NewInsideView from '@/views/New/NewInsideView.vue'
 import AboutView from '@/views/About/AboutView.vue'
-import RegisterView from '@/views/Auth/RegisterView.vue';
+import RegisterView from '@/views/Auth/RegisterView.vue'
 import EventListView from '@/views/Event/EventListView.vue'
+import SpeciesinfoView from '@/views/Educate/SpeciesinfoView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,11 +47,6 @@ const router = createRouter({
       component: ProductListView,
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('@/views/Auth/LoginView.vue'),
-    },
-      {
       path: '/productlist/:id',
       name: 'productdetail',
       component: ProductDetailView,
@@ -82,16 +78,21 @@ const router = createRouter({
       name: 'about',
       component: AboutView,
     },
-      {
+    {
       path: '/register',
-      component: RegisterView
+      component: RegisterView,
     },
-      {
+    {
       path: '/event',
       name: 'event',
-      component: EventListView
-    }
-
+      component: EventListView,
+    },
+    {
+      path: '/edu/species/:id',
+      name: 'speciesinfo',
+      component: SpeciesinfoView,
+      props: true,
+    },
     // {
     //   path: '/about',
     //   name: 'about',
