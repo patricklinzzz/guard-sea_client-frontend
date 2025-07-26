@@ -91,9 +91,11 @@
 
     return path
   }
-
+  defineProps(['code', 'title'])
   const svg = ref(null)
   const buttonPath = ref(null)
+  const pathD = ref('M 210 10 A 200 200 0 1 1 210 410 A 200 200 0 1 1 210 10 Z')
+
   const init_svg = (el) => {
     svg.value = el ? el : null
   }
@@ -119,9 +121,10 @@
     }
 
     gsap.ticker.add(() => {
+      pathD.value = spline(liquidPoints, options.tension, options.close)
       gsap.set(path, {
         attr: {
-          d: spline(liquidPoints, options.tension, options.close),
+          d: pathD.value,
         },
       })
     })
@@ -137,13 +140,14 @@
     },
     axis: ['x', 'y'],
   }
-
+  const img_ref = '/src/assets/images/Educate/Causes/'
   onMounted(() => {
     window.addEventListener('mousemove', (e) => {
       const { x, y } = transformCoords(e)
 
       mousePos.x = x
       mousePos.y = y
+
       liquidPoints.forEach((point, index) => {
         const pointOrigin = originPoints[index]
         const distX = Math.abs(pointOrigin.x - mousePos.x)
@@ -189,32 +193,30 @@
 </script>
 
 <template>
-  <svg width="450" height="450" viewBox="0 0 450 450" :ref="(el) => init_svg(el)">
-    <!-- The centered circle path -->
-    <path
-      :ref="(el) => init_path(el)"
-      d="M 225 25 A 200 200 0 1 1 225 425 A 200 200 0 1 1 225 25 Z"
-      fill="transparent"
-      stroke="black"
-      stroke-width="3"
-    />
+  <svg viewBox="0 0 420 420" :ref="(el) => init_svg(el)">
+    <defs>
+      <mask :id="'bubble_mask_' + code">
+        <path :ref="(el) => init_path(el)" :d="pathD" fill="#fff" stroke="black" stroke-width="3" />
+      </mask>
+    </defs>
+    <image
+      preserveAspectRatio="xMidYMid slice"
+      :mask="'url(#bubble_mask_' + code + ')'"
+      :href="img_ref + title + '.jpg'"
+    ></image>
   </svg>
-
-  <!-- <svg
-    width="481"
-    height="481"
-    viewBox="0 0 600 600"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    :ref="(el) => init_svg(el)"
-  >
-    <path
-      :ref="(el) => init_path(el)"
-      d="M1.5,240.5a239,239 0 1,0 478,0a239,239 0 1,0 -478,0"
-      stroke="black"
-      stroke-width="3"
-    ></path>
-  </svg> -->
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  image {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
+  svg {
+    position: relative;
+    width: 420px;
+    height: 420px;
+    cursor: pointer;
+  }
+</style>

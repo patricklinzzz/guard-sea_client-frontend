@@ -1,0 +1,153 @@
+<script setup>
+  import { onMounted, onBeforeUnmount, ref } from 'vue'
+  import L from 'leaflet'
+  import 'leaflet/dist/leaflet.css'
+  import Card from '@/components/map/map_card.vue'
+  import { useRouter } from 'vue-router'
+  const router = useRouter()
+
+  const map = ref(null)
+
+  const showCard = ref(false)
+  const cardContent = ref({
+    imgUrl: '',
+    actionLink: '',
+    title: '',
+  })
+  const closeCard = () => {
+    showCard.value = false
+  }
+
+  const indoPacificCenter = ref(null) // 印度太平洋
+  const creatureMarkers = ref([]) // 用來儲存生物標記的陣列
+
+  onMounted(() => {
+    if (map.value) {
+      return
+    }
+    map.value = L.map('map_container', {
+      maxBounds: window.L.latLngBounds([-85, -180], [85, 180]),
+      maxBoundsViscosity: 1,
+      zoomAnimation: true,
+      zoomControl: false,
+    }).setView([0, 0], 2)
+
+    L.tileLayer(
+      'https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}',
+      {
+        maxZoom: 8,
+        minZoom: 2,
+        attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>',
+      }
+    ).addTo(map.value)
+
+    // 印度太平洋
+    const indoPacificCoords = [-33, 80] // 圓心座標
+    const indoPacificRadius = 3000000 // 圓形半徑
+    indoPacificCenter.value = L.circle(indoPacificCoords, {
+      color: 'orange',
+      weight: 1.5,
+      dashArray: '10, 10',
+      fillColor: '#FA0',
+      fillOpacity: 0.08,
+      radius: indoPacificRadius,
+      className: 'animated_circle',
+    }).addTo(map.value)
+    // 印度太平洋點擊
+    indoPacificCenter.value.on('click', () => {
+      const centerLatLng = indoPacificCenter.value.getLatLng()
+      map.value.setView(centerLatLng, 3, {
+        animate: true,
+        duration: 1.0, // 動畫持續時間
+        easeLinearity: 0.5, // 動畫平滑度
+      })
+    })
+    addCreatureMarkers()
+    function addCreatureMarkers() {
+      creatureMarkers.value.forEach((marker) => marker.remove())
+      creatureMarkers.value = []
+      //生物圖標
+      const Dugong_dugonIcon = L.divIcon({
+        className: 'creature-icon',
+        html: '<img src="./src/assets/images/Educate/Indo_Pacific_Region/Dugong_dugon.png" style="width: 60px; height: 60px;">',
+        iconSize: [60, 60],
+        iconAnchor: [30, 30],
+      })
+      //生物標記
+      const markersData = [
+        {
+          latLng: [-30, 75],
+          icon: Dugong_dugonIcon,
+          title: '儒艮 (Dugong dugon)',
+          imgUrl: '/src/assets/images/Educate/Indo_Pacific_Region/Dugong_dugon.png',
+          actionLink: '/edu/species', //等生物圖鑑內頁路徑出來
+        },
+      ]
+
+      markersData.forEach((data) => {
+        const markerInstance = L.marker(data.latLng, { icon: data.icon }).addTo(map.value)
+        creatureMarkers.value.push(markerInstance)
+
+        markerInstance.on('click', (e) => {
+          cardContent.value = {
+            imgUrl: data.imgUrl,
+            actionLink: data.actionLink,
+            title: data.title,
+          }
+          showCard.value = true
+        })
+      })
+    }
+  })
+
+  onBeforeUnmount(() => {
+    if (map.value) {
+      map.value.remove()
+      map.value = null
+    }
+    if (indoPacificCenter.value) {
+      indoPacificCenter.value.remove()
+      indoPacificCenter.value = null
+    }
+    creatureMarkers.value.forEach((marker) => marker.remove())
+    creatureMarkers.value = []
+  })
+
+  const handleCardNavigate = (link) => {
+    router.push(link)
+    closeCard()
+  }
+</script>
+
+<template>
+  <div id="map_container">
+    <Card
+      :is-visible="showCard"
+      @close="closeCard"
+      :imgUrl="cardContent.imgUrl"
+      :actionLink="cardContent.actionLink"
+      :title="cardContent.title"
+      @navigate="handleCardNavigate"
+    ></Card>
+  </div>
+</template>
+
+<style scoped lang="scss">
+  #map_container {
+    width: 62.5vw;
+    height: 40vw;
+    margin: auto;
+  }
+
+  :deep(.animated_circle) {
+    animation: dash_rotate 20s linear infinite;
+  }
+  @keyframes dash_rotate {
+    from {
+      stroke-dashoffset: 0;
+    }
+    to {
+      stroke-dashoffset: -200;
+    }
+  }
+</style>
