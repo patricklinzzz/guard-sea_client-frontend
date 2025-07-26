@@ -93,6 +93,12 @@ const router = createRouter({
       component: SpeciesinfoView,
       props: true,
     },
+    {
+      path: '/edu/causes/pollution',
+      name: 'pollution',
+      component: () => import('@/views/Educate/Causes/PollutionView.vue'),
+    },
+
     // {
     //   path: '/about',
     //   name: 'about',

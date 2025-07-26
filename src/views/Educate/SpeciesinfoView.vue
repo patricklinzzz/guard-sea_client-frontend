@@ -1,46 +1,20 @@
 <script setup>
-  import { ref, onMounted } from 'vue'
-  const props = defineProps(['id'])
-  const animal = ref({})
+  import { speciesData } from '@/assets/data/Species.js'
+  import { useRoute } from 'vue-router'
+
   // animal.value = animals[id]
-  const animals = [
-    {
-      id: 1,
-      areas: '廣泛海域',
-      name: '綠蠵龜',
-      english: 'Chelonia mydas',
-      status: 'CR極危',
-      classification: '爬蟲綱／海龜科',
-      length: '可達 1.5 公尺',
-      weight: '最多超過 200 公斤',
-      lifespan: '可活超過 80 年',
-      distribution: '全球熱帶與亞熱帶海域，包括台灣東部、蘭嶼、小琉球一帶',
-      image1: new URL(
-        '../../assets/images/Educate/General_Oceanic_Region/Chelonia_mydas1.jpg',
-        import.meta.url
-      ).href,
-      image2: new URL(
-        '../../assets/images/Educate/General_Oceanic_Region/Chelonia_mydas2.jpg',
-        import.meta.url
-      ).href,
-      image3: new URL(
-        '../../assets/images/Educate/General_Oceanic_Region/Chelonia_mydas2.jpg',
-        import.meta.url
-      ).href,
-      description:
-        '綠蠵龜是體型最大的草食性海龜，廣泛分布於熱帶與亞熱帶海域，包括台灣東部與小琉球。牠們以海草和藻類為主食，具有強烈的歸巢性，會跨越數千公里回到出生地產卵。 目前綠蠵龜被國際自然保育聯盟列為瀕危物種，主要受到漁業混獲、海岸開發、垃圾污染與非法獵捕等威脅。保育行動包含參與淨灘、避免購買龜製品與推廣海洋教育，讓更多人關注牠們的生存困境與生態價值。',
-    },
-  ]
-  onMounted(() => {
-    animal.value = animals.find((a) => a.id === Number(props.id)) || animals[0]
-  })
+  // onMounted(() => {
+  //   animal.value = animals.find((a) => a.id === Number(props.id)) || animals[0]
+  // })
+  const route = useRoute()
+  const animal = speciesData.find((item) => item.id === Number(route.params.id))
 </script>
 
 <template>
   <div class="wrapper">
     <div class="container">
-      <div class="images" v-if="animal.image1">
-        <img :src="animal.image1" alt="圖片 1" />
+      <div class="images" v-if="animal.image2">
+        <img :src="animal.image2" alt="圖片2" />
       </div>
       <!-- <p class="english">{{ animals[0].english }}</p> -->
 
@@ -80,9 +54,9 @@
       <p>{{ animal.description }}</p>
     </div>
 
-    <div class="images" v-if="animal.image1">
-      <img :src="animal.image2" alt="圖片 2" />
-      <img :src="animal.image2" alt="圖片 3" />
+    <div class="images" v-if="animal.image3">
+      <img :src="animal.image3" alt="圖片 3" />
+      <img :src="animal.image4" alt="圖片 4" />
     </div>
   </div>
 
