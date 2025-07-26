@@ -11,15 +11,19 @@ export const speciesData = [
     lifespan: '可活超過 80 年',
     distribution: '全球熱帶與亞熱帶海域，包括台灣東部、蘭嶼、小琉球一帶',
     image1: new URL(
-      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas1.jpg',
+      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas/Chelonia_mydas1.png',
       import.meta.url
     ).href,
     image2: new URL(
-      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas2.jpg',
+      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas/Chelonia_mydas2.png',
       import.meta.url
     ).href,
     image3: new URL(
-      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas2.jpg',
+      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas/Chelonia_mydas3.png',
+      import.meta.url
+    ).href,
+    image4: new URL(
+      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas/Chelonia_mydas4.png',
       import.meta.url
     ).href,
     description:
@@ -37,15 +41,19 @@ export const speciesData = [
     lifespan: '10~20 年',
     distribution: '北太平洋沿岸海域',
     image1: new URL(
-      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris.png',
+      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris/Enhydra_lutris1.png',
       import.meta.url
     ).href,
     image2: new URL(
-      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris.png',
+      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris/Enhydra_lutris2.png',
       import.meta.url
     ).href,
     image3: new URL(
-      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris.png',
+      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris/Enhydra_lutris3.png',
+      import.meta.url
+    ).href,
+    image4: new URL(
+      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris/Enhydra_lutris4.png',
       import.meta.url
     ).href,
     description:
@@ -63,15 +71,19 @@ export const speciesData = [
     lifespan: '15~20 年',
     distribution: '南極洲沿岸與海冰區域',
     image1: new URL(
-      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri.png',
+      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri/Aptenodytes_forsteri1.png',
       import.meta.url
     ).href,
     image2: new URL(
-      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri.png',
+      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri/Aptenodytes_forsteri2.png',
       import.meta.url
     ).href,
     image3: new URL(
-      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri.png',
+      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri/Aptenodytes_forsteri3.png',
+      import.meta.url
+    ).href,
+    image4: new URL(
+      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri/Aptenodytes_forsteri4.png',
       import.meta.url
     ).href,
     description:
@@ -89,15 +101,19 @@ export const speciesData = [
     lifespan: '40 年以上',
     distribution: '印度太平洋珊瑚礁區',
     image1: new URL(
-      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum.png',
+      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum/Bolbometopon_muricatum1.png',
       import.meta.url
     ).href,
     image2: new URL(
-      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum.png',
+      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum/Bolbometopon_muricatum2.png',
       import.meta.url
     ).href,
     image3: new URL(
-      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum.png',
+      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum/Bolbometopon_muricatum3.png',
+      import.meta.url
+    ).href,
+    image4: new URL(
+      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum/Bolbometopon_muricatum4.png',
       import.meta.url
     ).href,
     description:
@@ -114,12 +130,22 @@ export const speciesData = [
     weight: '可超過 500 公斤',
     lifespan: '30~40 年',
     distribution: '熱帶與亞熱帶河口及沿岸水域',
-    image1: new URL('@/assets/images/Educate/Special_Region/Pristis_pristis.png', import.meta.url)
-      .href,
-    image2: new URL('@/assets/images/Educate/Special_Region/Pristis_pristis.png', import.meta.url)
-      .href,
-    image3: new URL('@/assets/images/Educate/Special_Region/Pristis_pristis.png', import.meta.url)
-      .href,
+    image1: new URL(
+      '@/assets/images/Educate/Special_Region/Pristis_pristis/Pristis_pristis1.png',
+      import.meta.url
+    ).href,
+    image2: new URL(
+      '@/assets/images/Educate/Special_Region/Pristis_pristis/Pristis_pristis2.png',
+      import.meta.url
+    ).href,
+    image3: new URL(
+      '@/assets/images/Educate/Special_Region/Pristis_pristis/Pristis_pristis3.png',
+      import.meta.url
+    ).href,
+    image4: new URL(
+      '@/assets/images/Educate/Special_Region/Pristis_pristis/Pristis_pristis4.png',
+      import.meta.url
+    ).href,
     description:
       '鋸鰩是一種大型軟骨魚類，以其長長的鋸齒狀吻部聞名，這種特殊的構造讓牠能在覓食時翻攪沙泥，或用來擊暈獵物，輔助捕食小魚與甲殼類。牠們棲息於熱帶與亞熱帶河口及沿岸水域，有時甚至會進入淡水河川，展現極高的環境適應力。由於吻部極具商業價值，加上漁業混獲與棲地破壞，鋸鰩族群數量急遽下降，國際自然保護聯盟將其列為極危物種。保護鋸鰩的行動包括限制漁業活動、建立棲地保護區及進行族群監測，以避免這種古老而獨特的物種從地球上消失。未來，透過強化國際合作與社區教育，有望扭轉牠們的滅絕危機。',
   },
