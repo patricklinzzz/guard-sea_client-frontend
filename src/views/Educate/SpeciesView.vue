@@ -56,8 +56,8 @@
   ]
 
   const filteredAnimals = computed(() => {
-    if (currentArea.value === '全部生物') return animals
-    return animals.filter((item) => item.area === currentArea.value)
+    if (currentArea.value === '全部生物') return speciesData
+    return speciesData.filter((item) => item.area === currentArea.value)
   })
 
   function changeArea(area) {
