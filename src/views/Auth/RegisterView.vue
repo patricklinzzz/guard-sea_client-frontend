@@ -224,6 +224,7 @@
 <style scoped lang="scss">
   @use '@/assets/style/variables' as *;
   @use '@/assets/style/mixins' as *;
+  @use "sass:color";
 
   .wrapper::before {
     @include bg-layer-fixed-dark;
@@ -553,7 +554,7 @@
         white-space: nowrap;
 
         &:hover {
-          background-color: darken($color-white, 5%);
+          background-color: color.adjust($color-white, $lightness: -5%);
         }
       }
     }
