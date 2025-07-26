@@ -81,7 +81,7 @@
       </nav>
       <!-- 手機導覽列 -->
       <nav id="mobile_nav">
-        <router-link to="/login">
+        <router-link to="/register">
           <i class="fa-solid fa-user"></i>
         </router-link>
         <router-link to="/">
