@@ -1,5 +1,6 @@
 <script setup>
   import Button from '@/components/buttons/button.vue'
+  import Map from '@/components/map/map.vue'
 </script>
 
 <template>
@@ -58,7 +59,7 @@
         </div>
       </div>
     </section>
-    <section id="map">*import互動地圖</section>
+    <section id="map"><Map></Map></section>
     <section id="pollute">
       <h2>汙染資訊</h2>
       <div id="pollute_data">數據...</div>
@@ -70,7 +71,9 @@
 
 <style scoped lang="scss">
   main {
-    @include bg-layer-fixed-dark;
+    &::before {
+      @include bg-layer-fixed-dark;
+    }
     color: v.$color-white;
   }
   #banner {
@@ -131,6 +134,7 @@
       flex-wrap: wrap;
       & > div {
         height: 250px;
+        width: 250px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -139,7 +143,8 @@
         border: 1px solid v.$color-skyblue;
         box-sizing: border-box;
         border-radius: v.$border-radius-md;
-        padding: 25px 50px;
+        padding: 25px 40px;
+        margin-bottom: 30px;
         img {
           height: 30%;
         }

@@ -11,12 +11,10 @@
 
 //背景色
 @mixin bg-layer-fixed-dark {
-    &::before {
-        content: '';
-        position: fixed;
-        inset: 0;
-        background-color: v.$color-blue-dark;
-        z-index: -1;
-        pointer-events: none;
-    }
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-color: v.$color-blue-dark;
+    z-index: -1;
+    pointer-events: none;
 }

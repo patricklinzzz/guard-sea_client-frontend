@@ -103,10 +103,10 @@
             <li><router-link to="/edu/causes" @click="edu_linkclick">滅絕原因</router-link></li>
             <li><router-link to="/edu/quiz" @click="edu_linkclick">知識測驗</router-link></li>
           </ul>
-          <router-link to="/" @click="edu_linkclick">商品</router-link>
-          <router-link to="/" @click="edu_linkclick">活動</router-link>
-          <router-link to="/" @click="edu_linkclick">最新消息</router-link>
-          <router-link to="/" @click="edu_linkclick">關於我們</router-link>
+          <router-link to="/productlist" @click="edu_linkclick">商品</router-link>
+          <router-link to="/event" @click="edu_linkclick">活動</router-link>
+          <router-link to="/new" @click="edu_linkclick">最新消息</router-link>
+          <router-link to="/about" @click="edu_linkclick">關於我們</router-link>
         </ul>
       </div>
     </transition>

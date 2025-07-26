@@ -2,7 +2,7 @@
     import { ref, computed } from 'vue';
 
     // 動態載入 assets/event 資料夾下所有 jpg、png
-    const imageModules = import.meta.glob('@/assets/images/event/*.{jpg,png}', { eager: true, as: 'url' })
+    const imageModules = import.meta.glob('@/assets/images/event/*.{jpg,png}', { eager: true, query: '?url', import: 'default' })
 
     const images = {}
     for (const path in imageModules) {
