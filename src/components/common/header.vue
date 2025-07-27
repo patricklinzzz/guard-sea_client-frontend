@@ -1,7 +1,7 @@
 <script setup>
   import { RouterLink } from 'vue-router'
-  import { computed, ref } from 'vue'
   import { useCartStore } from '@/stores/cart'
+  import { computed, ref, onMounted, onUnmounted } from 'vue'
 
   //手機menu
   const menu_open = ref(false)
@@ -11,8 +11,10 @@
   //漢堡與x切換
   const change_ham_icon = computed(() => {
     if (menu_open.value) {
+      document.body.style.overflow = 'hidden';
       return 'fa-solid fa-xmark'
     } else {
+      document.body.style.overflow = 'auto';
       return 'fa-solid fa-bars'
     }
   })
@@ -50,10 +52,36 @@
   // // 計算購物車總數量
   const cartStore = useCartStore()
   const cartCount = computed(() => cartStore.totalQuantity)
+
+  //下滑時收起 往上滑出現
+  const isNavHidden = ref(false)
+  let lastScrollY = 0
+
+  const handleScroll = () => {
+    const nowScrollY = window.scrollY
+    if (window.scrollY > 85) {
+      if (nowScrollY < lastScrollY) {
+        isNavHidden.value = false
+      } else {
+        isNavHidden.value = true
+      }
+      lastScrollY = nowScrollY
+    } else {
+      isNavHidden.value = false
+    }
+  }
+
+  onMounted(() => {
+    window.addEventListener('scroll', handleScroll)
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll)
+  })
 </script>
 
 <template>
-  <header>
+  <header :class="{ nav_hidden: isNavHidden }">
     <!-- 電腦導覽列 -->
     <div id="navbar">
       <router-link to="/"><img src="../../assets/images/logo.svg" alt="" id="logo" /></router-link>
@@ -117,13 +145,23 @@
       </div>
     </transition>
   </header>
+  <div id="navbar_placeholder"></div>
 </template>
 
 <style scoped lang="scss">
+  #navbar_placeholder {
+    height: 85px;
+    background-color: v.$color-blue-dark;
+  }
   header {
     background-color: v.$color-blue-dark;
-    position: relative;
-
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 85px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-out;
     #navbar {
       max-width: 1200px;
       height: 85px;
@@ -179,7 +217,7 @@
           #edu_dropdown_menu {
             position: absolute;
             top: 70px;
-            z-index: 999;
+            z-index: 1001;
 
             a {
               width: 100%;
@@ -213,10 +251,12 @@
       }
     }
   }
-
+  .nav_hidden {
+    transform: translateY(-100%);
+  }
   #md_menu {
     position: absolute;
-    top: 85px;
+    top: 84px;
     background-color: v.$color-blue-dark;
     width: 100vw;
     height: calc(100vh - 85px);

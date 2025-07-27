@@ -8,7 +8,7 @@
     },
     imgUrl: {
       type: String,
-      default: './src/assets/images/Educate/indo_Pacific_Region/Dugong_dugon.png',
+      default: '圖片檔案位置',
     },
     actionLink: {
       type: String,
@@ -16,7 +16,7 @@
     },
     title: {
       type: String,
-      default: '乳牛',
+      default: '生物名稱',
     },
   })
   const emit = defineEmits(['close','navigate'])
@@ -44,7 +44,8 @@
     left: 10px;
     width: 30%;
     min-height: 70%;
-    background-color: rgba(v.$color-white, 0.2);
+    background-color: rgba(v.$color-blue-dark, .5);
+    backdrop-filter: blur(10px);
     z-index: 1000;
     border-radius: v.$border-radius-md;
     padding: 10px;
