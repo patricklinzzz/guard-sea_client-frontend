@@ -1,7 +1,7 @@
 <script setup>
   import { ref, computed } from 'vue'
   import { fakeProducts } from '@/assets/data/product'
-
+  import ProductCard from '@/components/product/product_card.vue'
   const selectCategory = ref('全部商品')
   const categories = ['全部商品', '機能服飾', '各類包款', '周邊小物']
 
@@ -24,7 +24,7 @@
 <template>
   <div class="productlist">
     <div class="product_hero">
-      <img src="/src/assets/images/product/product_hero.png" alt="" />
+      <img src="/src/assets/images/product/product_banner.png" alt="" />
       <h1>周邊商品</h1>
     </div>
     <section>
@@ -50,25 +50,15 @@
       </div>
 
       <div class="product_grid">
-        <div
-          class="product_grid_card"
-          v-for="product in filterAndSort"
-          :key="product.id"
-          :product="product"
-        >
-          <RouterLink :to="`/productlist/${product.id}`">
-            <img :src="product.imageUrl" :alt="product.name" />
-          </RouterLink>
-          <div class="product_grid_txt">
-            <p>{{ product.name }}</p>
-            <p class="price">{{ product.price }}</p>
-          </div>
-        </div>
+        <ProductCard v-for="product in filterAndSort" :key="product.id" :product="product" />
       </div>
     </section>
   </div>
 </template>
 <style lang="scss" scoped>
+  .productlist::before {
+    @include bg-layer-fixed-dark;
+  }
   .product_hero {
     position: relative;
     display: flex;
@@ -85,7 +75,6 @@
   }
   section {
     padding: 0 18.75vw;
-    background-color: v.$color-blue-dark;
 
     @include respond(md) {
       padding: 0 6.25rem;
@@ -143,24 +132,6 @@
       column-gap: 1.68rem;
       row-gap: 2.31rem;
 
-      .product_grid_card {
-        border-radius: 8px;
-        img {
-          width: 100%;
-          vertical-align: top;
-        }
-        .product_grid_txt {
-          background-color: v.$color-white;
-          .price {
-            color: v.$color-orange;
-          }
-          p {
-            text-align: center;
-            color: v.$color-black;
-            font-weight: v.$font-bold;
-          }
-        }
-      }
       @include respond(md) {
         grid-template-columns: repeat(2, 1fr);
         column-gap: 1.31rem;

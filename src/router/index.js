@@ -61,6 +61,16 @@ const router = createRouter({
       component: () => import('@/views/Product/CartView.vue'),
     },
     {
+      path: '/shippinginfo',
+      name: 'shippinginfo',
+      component: () => import('@/views/Product/ShippingInfoView.vue'),
+    },
+    {
+      path: '/ordercomplete',
+      name: 'ordercomplete',
+      component: () => import('@/views/Product/OrderCompleteView.vue'),
+    },
+    {
       path: '/new',
       name: 'newlist',
       component: () => import('@/views/New/NewListView.vue'),
@@ -92,12 +102,7 @@ const router = createRouter({
       props: true,
     },
     {
-      path: '/forgot-password',
-      name: 'forgot-password',
-      component: () => import('@/views/Auth/ForgotPassword.vue'),
-    },
-    {
-      path: '/edu/species/:id',
+      path: '/species/:id',
       name: 'speciesinfo',
       component: () => import('@/views/Educate/SpeciesinfoView.vue'),
       props: true,
