@@ -1,6 +1,7 @@
 <script setup>
   import { RouterLink } from 'vue-router'
   import { computed, ref } from 'vue'
+  import { useCartStore } from '@/stores/cart'
 
   //手機menu
   const menu_open = ref(false)
@@ -46,6 +47,9 @@
       return 'fa-solid fa-caret-up fa-flip-vertical'
     }
   })
+  // // 計算購物車總數量
+  const cartStore = useCartStore()
+  const cartCount = computed(() => cartStore.totalQuantity)
 </script>
 
 <template>
@@ -75,8 +79,9 @@
         <router-link to="/register">
           <i class="fa-solid fa-user"></i>
         </router-link>
-        <router-link to="/">
+        <router-link to="/cart" class="cart-icon">
           <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-count" v-if="cartCount > 0">{{ cartCount }}</span>
         </router-link>
       </nav>
       <!-- 手機導覽列 -->
@@ -84,8 +89,9 @@
         <router-link to="/register">
           <i class="fa-solid fa-user"></i>
         </router-link>
-        <router-link to="/">
+        <router-link to="/cart" class="cart-icon">
           <i class="fa-solid fa-cart-shopping"></i>
+          <span class="cart-count" v-if="cartCount > 0">{{ cartCount }}</span>
         </router-link>
         <i :class="change_ham_icon" @click="toggle_menu"></i>
       </nav>
@@ -298,5 +304,29 @@
   .slide-fade-leave-to {
     transform: translateY(-20%);
     opacity: 0;
+  }
+  .cart-icon {
+    position: relative;
+    display: inline-block;
+
+    i {
+      font-size: 20px;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -10px;
+      min-width: 18px;
+      height: 18px;
+      background: red;
+      color: white;
+      font-size: 12px;
+      padding: 0 6px;
+      border-radius: 999px;
+      font-weight: bold;
+      line-height: 18px;
+      text-align: center;
+    }
   }
 </style>
