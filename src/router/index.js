@@ -1,19 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
-import SpeciesView from '@/views/Educate/SpeciesView.vue'
-import CausesView from '@/views/Educate/CausesOverviewView.vue'
-import QuizView from '@/views/Educate/QuizView.vue'
-import ProductListView from '@/views/Product/ProductListView.vue'
-import ProductDetailView from '@/views/Product/ProductDetailView.vue'
-import CartView from '@/views/Product/CartView.vue'
-import NewListView from '@/views/New/NewListView.vue'
-import NewInsideView from '@/views/New/NewInsideView.vue'
-import AboutView from '@/views/About/AboutView.vue'
-import RegisterView from '@/views/Auth/RegisterView.vue'
-import EventListView from '@/views/Event/EventListView.vue'
-import EventDetail from '@/views/Event/EventDetail.vue'
-import ForgotPasswordView from '@/views/Auth/ForgotPassword.vue'
-import SpeciesinfoView from '@/views/Educate/SpeciesinfoView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,92 +17,94 @@ const router = createRouter({
     {
       path: '/edu/species',
       name: 'species',
-      component: SpeciesView,
+      component: () => import('@/views/Educate/SpeciesView.vue'),
     },
     {
       path: '/edu/causes',
       name: 'causes',
-      component: CausesView,
+      component: () => import('@/views/Educate/CausesOverviewView.vue'),
     },
     {
       path: '/edu/causes/pollution',
       name: 'pollution',
-      component: import('@/views/Educate/Causes/PollutionView.vue'),
+      component: () => import('@/views/Educate/Causes/PollutionView.vue'),
     },
     {
       path: '/edu/causes/overfishing',
       name: 'overfishing',
-      component: import('@/views/Educate/Causes/OverfishingView.vue'),
+      component: () => import('@/views/Educate/Causes/OverfishingView.vue'),
     },
     {
       path: '/edu/causes/degradation',
       name: 'degradation',
-      component: import('@/views/Educate/Causes/DegradationView.vue'),
+      component: () => import('@/views/Educate/Causes/DegradationView.vue'),
     },
     {
       path: '/edu/quiz',
       name: 'quiz',
-      component: QuizView,
+      component: () => import('@/views/Educate/QuizView.vue'),
     },
     {
       path: '/productlist',
       name: 'productlist',
-      component: ProductListView,
+      component: () => import('@/views/Product/ProductListView.vue'),
     },
     {
       path: '/productlist/:id',
       name: 'productdetail',
-      component: ProductDetailView,
+      component: () => import('@/views/Product/ProductDetailView.vue'),
       props: true,
     },
     {
       path: '/cart',
       name: 'cart',
-      component: CartView,
+      component: () => import('@/views/Product/CartView.vue'),
     },
     {
-      path: '/:pathMatch(.*)*',
-      name: 'NotFound',
-      component: () => import('@/views/404View.vue'),
+      path: '/shippinginfo',
+      name: 'shippinginfo',
+      component: () => import('@/views/Product/ShippingInfoView.vue'),
+    },
+    {
+      path: '/ordercomplete',
+      name: 'ordercomplete',
+      component: () => import('@/views/Product/OrderCompleteView.vue'),
     },
     {
       path: '/new',
       name: 'newlist',
-      component: NewListView,
+      component: () => import('@/views/New/NewListView.vue'),
     },
     {
       path: '/new/:id',
       name: 'newinside',
-      component: NewInsideView,
+      component: () => import('@/views/New/NewInsideView.vue'),
       props: true,
     },
     {
       path: '/about',
       name: 'about',
-      component: AboutView,
+      component: () => import('@/views/About/AboutView.vue'),
     },
     {
       path: '/register',
-      component: RegisterView,
+      component: () => import('@/views/Auth/RegisterView.vue'),
     },
     {
       path: '/event',
       name: 'event',
-      component: EventListView,
+      component: () => import('@/views/Event/EventListView.vue'),
     },
     {
-      path: '/event:id',
+      path: '/event/:id',
       name: 'EventDetail',
-      component: EventDetail,
-      props: true
+      component: () => import('@/views/Event/EventDetail.vue'),
+      props: true,
     },
     {
-      path: '/forgot-password',
-      name: 'forgot-password',
-      component: ForgotPasswordView,
-      path: '/edu/species/:id',
+      path: '/species/:id',
       name: 'speciesinfo',
-      component: SpeciesinfoView,
+      component: () => import('@/views/Educate/SpeciesinfoView.vue'),
       props: true,
     },
     {
@@ -124,16 +112,20 @@ const router = createRouter({
       name: 'pollution',
       component: () => import('@/views/Educate/Causes/PollutionView.vue'),
     },
-
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue'),
-    // },
+    //404保持在最後一個 要加請加在上方↑↑
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('@/views/404View.vue'),
+    },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0, left: 0 }
+    }
+  },
 })
 
 export default router
