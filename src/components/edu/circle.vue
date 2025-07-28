@@ -1,28 +1,14 @@
 <script setup></script>
 
 <template>
-  <h3 class="text">暫時的導覽列，之後header的dropdown設計完後這頁可以刪掉</h3>
-  <div class="wrapper">
-    <nav>
-      <router-link to="/edu/species"><h2>生物圖鑑</h2></router-link>
-      <router-link to="/edu/causes"><h2>滅絕原因</h2></router-link>
-      <router-link to="/edu/quiz"><h2>知識測驗</h2></router-link>
-    </nav>
-  </div>
+  <nav>
+    <router-link to="/edu/species"><h2>生物圖鑑</h2></router-link>
+    <router-link to="/edu/causes"><h2>滅絕原因</h2></router-link>
+    <router-link to="/edu/quiz"><h2>知識測驗</h2></router-link>
+  </nav>
 </template>
 
 <style lang="scss" scoped>
-  .wrapper::before {
-    @include bg-layer-fixed-dark;
-  }
-
-  .wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-  }
-
   nav {
     display: grid;
     justify-content: center;

@@ -19,11 +19,13 @@
       <!-- <p class="english">{{ animals[0].english }}</p> -->
 
       <div class="animalInfo">
-        <h1 class="areas">{{ animal.areas }}</h1>
         <h2 class="name">{{ animal.name }}</h2>
         <ul>
           <li>
             <p>學名：{{ animal.english }}</p>
+          </li>
+          <li>
+            <p>海域：{{ animal.areas }}</p>
           </li>
           <li>
             <p>分類：{{ animal.classification }}</p>
@@ -130,5 +132,18 @@
     .description img {
       width: 100%;
     }
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: v.$font-bold;
+  }
+  h1 {
+    letter-spacing: v.$letter-spacing-wide;
+  }
+
+  p {
+    letter-spacing: v.$letter-spacing-normal;
+    line-height: v.$line-height-relaxed;
   }
 </style>
