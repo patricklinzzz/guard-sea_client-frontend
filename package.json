@@ -10,6 +10,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@img-comparison-slider/vue": "^8.0.0",
     "gsap": "^3.13.0",
     "leaflet": "^1.9.4",
     "pinia": "^3.0.3",
