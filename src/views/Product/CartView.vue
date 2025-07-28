@@ -42,13 +42,15 @@
           </p>
           <p>尺寸：{{ item.size }}</p>
           <div class="quantity-box">
-            <button @click="cartStore.updateQuantity(index, item.quantity - 1)">－</button>
+            <button @click="cartStore.updateQuantity(index, item.quantity - 1)">-</button>
             <span>{{ item.quantity }}</span>
-            <button @click="cartStore.updateQuantity(index, item.quantity + 1)">＋</button>
+            <button @click="cartStore.updateQuantity(index, item.quantity + 1)">+</button>
           </div>
           <p class="price">價格 ${{ item.price }}</p>
         </div>
-        <button class="remove-btn" @click="cartStore.removeItem(index)">🗑</button>
+        <button class="remove-btn" @click="cartStore.removeItem(index)">
+          <img src="/src/assets/images/product/delete.svg" alt="" />
+        </button>
       </div>
 
       <!-- 優惠券區塊（靜態展示） -->
@@ -58,7 +60,7 @@
           <div class="coupon">
             購物金 $50
             <br />
-            <small>代碼：SAVE50</small>
+            <small>代碼:SAVE50</small>
           </div>
           <div class="coupon">
             購物金 $30
