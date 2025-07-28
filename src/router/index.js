@@ -87,8 +87,9 @@ const router = createRouter({
       component: () => import('@/views/About/AboutView.vue'),
     },
     {
-      path: '/register',
-      component: () => import('@/views/Auth/RegisterView.vue'),
+      path: '/login',
+      name: 'login',
+      component: () => import('@/views/Auth/LoginView.vue'),
     },
     {
       path: '/event',
@@ -102,15 +103,15 @@ const router = createRouter({
       props: true,
     },
     {
-      path: '/species/:id',
+      path: '/edu/species/:id',
       name: 'speciesinfo',
       component: () => import('@/views/Educate/SpeciesinfoView.vue'),
       props: true,
     },
     {
-      path: '/edu/causes/pollution',
-      name: 'pollution',
-      component: () => import('@/views/Educate/Causes/PollutionView.vue'),
+      path: '/member-edit',
+      name: 'MemberEdit',
+      component: () => import('@/views/Auth/MemberEdit.vue'),
     },
     //404保持在最後一個 要加請加在上方↑↑
     {
