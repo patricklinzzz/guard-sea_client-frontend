@@ -104,7 +104,7 @@
         <router-link to="/event">活動</router-link>
         <router-link to="/new">最新消息</router-link>
         <router-link to="/about">關於我們</router-link>
-        <router-link to="/register">
+        <router-link to="/login">
           <i class="fa-solid fa-user"></i>
         </router-link>
         <router-link to="/cart" class="cart-icon">
