@@ -2,8 +2,10 @@
   import { ref, computed } from 'vue'
   import { useProductStore } from '@/stores/product'
   import { useCartStore } from '@/stores/cart'
+  import { useRouter } from 'vue-router'
   import Button from '@/components/buttons/button.vue'
   import ProductCard from '@/components/product/product_card.vue'
+
   const props = defineProps({
     id: {
       type: [String, Number],
@@ -48,6 +50,10 @@
     })
 
     alert('已加入購物車！')
+  }
+  const router = useRouter()
+  const goBack = () => {
+    router.back()
   }
 </script>
 
@@ -175,6 +181,9 @@
             :product="item"
           />
         </div>
+      </div>
+      <div class="go_back">
+        <button @click="goBack">上一頁</button>
       </div>
     </div>
   </div>
@@ -364,6 +373,25 @@
         column-gap: 1rem;
         img {
           width: 100%;
+        }
+      }
+      .go_back {
+        button {
+          margin: 0 auto;
+          display: block;
+          border: none;
+          width: 85px;
+          height: 40px;
+          border-radius: 4px;
+          background-color: v.$color-skyblue-light;
+          font-size: 18px;
+          cursor: pointer;
+          @include respond(md) {
+            margin-bottom: 20px;
+            font-size: 16px;
+            width: 80px;
+            height: 36px;
+          }
         }
       }
     }
