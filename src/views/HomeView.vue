@@ -1,7 +1,11 @@
 <script setup>
+  import { computed, ref } from 'vue'
   //組件
   import Button from '@/components/buttons/button.vue'
   import Map from '@/components/map/map.vue'
+  import ProductCard from '@/components/product/product_card.vue'
+  import { ImgComparisonSlider } from '@img-comparison-slider/vue'
+  import storyCard from '@/components/cards/story.vue'
   //圖片
   import banner from '@/assets/images/homepage/banner.png'
   import bg1 from '@/assets/images/homepage/bg1.png'
@@ -10,9 +14,16 @@
   import action2 from '@/assets/images/homepage/action2.png'
   import action3 from '@/assets/images/homepage/action3.png'
   import diver from '@/assets/images/homepage/diver.png'
-
-  import { ref } from 'vue'
+  import coral_reef_1 from '@/assets/images/homepage/coral_reef_1.png'
+  import coral_reef_2 from '@/assets/images/homepage/coral_reef_2.png'
+  import turtle from '@/assets/images/homepage/turtle.png'
+  import whale from '@/assets/images/homepage/whale.png'
+  import little_fish1 from '@/assets/images/homepage/little_fish1.png'
+  import little_fish2 from '@/assets/images/homepage/little_fish2.png'
+  import coral from '@/assets/images/homepage/coral.png'
+  //Data
   import { newsData } from '@/assets/data/map_news'
+  import { fakeProducts } from '@/assets/data/product'
 
   const allNews = ref(newsData)
   import { useRouter } from 'vue-router'
@@ -20,6 +31,11 @@
   const goToNewsDetail = (id) => {
     router.push(`/new/${id}`) // 跳轉到 /new/1, /new/2 等
   }
+
+  const productsToShow = computed(() => {
+    let products = [...fakeProducts]
+    return products.slice(0, 4)
+  })
 </script>
 
 <template>
@@ -29,7 +45,7 @@
       <article>
         <h1>守護海洋,從了解開始</h1>
         <div id="buttons">
-          <Button variant="transparent" @click="router.push('/event')">了解更多</Button>
+          <Button variant="transparent" @click="router.push('/edu/species')">了解更多</Button>
           <Button @click="router.push('/event')">我想參與</Button>
         </div>
       </article>
@@ -45,6 +61,7 @@
           </p>
         </div>
       </article>
+      <img :src="turtle" alt="" id="turtle" />
     </section>
     <section id="action">
       <h2>我們在做什麼</h2>
@@ -77,23 +94,77 @@
           </p>
         </div>
       </div>
+      <img :src="whale" alt="" id="whale" />
     </section>
     <section id="map">
       <h2>互動地圖</h2>
       <p>
-        <i class="fa-regular fa-circle"></i> 點擊圓圈，探索區域詳情
+        <i class="fa-regular fa-circle"></i>
+        點擊圓圈，探索區域詳情
         <br />
-        <i class="fa-solid fa-map-pin"></i> 點擊圖標，了解海洋生物
+        <i class="fa-solid fa-map-pin"></i>
+        點擊圖標，了解海洋生物
       </p>
       <Map></Map>
     </section>
     <section id="pollute">
       <h2>汙染資訊</h2>
-      <div id="pollute_data">...</div>
+      <div id="pollute_data">
+        <h3>
+          1.2m
+          <br />
+          塑膠汙染
+        </h3>
+        <h3>
+          2500
+          <br />
+          過度捕撈
+        </h3>
+        <h3>
+          800+
+          <br />
+          氣候變遷
+        </h3>
+        <h3>
+          50+
+          <br />
+          噪音汙染
+        </h3>
+      </div>
+      <img :src="little_fish1" alt="" id="little_fish1" />
+      <img :src="little_fish2" alt="" id="little_fish2" />
     </section>
     <section id="coral_reef">
       <h2>珊瑚礁白化危機</h2>
-      <div>...</div>
+      <div id="slider_container">
+        <ImgComparisonSlider class="slider-with-animated-handle">
+          <svg
+            slot="handle"
+            class="custom-animated-handle"
+            xmlns="http://www.w3.org/2000/svg"
+            width="70"
+            viewBox="-8 -3 16 6"
+          >
+            <path
+              d="M -5 -2 L -7 0 L -5 2 M -5 -2 L -5 2 M 5 -2 L 7 0 L 5 2 M 5 -2 L 5 2"
+              fill="#fff"
+              vector-effect="non-scaling-stroke"
+            ></path>
+          </svg>
+          <figure slot="first" class="before">
+            <img style="width: 100%" :src="coral_reef_1" alt="" />
+            <figcaption>Before</figcaption>
+          </figure>
+          <figure slot="second" class="after">
+            <img style="width: 100%" :src="coral_reef_2" alt="" />
+            <figcaption>After</figcaption>
+          </figure>
+        </ImgComparisonSlider>
+        <h3>-- 全球逾50%珊瑚礁已遭白化危機 --</h3>
+        <p>自1950 年以來，全球已有一半以上的珊瑚礁因海水升溫與污染而嚴重白化</p>
+      </div>
+      <img :src="coral" alt="" id="coral1" />
+      <img :src="coral" alt="" id="coral2" />
     </section>
     <section id="future_action">
       <h2>未來的行動藍圖</h2>
@@ -115,7 +186,9 @@
     <section id="story">
       <img :src="diver" alt="" id="img_diver" />
       <h2>真實故事或社群感</h2>
-      <div>...</div>
+      <div id="story_container">
+        <storyCard></storyCard>
+      </div>
     </section>
     <section id="store">
       <h2 id="store_banner">支持我們，讓守護不斷電</h2>
@@ -124,7 +197,13 @@
         來去支持
         <i class="fa-solid fa-chevron-right"></i>
       </Button>
-      <div id="store_container">...</div>
+      <div id="store_container">
+        <ProductCard
+          v-for="product in productsToShow"
+          :key="product.id"
+          :product="product"
+        ></ProductCard>
+      </div>
     </section>
   </main>
 </template>
@@ -183,12 +262,23 @@
         }
       }
     }
+    #turtle {
+      width: 17vw;
+      position: absolute;
+      right: -5%;
+      top: -50%;
+    }
   }
   #action {
-    width: 62.5vw;
-    margin: auto;
+    margin-top: 70px;
+    position: relative;
+    h2 {
+      width: 62.5vw;
+      margin: auto;
+    }
     & > div {
-      margin: 75px 0;
+      width: 62.5vw;
+      margin: 75px auto;
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -215,6 +305,12 @@
         }
       }
     }
+    #whale {
+      width: 17vw;
+      position: absolute;
+      bottom: -30%;
+      left: -3%;
+    }
   }
   #map {
     width: 62.5vw;
@@ -235,23 +331,85 @@
     }
   }
   #pollute {
+    position: relative;
     h2 {
       background: url(@/assets/images/homepage/bg2.png) no-repeat center top / 100vw;
       padding: 0 18.75vw;
     }
     #pollute_data {
-      padding: 75px 18.75vw;
+      padding: 150px 18.75vw;
       background-color: v.$color-blue-extra-dark;
       display: flex;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+    img {
+      width: 12vw;
+      position: absolute;
+      top: -60px;
+    }
+    #little_fish1 {
+      left: 2vw;
+    }
+    #little_fish2 {
+      right: 2vw;
     }
   }
   #coral_reef {
     background-color: v.$color-blue-extra-dark;
-    padding: 0 18.75vw;
-    div {
-      padding: 75px 0;
+    position: relative;
+    h2 {
+      padding: 0 18.75vw;
+    }
+    #slider_container {
+      padding: 75px 18.75vw;
+      text-align: center;
+    }
+    img-comparison-slider {
+      --divider-width: 3px;
+      --divider-color: #012038;
+    }
+    .custom-animated-handle {
+      transition: transform 0.2s;
+    }
+    .slider-with-animated-handle:hover .custom-animated-handle {
+      transform: scale(1.2);
+    }
+    .before,
+    .after {
+      margin: 0;
+    }
+    .before figcaption,
+    .after figcaption {
+      background: #fff;
+      border: 1px solid v.$color-skyblue;
+      border-radius: 8px;
+      color: v.$color-blue-dark;
+      opacity: 0.6;
+      padding: 6px 10px;
+      position: absolute;
+      top: 3%;
+      line-height: 100%;
+    }
+    .before figcaption {
+      left: 12px;
+    }
+    .after figcaption {
+      right: 12px;
+    }
+    & > img {
+      width: 17vw;
+      position: absolute;
+    }
+    #coral1 {
+      bottom: 0;
+      left: -3%;
+    }
+    #coral2 {
+      top: 0;
+      right: -3%;
     }
   }
   #future_action {
@@ -324,7 +482,7 @@
       left: 50%;
       transform: translateX(-50%);
     }
-    div {
+    #story_container {
       padding: 75px 0;
     }
   }
@@ -345,7 +503,11 @@
       float: right;
     }
     #store_container {
-      padding: 100px 0;
+      padding: 70px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      width: 100%;
     }
   }
 </style>
