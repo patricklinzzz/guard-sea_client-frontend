@@ -45,7 +45,7 @@ export const events_all = [
         dateTime: '2025.11.28(六) 09:00 - 12:00', //詳情頁
         location: '福隆海水浴場',
         mapUrl: 'https://maps.app.goo.gl/b29jWkTu8wz2UwXv8',
-        status: '報名中',
+        status: '報名中', //改成slot
         speaker: '海洋志工協會',
         introductionHtml: `
             <p>本次淨灘活動旨在提高大眾對海洋塑膠污染的意識，並透過實際行動共同維護海岸線的清潔。我們將提供所有必要的工具和指導，讓參與者能安全有效地進行淨灘工作。</p>
@@ -308,7 +308,7 @@ export const events_all = [
         dateTime: '2025.09.21(日) 09:00 - 16:00',
         location: '蘇澳漁港',
         mapUrl: 'https://maps.app.goo.gl/D7i4Wg8rGtUNaHPA9',
-        status: '報名中',
+        status: '報名中', //改成slot
         speaker: '漁業署代表',
         introductionHtml: `
             <p>深入漁港，了解漁業運作的同時，也一同參與港區的清潔行動。透過導覽與實作，認識海洋垃圾對漁業的影響，並學習如何共同維護海洋環境。</p>
@@ -335,7 +335,7 @@ export const events_all = [
         dateTime: '2025.09.01(一) 13:00 - 17:00',
         location: '基隆海洋廣場',
         mapUrl: 'https://maps.app.goo.gl/4Kbr5adE5L6xNGqY9',
-        status: '報名中',
+        status: '報名截止',
         speaker: '藝術家 小海',
         introductionHtml: `
             <p>以海洋為靈感，利用回收材料或天然素材，創作出獨一無二的海洋藝術品。在創作中感受海洋之美，並傳達海洋保育的訊息。</p>
@@ -361,7 +361,7 @@ export const events_all = [
         dateTime: '2025.08.13(日) 09:00 - 13:00',
         location: '新北市中角灣',
         mapUrl: 'https://maps.app.goo.gl/sUmi1t7wTduFdHjH9',
-        status: '報名中',
+        status: '報名截止',
         speaker: '環保志工隊長 阿力',
         introductionHtml: `
             <p>不僅是淨灘，更是透過廢棄物記錄，了解塑膠垃圾的來源與種類，從數據中發現問題，並倡議社區共同建立無塑生活模式。</p>
@@ -383,10 +383,10 @@ export const events_all = [
         img: ocean, 
         category: '線上參與',
         bannerImage: oceanBanner,
-        date: '2025.08.07',
-        dateTime: '2025.08.07(一) 20:00 - 21:30',
+        date: '2025.07.30',
+        dateTime: '2025.07.30(一) 20:00 - 21:30',
         location: '線上參與',
-        status: '報名中',
+        status: '已結束',
         speaker: '海洋地質學家 楊教授',
         introductionHtml: `
             <p>深海是地球上最神秘的區域，充滿了未知的生命與奇特的地貌。本講座將帶您深入探索深海的奧秘，揭開那些超乎想像的自然奇觀。</p>
@@ -399,7 +399,7 @@ export const events_all = [
                 <li><p>深海資源與保育挑戰</p></li>
             </ul>
         `,
-        deadline: '2025 年 08 月 02 日',
+        deadline: '2025 年 07 月 25 日',
         registrationSpots: '名額：150人，額滿為止 (活動前一周將發送直播連結，時間到點擊連結即可參加)',
     },
     { 
@@ -411,7 +411,7 @@ export const events_all = [
         date: '2025.07.26',
         dateTime: '2025.07.26(日) 14:00 - 15:00',
         location: '線上直播',
-        status: '已結束',
+        status: '已取消',
         speaker: '小魚',
         introductionHtml: `
             <p>想測試你對海洋的了解嗎？快來參加線上問答賽，挑戰你的海洋知識！贏家還有機會獲得神秘好禮喔！</p>
@@ -424,7 +424,7 @@ export const events_all = [
             </ul>
         `,
         deadline: '2025 年 07 月 21 日',
-        registrationSpots: '名額：20人，已結束',
+        registrationSpots: '名額：20人，額滿為止',
     },
     { 
         id: 16, 
@@ -451,6 +451,6 @@ export const events_all = [
             </ul>
         `,
         deadline: '2025 年 07 月 07 日',
-        registrationSpots: '名額：限15人，已結束',
+        registrationSpots: '名額：限5人，額滿為止',
     }
 ]
