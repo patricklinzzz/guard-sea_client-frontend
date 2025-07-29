@@ -103,6 +103,11 @@ const router = createRouter({
       props: true,
     },
     {
+      path: '/event/reg/:id',
+      name: 'EventReg',
+      component: () => import('@/views/Event/EventReg.vue'),
+    },
+    {
       path: '/edu/species/:id',
       name: 'speciesinfo',
       component: () => import('@/views/Educate/SpeciesinfoView.vue'),

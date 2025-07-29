@@ -7,8 +7,8 @@
     const events = ref(events_all)
 
     //頁碼
-    const current_page = ref(1)
-    const items_per_page = 12
+    const current_page = ref(1) //當前頁碼，預設第一頁
+    const items_per_page = 12 //每頁12筆資料
 
     //show_per_page_items
     const filter_items = computed(() => filtered_events.value)
@@ -30,10 +30,7 @@
     const status_filter = ref('全部');
     const showDropdown = ref(false);
 
-    const statusOptions = ['全部', '報名中', '報名截止', '已結束', '已取消'];
-
-    //時間排序
-    // const sort_order = ref('asc');
+    const statusOptions = ['全部', '報名中', '報名截止'];
 
     // 篩選分類資料
     const filtered_events = computed(() => {
@@ -43,7 +40,8 @@
             events_cat_all.value === '全部活動' ||
             event.category === events_cat_all.value;
         const matchStatus =
-            status_filter.value === '全部' || event.status === status_filter.value;
+            status_filter.value === '全部' || 
+            event.status === status_filter.value;
 
         return matchCategory && matchStatus;
         })
@@ -110,9 +108,6 @@
         <div 
             v-for="(item, index) in show_per_page_items"
             :key="item.id"
-            :class="{
-                reverse: index % 2 === 1,
-            }"
             class="event_card"
         >
             <router-link :to="{ name: 'EventDetail', params: { id: item.id } }"
@@ -282,9 +277,12 @@
             top: 100%;
             left: 0;
             right: 0;
-            background: white;
+            background: v.$color-blue-dark;
+            color: #fff;
             border-radius: 6px;
             font-size: v.$sub-desktop;
+            border: 3px solid skyblue;
+            // border-top: none;
             // max-height: 200px;
             // overflow-y: auto;
             overflow: hidden;
@@ -294,7 +292,7 @@
                 cursor: pointer;
                 transition: 0.2s;
                 &:hover {
-                    background-color: v.$color-skyblue-light;
+                    background-color: v.$color-blue;
                 }
             }
 
@@ -410,10 +408,10 @@
         border-radius: v.$border-radius-sm;
 
         color: v.$color-white;
-        &.報名截止 {
+        &.報名中 {
             background-color: v.$color-orange;
         }
-        &.報名中 {
+        &.報名截止 {
             background-color: v.$color-yellow;
         }
         &.已結束 {
@@ -425,29 +423,5 @@
     }
     .location {
         margin-top: auto;
-    }
-
-    //客製化頁碼
-    :deep(.my_pagination button) {
-        border-color: #00bcd4;
-        color: #00bcd4;
-    }
-
-    :deep(.my_pagination button.active) {
-        background-color: #00bcd4;
-        color: white;
-    }
-
-    :deep(.my_pagination button:disabled) {
-        opacity: 0.4;
-        color: #aaa;
-    }
-
-    :deep(.my_pagination .arrow svg path) {
-        stroke: #00bcd4;
-    }
-
-    :deep(.my_pagination button:disabled svg path) {
-        stroke: #ccc;
     }
 </style>
