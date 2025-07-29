@@ -102,7 +102,7 @@ const router = createRouter({
       props: true,
     },
     {
-      path: '/species/:id',
+      path: '/edu/species/:id',
       name: 'speciesinfo',
       component: () => import('@/views/Educate/SpeciesinfoView.vue'),
       props: true,

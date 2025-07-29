@@ -46,6 +46,7 @@
     align-items: center;
     width: 150px;
     height: 150px;
+    aspect-ratio: 1 / 1;
     border: 1.5px solid v.$color-white;
     border-radius: 50%;
     text-decoration: none;
