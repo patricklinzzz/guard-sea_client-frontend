@@ -15,15 +15,15 @@ export const speciesData = [
       import.meta.url
     ).href,
     image2: new URL(
-      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas/Chelonia_mydas2.png',
+      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas/Chelonia_mydas2.jpeg',
       import.meta.url
     ).href,
     image3: new URL(
-      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas/Chelonia_mydas3.png',
+      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas/Chelonia_mydas3.jpeg',
       import.meta.url
     ).href,
     image4: new URL(
-      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas/Chelonia_mydas4.png',
+      '@/assets/images/Educate/General_Oceanic_Region/Chelonia_mydas/Chelonia_mydas4.jpeg',
       import.meta.url
     ).href,
     description:
@@ -45,15 +45,15 @@ export const speciesData = [
       import.meta.url
     ).href,
     image2: new URL(
-      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris/Enhydra_lutris2.png',
+      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris/Enhydra_lutris2.jpeg',
       import.meta.url
     ).href,
     image3: new URL(
-      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris/Enhydra_lutris3.png',
+      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris/Enhydra_lutris3.jpeg',
       import.meta.url
     ).href,
     image4: new URL(
-      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris/Enhydra_lutris4.png',
+      '@/assets/images/Educate/North_Pacific_Region/Enhydra_lutris/Enhydra_lutris4.jpeg',
       import.meta.url
     ).href,
     description:
@@ -75,15 +75,15 @@ export const speciesData = [
       import.meta.url
     ).href,
     image2: new URL(
-      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri/Aptenodytes_forsteri2.png',
+      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri/Aptenodytes_forsteri2.jpeg',
       import.meta.url
     ).href,
     image3: new URL(
-      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri/Aptenodytes_forsteri3.png',
+      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri/Aptenodytes_forsteri3.jpeg',
       import.meta.url
     ).href,
     image4: new URL(
-      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri/Aptenodytes_forsteri4.png',
+      '@/assets/images/Educate/Polar_Region/Aptenodytes_forsteri/Aptenodytes_forsteri4.jpeg',
       import.meta.url
     ).href,
     description:
@@ -105,15 +105,15 @@ export const speciesData = [
       import.meta.url
     ).href,
     image2: new URL(
-      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum/Bolbometopon_muricatum2.png',
+      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum/Bolbometopon_muricatum2.jpeg',
       import.meta.url
     ).href,
     image3: new URL(
-      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum/Bolbometopon_muricatum3.png',
+      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum/Bolbometopon_muricatum3.jpeg',
       import.meta.url
     ).href,
     image4: new URL(
-      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum/Bolbometopon_muricatum4.png',
+      '@/assets/images/Educate/Indo_Pacific_Region/Bolbometopon_muricatum/Bolbometopon_muricatum4.jpeg',
       import.meta.url
     ).href,
     description:
@@ -135,15 +135,15 @@ export const speciesData = [
       import.meta.url
     ).href,
     image2: new URL(
-      '@/assets/images/Educate/Special_Region/Pristis_pristis/Pristis_pristis2.png',
+      '@/assets/images/Educate/Special_Region/Pristis_pristis/Pristis_pristis2.jpeg',
       import.meta.url
     ).href,
     image3: new URL(
-      '@/assets/images/Educate/Special_Region/Pristis_pristis/Pristis_pristis3.png',
+      '@/assets/images/Educate/Special_Region/Pristis_pristis/Pristis_pristis3.jpeg',
       import.meta.url
     ).href,
     image4: new URL(
-      '@/assets/images/Educate/Special_Region/Pristis_pristis/Pristis_pristis4.png',
+      '@/assets/images/Educate/Special_Region/Pristis_pristis/Pristis_pristis4.jpeg',
       import.meta.url
     ).href,
     description:

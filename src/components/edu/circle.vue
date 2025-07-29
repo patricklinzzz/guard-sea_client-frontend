@@ -1,35 +1,19 @@
-<script setup></script>
+<script setup>
+  defineProps(['text', 'link'])
+</script>
 
 <template>
-  <nav>
-    <router-link to="/edu/species"><h2>生物圖鑑</h2></router-link>
-    <router-link to="/edu/causes"><h2>滅絕原因</h2></router-link>
-    <router-link to="/edu/quiz"><h2>知識測驗</h2></router-link>
-  </nav>
+  <router-link :to="link" class="circle-link">
+    <h2>{{ text }}</h2>
+  </router-link>
 </template>
 
 <style lang="scss" scoped>
-  nav {
-    display: grid;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 60px;
-    margin-bottom: 30px;
-    grid-template-columns: repeat(1, 150px);
-
-    @media (min-width: 600px) {
-      grid-template-columns: repeat(3, 150px);
-      gap: 40px;
-    }
-    @media (min-width: 768px) {
-      gap: 60px;
-    }
-  }
-
   a {
     display: flex;
     justify-content: center;
     align-items: center;
+    aspect-ratio: 1 / 1;
     width: 150px;
     height: 150px;
     border: 1.5px solid v.$color-white;
@@ -64,15 +48,15 @@
     }
   }
 
-  nav a:nth-child(1) {
-    animation-delay: 0s;
-  }
-  nav a:nth-child(2) {
-    animation-delay: 0.3s;
-  }
-  nav a:nth-child(3) {
-    animation-delay: 0.6s;
-  }
+  // nav a:nth-child(1) {
+  //   animation-delay: 0s;
+  // }
+  // nav a:nth-child(2) {
+  //   animation-delay: 0.3s;
+  // }
+  // nav a:nth-child(3) {
+  //   animation-delay: 0.6s;
+  // }
 
   .text {
     color: v.$color-white;
