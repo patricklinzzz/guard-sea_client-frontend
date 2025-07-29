@@ -22,6 +22,7 @@
 <style scoped lang="scss">
   .button {
     cursor: pointer;
+    white-space: nowrap;
     border: none;
     color: #fff;
     font-weight: bold;
@@ -79,7 +80,7 @@
       color: v.$color-black;
       box-sizing: border-box;
       &:hover {
-        background-color: v.$color-gray;
+        background-color: rgba(v.$color-gray, .1) ;
       }
       &:active {
         background-color: v.$color-black;

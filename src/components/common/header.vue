@@ -159,7 +159,7 @@
     top: 0;
     width: 100%;
     height: 85px;
-    z-index: 1000;
+    z-index: 1001;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease-out;
     #navbar {
@@ -171,7 +171,6 @@
       margin: auto;
       padding-left: 30px;
       padding-right: 30px;
-
       @include respond(md) {
         padding-left: 15px;
         padding-right: 15px;

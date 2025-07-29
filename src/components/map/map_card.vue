@@ -19,7 +19,7 @@
       default: '生物名稱',
     },
   })
-  const emit = defineEmits(['close','navigate'])
+  const emit = defineEmits(['close', 'navigate'])
   const closePopup = () => {
     emit('close')
   }
@@ -43,8 +43,9 @@
     top: 20px;
     left: 10px;
     width: 30%;
-    min-height: 70%;
-    background-color: rgba(v.$color-blue-dark, .5);
+    height: auto;
+    max-height: 80%;
+    background-color: rgba(v.$color-blue-dark, 0.5);
     backdrop-filter: blur(10px);
     z-index: 1000;
     border-radius: v.$border-radius-md;
@@ -67,6 +68,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      @include respond(md) {
+        flex-direction: column;
+        gap: 15px;
+      }
       p {
         mix-blend-mode: difference;
         font-weight: bold;

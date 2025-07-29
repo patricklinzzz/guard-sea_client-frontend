@@ -32,7 +32,7 @@
     }
   }
 
-  onMounted( () => {
+  onMounted(() => {
     if (map.value) {
       return
     }
@@ -177,6 +177,10 @@
     width: 62.5vw;
     height: 40vw;
     margin: auto;
+    @include respond(md) {
+      width: 90vw;
+      height: 50vh;
+    }
   }
   .hover_text {
     position: absolute;
@@ -185,6 +189,9 @@
     transform: translate(50%, -100%);
     pointer-events: none;
     z-index: 1000;
+    @include respond(md) {
+      display: none;
+    }
   }
   :deep(.creature-icon) {
     img {
