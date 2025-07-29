@@ -3,24 +3,32 @@
     <h2>汙染資訊</h2>
     <div id="pollute_data">
       <h3>
-        1.2m
-        <br />
-        塑膠汙染
+        <div>
+          <CountUp :number="1100"></CountUp>
+          <h2>萬噸</h2>
+        </div>
+        塑膠流入海洋
       </h3>
       <h3>
-        2500
-        <br />
-        過度捕撈
+        <div>
+          <CountUp :number="9600"></CountUp>
+          <h2>萬噸</h2>
+        </div>
+        全球年漁獲量
       </h3>
       <h3>
-        800+
-        <br />
-        氣候變遷
+        <div>
+          <CountUp :number="90"></CountUp>
+          <h2>% 熱量</h2>
+        </div>
+        海洋承擔暖化
       </h3>
       <h3>
-        50+
-        <br />
-        噪音汙染
+        <div>
+          <CountUp :number="170"></CountUp>
+          <h2>dB↑</h2>
+        </div>
+        聲壓威脅鯨豚
       </h3>
     </div>
     <img :src="little_fish1" alt="" id="little_fish1" />
@@ -29,6 +37,7 @@
 </template>
 
 <script setup>
+  import CountUp from '@/components/edu/CountUp.vue'
   import little_fish1 from '@/assets/images/homepage/little_fish1.png'
   import little_fish2 from '@/assets/images/homepage/little_fish2.png'
 </script>
@@ -51,11 +60,24 @@
       align-items: center;
       text-align: center;
       flex-wrap: wrap;
+      gap: 15px;
+      h3 {
+        flex-basis: 45%;
+      }
       @include respond(md) {
         padding: 60px 5vw;
-        gap: 15px;
-        h3 {
-          flex-basis: 40%;
+      }
+      h3 > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-wrap: nowrap;
+        & > * {
+          font-size: 1.3em;
+          line-height: 1.3em;
+        }
+        h2 {
+          padding: 0;
         }
       }
     }

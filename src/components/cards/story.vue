@@ -51,6 +51,9 @@
 <style scoped lang="scss">
   .swiper {
     width: 40vw;
+    @include respond(md) {
+      width: 90vw;
+    }
   }
   .swiper-slide {
     display: flex;
@@ -82,10 +85,16 @@
     left: -100px;
     font-weight: bolder;
     color: v.$color-white;
+    @include respond(md) {
+      left: 0;
+    }
   }
   :deep(.swiper-button-next) {
     right: -100px;
     font-weight: bolder;
     color: v.$color-white;
+    @include respond(md) {
+      right: 0;
+    }
   }
 </style>

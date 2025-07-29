@@ -40,17 +40,14 @@
     #news_container {
       padding: 75px 0 150px 0;
       display: grid;
-      grid-template-columns: 2fr, 1fr;
       grid-template-rows: repeat(3, auto);
       gap: 20px;
       @include respond(md) {
         grid-template-columns: 1fr;
         grid-template-rows: repeat(5, auto);
+        padding-top: 60px;
       }
-
-      //右側3個
       & > div {
-        grid-column: 2;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -58,30 +55,16 @@
         color: v.$color-black;
         border-radius: v.$border-radius-md;
         overflow: hidden;
+        //右側3個
+        grid-column: 2;
         @include respond(md) {
           grid-column: 1;
           height: auto;
         }
-        //左側第一個
-        &:nth-of-type(1) {
-          grid-column: 1;
-          grid-row: 1 / span 3;
-          flex-direction: column;
-          @include respond(md) {
-            grid-row: 1 / span 2;
-          }
-          img {
-            width: 100%;
-          }
-        }
         img {
-          width: 100%;
-          flex-basis: 30%;
+          width: 30%;
           height: 100%;
           object-fit: cover;
-          @include respond(md) {
-            height: inherit;
-          }
         }
         #text_btn {
           display: flex;
@@ -106,6 +89,18 @@
               -webkit-line-clamp: 1;
               line-clamp: 1;
             }
+          }
+        }
+        //左側第一個
+        &:nth-of-type(1) {
+          grid-column: 1;
+          grid-row: 1 / span 3;
+          flex-direction: column;
+          @include respond(md) {
+            grid-row: 1 / span 2;
+          }
+          img {
+            width: 100%;
           }
         }
       }

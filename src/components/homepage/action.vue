@@ -61,6 +61,7 @@
       flex-wrap: wrap;
       @include respond(md) {
         width: 90vw;
+        margin: 60px auto;
       }
       & > div {
         height: 250px;
@@ -107,6 +108,9 @@
       position: absolute;
       bottom: -30%;
       left: -3%;
+      @include respond(md){
+        display: none;
+      }
     }
   }
 </style>

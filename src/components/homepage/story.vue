@@ -17,6 +17,9 @@
   #story {
     position: relative;
     padding: 100px 18.75vw 0 18.75vw;
+    @include respond(md){
+      padding: 100px 5vw 0 5vw;
+    }
     #img_diver {
       position: absolute;
       top: -75px;
@@ -26,6 +29,9 @@
     }
     #story_container {
       padding: 75px 0;
+      @include respond(md){
+        padding: 60px 0;
+      }
     }
   }
 </style>
