@@ -408,10 +408,10 @@
         border-radius: v.$border-radius-sm;
 
         color: v.$color-white;
-        &.報名截止 {
+        &.報名中 {
             background-color: v.$color-orange;
         }
-        &.報名中 {
+        &.報名截止 {
             background-color: v.$color-yellow;
         }
         &.已結束 {

@@ -424,7 +424,7 @@ export const events_all = [
             </ul>
         `,
         deadline: '2025 年 07 月 21 日',
-        registrationSpots: '名額：20人，已結束',
+        registrationSpots: '名額：20人，額滿為止',
     },
     { 
         id: 16, 
@@ -451,6 +451,6 @@ export const events_all = [
             </ul>
         `,
         deadline: '2025 年 07 月 07 日',
-        registrationSpots: '名額：限5人，已結束',
+        registrationSpots: '名額：限5人，額滿為止',
     }
 ]

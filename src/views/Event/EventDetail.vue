@@ -41,7 +41,7 @@
             case '報名截止':
                 return { text:'報名已截止', class: 'status-closed'};
             case '已取消':
-                return { text:'報名已取消', class: 'status-cancelled'};
+                return { text:'活動已取消', class: 'status-cancelled'};
             case '已結束':
                 return {text:'活動已結束', class: 'status-ended'};
             default: // 默認情況或任何其他未定義的狀態
@@ -53,16 +53,8 @@
         if (!current_event.value) return true; // 數據未載入時禁用
         
         const status = current_event.value.status;
-        return status === '活動截止' || status === '活動取消' || status === '活動結束';
+        return status === '報名截止' || status === '已取消' || status === '已結束';
     });
-
-    const handleRegistration = () => {
-        if (isButtonDisabled.value) {
-            // 如果按鈕是禁用的，則不執行任何操作
-            console.log('按鈕已禁用，無法報名。');
-            return;
-        }
-    };
 
     //返回列表
     const go_back = () => {
@@ -78,18 +70,18 @@
 
     <section class="event_info">
         <h1>{{ current_event.title }}</h1>
-        <RouterLink 
-        :to="`/event/reg/${current_event.id}`">
-            <Button 
-                @click="handleRegistration" 
+        <component
+            :is="isButtonDisabled ? 'div' : 'RouterLink'"
+            :to="!isButtonDisabled ? `/event/reg/${current_event.id}` : null"
+            >
+            <Button
                 :disabled="isButtonDisabled"
                 :class="[buttonInfo.class, 'button_inline']"
             >
                 {{ buttonInfo.text }}
             </Button>
-        </RouterLink>
+        </component>
 
-        
         <div class="desc">
             <div class="time">
                 <img src="@/assets/images/event/time.svg" alt="icon_time">
