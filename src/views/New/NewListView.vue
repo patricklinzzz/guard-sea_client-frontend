@@ -340,7 +340,7 @@
   }
   // banner_start
   .banner_400dh_200ph {
-    background-image: url('/src/assets/images/new/newbanner.jpg');
+    background-image: url('@/assets/images/new/newbanner.jpg');
     width: 100%;
     height: 300px;
     background-size: cover;
