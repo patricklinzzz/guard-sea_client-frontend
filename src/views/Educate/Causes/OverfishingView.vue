@@ -81,7 +81,7 @@
     margin: 0 auto;
 
     @media (min-width: 768px) {
-      max-width: v.$container;
+      max-width: 1000px;
     }
   }
 

@@ -36,7 +36,7 @@
         <router-link
           v-for="item in filteredAnimals"
           :key="item.id"
-          :to="`/species/${item.id}`"
+          :to="`/edu/species/${item.id}`"
           class="gallery__card"
         >
           <img :src="item.image1" :alt="item.name" class="gallery__img" />
