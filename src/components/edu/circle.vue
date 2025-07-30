@@ -1,33 +1,53 @@
 <script setup>
-  defineProps(['text', 'link'])
+  defineProps(['text', 'r'])
+  const emit = defineEmits(['click'])
+  const handleClick = (event) => {
+    emit('click', event)
+  }
 </script>
 
 <template>
-  <router-link :to="link" class="circle-link">
-    <h2>{{ text }}</h2>
-  </router-link>
+  <div class="circle" @click="handleClick">
+    <p>{{ text }}</p>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-  a {
+  .circle {
+    --r: v-bind('r + "px"');
     display: flex;
     justify-content: center;
     align-items: center;
     aspect-ratio: 1 / 1;
-    width: 150px;
-    height: 150px;
+    // width: 150px;
+    width: var(--r);
+    height: var(--r);
     border: 1.5px solid v.$color-white;
     border-radius: 50%;
     text-decoration: none;
     color: v.$color-text-white;
-    font-size: 1.125rem;
+    // font-size: 1.125rem;
     transition: all 0.3s ease;
     animation: floatCircle 4s ease-in-out infinite;
+    cursor: pointer;
+
+    p {
+      width: fit-content;
+      --fz: v-bind('+r * 0.0088235294 + "rem"');
+      font-size: var(--fz);
+      margin-right: -5px;
+      letter-spacing: v.$letter-spacing-wide;
+    }
 
     @media (min-width: 768px) {
-      width: 170px;
-      height: 170px;
-      font-size: 1.5rem;
+      --rB: v-bind('+r + 20 + "px"');
+      // width: 170px;
+      width: var(--rB);
+      height: var(--rB);
+      p {
+        --fzB: v-bind('(+r + 20) * 0.0088235294 + "rem"');
+        font-size: var(--fzB);
+      }
     }
 
     &:hover {
@@ -46,21 +66,5 @@
     50% {
       transform: translateY(-10px);
     }
-  }
-
-  // nav a:nth-child(1) {
-  //   animation-delay: 0s;
-  // }
-  // nav a:nth-child(2) {
-  //   animation-delay: 0.3s;
-  // }
-  // nav a:nth-child(3) {
-  //   animation-delay: 0.6s;
-  // }
-
-  .text {
-    color: v.$color-white;
-    text-align: center;
-    margin-bottom: 16px;
   }
 </style>

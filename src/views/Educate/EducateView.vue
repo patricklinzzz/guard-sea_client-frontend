@@ -1,12 +1,20 @@
-<script setup></script>
+<script setup>
+  import FloatBubble from '@/components/edu/circle.vue'
+  import { RouterLink } from 'vue-router'
+</script>
 
 <template>
-  <h3 class="text">暫時的導覽列，之後header的dropdown設計完後這頁可以刪掉</h3>
   <div class="wrapper">
     <nav>
-      <router-link to="/edu/species"><h2>生物圖鑑</h2></router-link>
-      <router-link to="/edu/causes"><h2>滅絕原因</h2></router-link>
-      <router-link to="/edu/quiz"><h2>知識測驗</h2></router-link>
+      <router-link to="/edu/species" custom v-slot="{ navigate }">
+        <FloatBubble text="生物圖鑑" r="150" @click="navigate"></FloatBubble>
+      </router-link>
+      <router-link to="/edu/causes" custom v-slot="{ navigate }">
+        <FloatBubble text="滅絕原因" r="150" @click="navigate"></FloatBubble>
+      </router-link>
+      <router-link to="/edu/quiz" custom v-slot="{ navigate }">
+        <FloatBubble text="知識測驗" r="150" @click="navigate"></FloatBubble>
+      </router-link>
     </nav>
   </div>
 </template>
@@ -40,35 +48,6 @@
     }
   }
 
-  a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 150px;
-    height: 150px;
-    aspect-ratio: 1 / 1;
-    border: 1.5px solid v.$color-white;
-    border-radius: 50%;
-    text-decoration: none;
-    color: v.$color-text-white;
-    font-size: 1.125rem;
-    transition: all 0.3s ease;
-    animation: floatCircle 4s ease-in-out infinite;
-
-    @media (min-width: 768px) {
-      width: 170px;
-      height: 170px;
-      font-size: 1.5rem;
-    }
-
-    &:hover {
-      background-color: v.$color-blue-navy;
-      color: v.$color-text-white;
-      border: 3px solid v.$color-skyblue;
-      transform: scale(1.05);
-    }
-  }
-
   @keyframes floatCircle {
     0%,
     100% {
@@ -79,19 +58,13 @@
     }
   }
 
-  nav a:nth-child(1) {
+  nav div:nth-child(1) {
     animation-delay: 0s;
   }
-  nav a:nth-child(2) {
+  nav div:nth-child(2) {
     animation-delay: 0.3s;
   }
-  nav a:nth-child(3) {
+  nav div:nth-child(3) {
     animation-delay: 0.6s;
-  }
-
-  .text {
-    color: v.$color-white;
-    text-align: center;
-    margin-bottom: 16px;
   }
 </style>
