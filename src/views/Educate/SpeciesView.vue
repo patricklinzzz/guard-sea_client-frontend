@@ -37,7 +37,7 @@
           v-for="item in filteredAnimals"
           :key="item.id"
           :to="`/edu/species/${item.id}`"
-          class="gallery__card"
+          class="gallery__card breathing"
         >
           <img :src="item.image1" :alt="item.name" class="gallery__img" />
           <h3>{{ item.name }}</h3>
@@ -47,6 +47,11 @@
         </router-link>
       </section>
     </div>
+    <p class="slogan">
+      願地球未來仍能與形形色色
+      <br />
+      的生物綿延不絕地連結
+    </p>
   </main>
 </template>
 
@@ -84,20 +89,40 @@
         border: none;
         background-color: transparent;
         color: v.$color-white;
-        border-radius: 6px;
+        border-radius: 4px;
         cursor: pointer;
         transition: background-color 0.3s ease;
         outline: none;
         box-shadow: none;
-        padding: 3px 4px;
+        position: relative;
+        // margin-right: 5px;
 
-        &:hover {
-          background-color: v.$color-skyblue;
+        &.active {
+          background-color: v.$color-skyblue-light;
+          color: v.$color-blue-dark;
+          border-radius: v.$border-radius-sm;
         }
-        //   &:active {
-        //   background-color:v.$color-skyblue;
-        // }
-        //   }
+
+        &::after {
+          content: '';
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 1px;
+          height: 24px;
+          background-color: #fff;
+          // margin-right: -15px;
+        }
+
+        &:last-child::after {
+          display: none;
+        }
+      }
+
+      .area-btn.active h3 {
+        color: v.$color-blue-dark;
+        text-align: center;
       }
       .info {
         color: v.$color-skyblue;
@@ -145,5 +170,27 @@
     width: 100%;
     height: auto;
     object-fit: cover;
+  }
+  .slogan {
+    text-align: center;
+    color: v.$color-text-white;
+    padding: 30px 0;
+  }
+  @keyframes breathing {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .breathing {
+    animation: breathing 3s ease-in-out infinite;
+    transition: transform 0.3s ease;
+    will-change: transform;
   }
 </style>

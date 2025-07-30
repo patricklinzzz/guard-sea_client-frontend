@@ -21,7 +21,10 @@
       console.log('切換動物 id:', newId)
     }
   )
-
+  const shuffledSpecies = speciesData
+    .slice() // 不修改原陣列
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 4)
   // const randomAnimals = ref([])
 
   // onMounted(() => {
@@ -71,7 +74,9 @@
       </div>
     </div>
   </div>
-
+  <div class="wave">
+    <img src="@/assets/images/Educate/wave.png" alt="波浪" />
+  </div>
   <div class="description">
     <div class="description_first">
       <h2>詳細介紹</h2>
@@ -103,10 +108,10 @@
   <router-link to="/edu/species" class="gallery__more"><Button>更多生物></Button></router-link>
   <div class="more">
     <router-link
-      v-for="item in speciesData.slice(0, 4)"
+      v-for="item in shuffledSpecies"
       :key="item.id"
       :to="`/edu/species/${item.id}`"
-      class="gallery__card"
+      class="gallery__card breathing"
     >
       <img :src="item.image1" :alt="item.name" class="gallery__img" />
       <h3>{{ item.name }}</h3>
@@ -129,7 +134,7 @@
     flex-direction: column;
     // gap: 10px;
     color: v.$color-text-white;
-    padding: 30px 20px;
+    padding: 30px 20px 20px 20px;
     margin: 0 auto;
     max-width: 1200px;
 
@@ -151,7 +156,7 @@
     }
   }
   .animalInfo {
-    padding: 10px 0px;
+    padding: 0px 0px;
   }
 
   .description {
@@ -159,7 +164,7 @@
     display: flex;
     flex-direction: column;
     // text-align: center;
-    padding: 15px 15px;
+    padding: 0px 15px 15px 15px;
     max-width: 1200px;
     p,
     h2 {
@@ -171,7 +176,6 @@
   }
   .description_first {
     padding-bottom: 20px;
-    // gap: 10px;
   }
 
   .viewMore {
@@ -199,6 +203,73 @@
       width: 100%;
     }
   }
+  .wave {
+    width: 100%;
+    overflow: visible;
+    line-height: 0;
+    background-color: v.$color-blue-dark;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin-top: -50px;
+      z-index: 999;
+      transform: translateY(1px);
+      // @media (min-width: 768px) {
+      //   margin-top: -5px;
+      // }
+      @media (min-width: 768px) {
+        margin-top: -70px;
+      }
+      @media (min-width: 1024px) {
+        margin-top: -140px;
+      }
+      @media (min-width: 1124px) {
+        margin-top: -180px;
+      }
+      @media (min-width: 1224px) {
+        margin-top: -280px;
+      }
+    }
+  }
+
+  // .wave-transition svg {
+  //   width: 100%;
+  //   height: auto;
+
+  // }
+  // .wave-blue {
+  //   width: 100%;
+  //   height: auto;
+
+  //   @media (min-width: 768px) {
+  //     transform: translate(0, 5px);
+  //   }
+  // }
+
+  // .wave-dark {
+  //   width: 100%;
+  //   height: auto;
+  // }
+  @keyframes breathing {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .breathing {
+    animation: breathing 3s ease-in-out infinite;
+    transition: transform 0.3s ease;
+    will-change: transform;
+  }
+
   h1,
   h2,
   h3 {
@@ -256,4 +327,10 @@
   // .more {
   //   display: grid;
   // }
+  .more {
+    padding-bottom: 40px;
+    @media (min-width: v.$breakpoint-md) {
+      padding-bottom: 60px;
+    }
+  }
 </style>
