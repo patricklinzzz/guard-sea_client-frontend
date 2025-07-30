@@ -15,9 +15,16 @@ const router = createRouter({
       component: () => import('@/views/Educate/EducateView.vue'),
     },
     {
-      path: '/edu/species',
+      path: '/edu/species/:id(\\d+)',
+      name: 'speciesinfo',
+      component: () => import('@/views/Educate/SpeciesinfoView.vue'),
+      props: true,
+    },
+    {
+      path: '/edu/species/:typeId?',
       name: 'species',
       component: () => import('@/views/Educate/SpeciesView.vue'),
+      props: true,
     },
     {
       path: '/edu/causes',
@@ -112,18 +119,12 @@ const router = createRouter({
       path: '/event/reg_confirm/:id',
       name: 'EventConfirm',
       component: () => import('@/views/Event/EventConfirm.vue'),
-      props: true
+      props: true,
     },
     {
       path: '/event/reg_success/:id',
       name: 'EventSuccess',
       component: () => import('@/views/Event/EventSuccess.vue'),
-      props: true,
-    },
-    {
-      path: '/edu/species/:id',
-      name: 'speciesinfo',
-      component: () => import('@/views/Educate/SpeciesinfoView.vue'),
       props: true,
     },
     {

@@ -1,10 +1,23 @@
 <script setup>
-  import { ref, computed } from 'vue'
+  import { ref, computed, watch } from 'vue'
   import { speciesData } from '@/assets/data/Species.js'
+  import { useRouter, useRoute } from 'vue-router'
+  // 獲取路由
+  const router = useRouter()
+  const route = useRoute() // 獲取當前路由實例，用於監聽路由變化
 
   // 海域分類
   const areas = ['全部生物', '廣泛海域', '印度太平洋', '北太平洋', '極地海域', '特殊海域']
-  const currentArea = ref('全部生物')
+  const currentArea = ref('')
+
+  // 監聽路由參數的變化，更新 currentType 顯示
+  watch(
+    () => route.params.typeId,
+    (newId) => {
+      currentArea.value = areas.includes(newId) ? newId : '全部生物'
+    },
+    { immediate: true } // immediate: true 確保組件掛載時就執行一次
+  )
 
   const filteredAnimals = computed(() => {
     if (currentArea.value === '全部生物') return speciesData
@@ -13,6 +26,11 @@
 
   function changeArea(area) {
     currentArea.value = area
+    // 傳遞路由參數
+    router.push({
+      name: 'species',
+      params: { typeId: area },
+    })
   }
 </script>
 
