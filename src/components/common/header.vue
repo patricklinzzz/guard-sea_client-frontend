@@ -114,10 +114,10 @@
       </nav>
       <!-- 手機導覽列 -->
       <nav id="mobile_nav">
-        <router-link to="/register">
+        <router-link to="/login" @click="edu_linkclick">
           <i class="fa-solid fa-user"></i>
         </router-link>
-        <router-link to="/cart" class="cart-icon">
+        <router-link to="/cart" class="cart-icon" @click="edu_linkclick">
           <i class="fa-solid fa-cart-shopping"></i>
           <span class="cart-count" v-if="cartCount > 0">{{ cartCount }}</span>
         </router-link>

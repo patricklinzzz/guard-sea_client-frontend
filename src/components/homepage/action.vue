@@ -8,7 +8,7 @@
         <p>
           從棲地到物種
           <br />
-          全面守護海洋生命
+          守護海洋生命力
         </p>
       </div>
       <div>
@@ -43,8 +43,11 @@
 
 <style lang="scss" scoped>
   #action {
-    margin-top: 70px;
+    margin-top: 40px;
     position: relative;
+    @include respond(md){
+      margin-top: 30px;
+    }
     h2 {
       width: 62.5vw;
       margin: auto;
@@ -54,14 +57,15 @@
     }
     & > #container {
       width: 62.5vw;
-      margin: 75px auto;
+      margin: 55px auto;
       display: flex;
       justify-content: space-around;
       align-items: center;
       flex-wrap: wrap;
+      gap: 20px;
       @include respond(md) {
         width: 90vw;
-        margin: 60px auto;
+        margin: 30px auto;
       }
       & > div {
         height: 250px;
@@ -74,8 +78,7 @@
         border: 1px solid v.$color-skyblue;
         box-sizing: border-box;
         border-radius: v.$border-radius-md;
-        padding: 25px 40px;
-        margin-bottom: 30px;
+        padding: 15px 20px;
         @include respond(md) {
           display: grid;
           grid-template-columns: 40% 60%;
@@ -85,7 +88,8 @@
           height: auto;
         }
         img {
-          width: 60px;
+          width: 100px;
+          height: 100px;
           @include respond(md) {
             grid-row: 1 / span2;
             margin: auto;

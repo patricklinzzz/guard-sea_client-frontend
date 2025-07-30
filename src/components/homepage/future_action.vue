@@ -38,14 +38,14 @@
       padding: 0 5vw;
     }
     #news_container {
-      padding: 75px 0 150px 0;
+      padding: 75px 0 100px 0;
       display: grid;
       grid-template-rows: repeat(3, auto);
       gap: 20px;
       @include respond(md) {
         grid-template-columns: 1fr;
         grid-template-rows: repeat(5, auto);
-        padding-top: 60px;
+        padding-top: 30px;
       }
       & > div {
         display: flex;
@@ -75,6 +75,10 @@
           flex-basis: 70%;
           button {
             aspect-ratio: 1/1;
+            @include respond(md){
+              width: 40px;
+              height: 40px;
+            }
           }
           span {
             p {

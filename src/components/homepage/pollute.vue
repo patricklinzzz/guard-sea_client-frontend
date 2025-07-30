@@ -53,7 +53,7 @@
       }
     }
     #pollute_data {
-      padding: 150px 18.75vw;
+      padding: 50px 18.75vw 20px 18.75vw;
       background-color: v.$color-blue-extra-dark;
       display: flex;
       justify-content: space-around;
@@ -65,7 +65,7 @@
         flex-basis: 45%;
       }
       @include respond(md) {
-        padding: 60px 5vw;
+        padding: 30px 5vw 0px 5vw;
       }
       h3 > div {
         display: flex;
@@ -88,9 +88,15 @@
     }
     #little_fish1 {
       left: 2vw;
+      @include respond(md) {
+        display: none;
+      }
     }
     #little_fish2 {
       right: 2vw;
+      @include respond(md) {
+        display: none;
+      }
     }
   }
 </style>
