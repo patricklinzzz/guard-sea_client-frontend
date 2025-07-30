@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+  import aboutwhiteblock from '@/assets/images/about/aboutwhiteblock.png'
+</script>
 
 <template>
   <main class="wrapper">
@@ -7,11 +9,16 @@
         我們看見傷痕，
         <span class="main_slogan_bottom">於是決定成為希望的起點</span>
       </h1>
-      <div class="sub_slogan">
-        <p>在一趟潛水旅程中，我們親眼目睹一隻小海龜被塑膠纏住，掙扎著無法游動。</p>
-        <p>那一刻，我們意識到海洋不只是美麗的藍色畫面，更藏著我們忽視太久的傷痕。</p>
+      <div class="sub_slogan_wrap">
+        <div class="aboutwhiteblock">
+          <img :src="aboutwhiteblock" alt="" class="aboutwhiteblock" />
+        </div>
+        <div class="sub_slogan">
+          <p>在一趟潛水旅程中，我們親眼目睹一隻小海龜被塑膠纏住，掙扎著無法游動。</p>
+          <p>那一刻，我們意識到海洋不只是美麗的藍色畫面，更藏著我們忽視太久的傷痕。</p>
 
-        <p>-- 這個平台因此誕生</p>
+          <p>-- 這個平台因此誕生</p>
+        </div>
       </div>
       <div class="wave_block">
         <div class="wave"></div>
@@ -53,28 +60,67 @@
     h1 {
       text-align: center;
       padding: 5.8333333% 20px 0px 20px;
-      margin-bottom: 240px;
+      margin-bottom: 6%;
 
       @include respond(md) {
         padding-top: 40px;
         text-align: left;
+
         .main_slogan_bottom {
           display: block;
         }
       }
     }
 
-    .sub_slogan {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      max-width: 1018px;
-      min-height: 362px;
+    .sub_slogan_wrap {
+      position: relative;
+      max-width: 1010px;
       margin: 0 auto;
-      background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201058%20403%22%3E%3Cpath%20d%3D%22M20%2065C20%2038%2042%2016%2069%2016H907C923%2016%20936%2030%20936%2046C936%2061%20949%2075%20965%2075H988C1015%2075%201037%2097%201037%20124V329C1037%20356%201015%20378%20988%20378H178C163%20378%20151%20366%20151%20352C151%20337%20139%20325%20125%20325H69C42%20325%2020%20303%2020%20276V65Z%22%20fill%3D%22white%22%20fill-opacity%3D%220.8%22/%3E%3C/svg%3E');
-      background-repeat: no-repeat;
-      background-size: contain;
+      padding: 0 10px;
+
+      .aboutwhiteblock {
+        margin: 0 auto;
+        width: 100%;
+
+        @include respond(md) {
+          background-color: hsla(0, 0%, 100%, 0.8);
+          border-radius: 30px;
+        }
+
+        @include respond(md) {
+          .aboutwhiteblock {
+            display: none;
+          }
+        }
+
+        @include respond(md) {
+          max-width: 95%;
+          height: 280px;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .sub_slogan {
+        position: absolute;
+        width: 75%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        color: #333;
+        font-size: v.$h3-desktop;
+
+        p:first-child {
+          margin-bottom: 2.6%;
+        }
+        p:last-child {
+          margin-top: 8%;
+          text-align: right;
+        }
+      }
     }
   }
 
