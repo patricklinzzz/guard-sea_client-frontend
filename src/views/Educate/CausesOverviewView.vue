@@ -37,7 +37,7 @@
   const dynamic_link = ref('./causes/pollution')
   const init_title = (el) => {
     cause_title.value = el ? el : null
-    console.log(cause_title.value)
+    // console.log(cause_title.value)
   }
   const isEasingEnabled = ref(true)
   const handleTransitionEnd = (swiper) => {

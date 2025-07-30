@@ -1,6 +1,11 @@
 <script setup>
   import { ref, onMounted } from 'vue'
   import { gsap } from 'gsap'
+
+  import Pollution from '@/assets/images/Educate/Causes/pollution.jpg'
+  import Overfishing from '@/assets/images/Educate/Causes/overfishing.jpg'
+  import Degradation from '@/assets/images/Educate/Causes/degradation.jpg'
+
   function pointsInPath(path, numPoints = 10) {
     const pathLength = path.getTotalLength()
     const step = pathLength / numPoints
@@ -91,7 +96,7 @@
 
     return path
   }
-  defineProps(['code', 'title'])
+  const props = defineProps(['code', 'title'])
   const svg = ref(null)
   const buttonPath = ref(null)
   const pathD = ref('M 210 10 A 200 200 0 1 1 210 410 A 200 200 0 1 1 210 10 Z')
@@ -140,7 +145,14 @@
     },
     axis: ['x', 'y'],
   }
-  const img_ref = '/src/assets/images/Educate/Causes/'
+  // const img_ref = '/src/assets/images/Educate/Causes/'
+  const img_ref = ref(null)
+  img_ref.value =
+    props.title == 'pollution'
+      ? Pollution
+      : props.title == 'overfishing'
+        ? Overfishing
+        : Degradation
   onMounted(() => {
     window.addEventListener('mousemove', (e) => {
       const { x, y } = transformCoords(e)
@@ -202,7 +214,7 @@
     <image
       preserveAspectRatio="xMidYMid slice"
       :mask="'url(#bubble_mask_' + code + ')'"
-      :href="img_ref + title + '.jpg'"
+      :href="img_ref"
     ></image>
   </svg>
 </template>

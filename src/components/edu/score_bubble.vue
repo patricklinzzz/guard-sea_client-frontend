@@ -53,8 +53,43 @@
         <stop offset="1" stop-color="white" stop-opacity="0.4" />
       </radialGradient>
     </defs>
+    <Transition>
+      <g v-if="score == 110">
+        <text
+          class="title"
+          :x="+size"
+          :y="+size * 0.8 + baseline"
+          fill="white"
+          text-anchor="middle"
+          font-size="2.5rem"
+        >
+          守護者挑戰
+        </text>
+        <g class="sub_title">
+          <text
+            :x="+size"
+            :y="+size * 1.1 + baseline"
+            fill="white"
+            text-anchor="middle"
+            font-size="1.5rem"
+          >
+            測試你的海洋知識
+          </text>
+          <text
+            :x="+size"
+            :y="+size * 1.3 + baseline"
+            fill="white"
+            text-anchor="middle"
+            font-size="1.5rem"
+          >
+            成為解救海洋的一份子
+          </text>
+        </g>
+      </g>
+    </Transition>
+
     <Transition @leave="onLeave">
-      <g v-if="score >= 0">
+      <g v-if="score >= 0 && score <= 100">
         <text
           :x="+size * 0.65"
           :y="+size * 0.9 + baseline"
@@ -105,6 +140,28 @@
 <style lang="scss" scoped>
   text {
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  }
+  .title {
+    font-family: v.$font-serif-tc;
+    font-size: v.$h1-desktop;
+    font-weight: v.$font-bold;
+    letter-spacing: v.$letter-spacing-wide;
+    line-height: v.$line-height-normal;
+
+    @include respond(md) {
+      font-size: v.$h1-mobile;
+    }
+  }
+  .sub_title {
+    text {
+      font-family: v.$font-sans;
+      font-size: v.$h3-desktop;
+      letter-spacing: v.$letter-spacing-base;
+
+      @include respond(md) {
+        font-size: v.$h3-mobile;
+      }
+    }
   }
   .coupon_path {
     --translate-x: v-bind('trans.x + "px"');

@@ -1,92 +1,389 @@
 export const quizData = [
-  {
-    question_id: 1,
-    question_description: "綠蠵龜 (Chelonia mydas) 是世界受保護的物種。根據IUCN紅色名錄，目前其主要等級為何？",
-    option_1: "極危 (Critically Endangered, CR)",
-    option_2: "瀕危 (Endangered, EN)",
-    option_3: "易危 (Vulnerable, VU)",
-    answer: 2,
-    explanation: "綠蠵龜目前被IUCN紅色名錄列為「瀕危」(Endangered, EN) 等級，表示牠們在野外面臨很高的滅絕風險，主要原因包括棲地喪失、漁業混獲和非法貿易。"
-  },
-  {
-    question_id: 2,
-    question_description: "除了漁業混獲和非法貿易，導致綠蠵龜數量減少的主要威脅之一，特別是在繁殖和覓食方面，是什麼？",
-    option_1: "火山爆發",
-    option_2: "棲地喪失和劣化",
-    option_3: "淡水污染",
-    answer: 2,
-    explanation: "綠蠵龜非常依賴健康的棲地進行繁殖（如沙灘）和覓食（如海草床）。海岸開發、污染和氣候變遷導致的棲地喪失和劣化，是牠們面臨的重大威脅。"
-  },
-  {
-    question_id: 3,
-    question_description: "海獺 (Enhydra lutris) 在歷史上曾因皮毛貿易而遭受大量捕殺。目前，其野外族群數量最主要的人為威脅是什麼？",
-    option_1: "海嘯頻率增加",
-    option_2: "石油洩漏和海洋污染",
-    option_3: "與海豹競爭食物",
-    answer: 2,
-    explanation: "海獺的皮毛不防水，而是依靠皮毛間的空氣層保暖。石油洩漏會破壞這層空氣，導致海獺迅速失溫死亡，因此牠們對油污特別敏感。"
-  },
-  {
-    question_id: 4,
-    question_description: "海獺（Enhydra lutris）在海洋生態系統中扮演著關鍵角色，因其對某種生物的捕食而聞名，這種生物的過度生長會破壞海帶森林。請問海獺主要捕食哪種生物？",
-    option_1: "水母",
-    option_2: "海膽",
-    option_3: "螃蟹",
-    answer: 2,
-    explanation: "海獺是海帶森林的「基石物種」。牠們主要捕食海膽，防止海膽大量啃食海帶，從而維持海帶森林的健康和生物多樣性。"
-  },
-  {
-    question_id: 5,
-    question_description: "皇帝企鵝 (Aptenodytes forsteri) 是南極的代表性物種。牠們最主要的長期威脅，直接影響其繁殖和覓食棲地的是什麼？",
-    option_1: "來自其他企鵝物種的競爭",
-    option_2: "海冰減少與融化",
-    option_3: "企鵝天敵數量的增加",
-    answer: 2,
-    explanation: "皇帝企鵝的整個生命週期都高度依賴南極海冰。海冰的減少直接威脅到牠們的繁殖場所、換羽地點和覓食途徑，是氣候變遷對其影響最顯著的形式。"
-  },
-  {
-    question_id: 6,
-    question_description: "皇帝企鵝 (Aptenodytes forsteri) 有著獨特的繁殖策略。在冬季嚴寒的南極，哪一種性別的皇帝企鵝主要負責在極端條件下孵化蛋？",
-    option_1: "雌性企鵝",
-    option_2: "雄性企鵝",
-    option_3: "雌雄輪流孵化",
-    answer: 2,
-    explanation: "在皇帝企鵝的繁殖季節，雌性產卵後會將蛋交給雄性，由雄性企鵝在長達兩個多月的時間裡，在嚴寒中獨自孵化企鵝蛋，期間不吃不喝。"
-  },
-  {
-    question_id: 7,
-    question_description: "蘇眉魚 (Bolbometopon muricatum)，因其突出的大額頭而聞名。目前，IUCN紅色名錄將其列為哪個瀕危等級？",
-    option_1: "易危 (Vulnerable, VU)",
-    option_2: "瀕危 (Endangered, EN)",
-    option_3: "極危 (Critically Endangered, CR)",
-    answer: 2,
-    explanation: "蘇眉魚目前被IUCN紅色名錄列為「瀕危」(Endangered, EN) 等級。由於其作為高價食用魚的需求，加上生長緩慢和分佈限制，使其族群數量急劇下降。"
-  },
-  {
-    question_id: 8,
-    question_description: "蘇眉魚 (Bolbometopon muricatum) 在水族館中因其鮮豔的色彩而受歡迎，但在野外，牠們因什麼因素面臨嚴峻的滅絕風險？",
-    option_1: "對淡水環境的依賴",
-    option_2: "高價值的活魚貿易和破壞性捕魚方式",
-    option_3: "棲息地受河流沉積物淤積",
-    answer: 2,
-    explanation: "蘇眉魚因在亞洲活魚貿易中的高需求而遭到過度捕撈，尤其是使用氰化物等破壞性方式捕魚，對其族群造成了巨大壓力。"
-  },
-  {
-    question_id: 9,
-    question_description: "鋸鰩 (Pristis pristis)，因其吻部酷似鋸子而得名。這種獨特的海洋生物目前在IUCN紅色名錄中被列為哪個瀕危等級？",
-    option_1: "瀕危 (Endangered, EN)",
-    option_2: "數據缺乏 (Data Deficient, DD)",
-    option_3: "極危 (Critically Endangered, CR)",
-    answer: 3,
-    explanation: "鋸鰩被IUCN紅色名錄列為「極危」(Critically Endangered, CR) 等級，是全球最受威脅的海洋魚類之一，其獨特的鋸狀吻部使其極易被漁網纏繞而意外捕獲。"
-  },
-  {
-    question_id: 10,
-    question_description: "鋸鰩 (Pristis pristis) 最主要的威脅之一是其特有的吻部構造。請問這個「鋸子」狀的吻部如何使其特別容易受到漁業活動的危害？",
-    option_1: "用於攻擊大型捕食者",
-    option_2: "容易纏繞在漁網和漁線中",
-    option_3: "幫助它們在深海中導航",
-    answer: 2,
-    explanation: "鋸鰩的吻部雖然是覓食和防禦的利器，但它獨特的形狀使其在漁網、拖網和延繩釣等漁具中極易被纏繞，導致其成為嚴重的漁業混獲對象。"
-  }
-];
+  [
+    {
+      question_id: 1,
+      question_description: "氣候變遷如何威脅綠蠵龜的族群平衡？",
+      option_1: "改變其覓食地點",
+      option_2: "增加牠們的天敵數量",
+      option_3: "影響孵化溫度，導致性別失衡",
+      answer: 3,
+      explanation: "巢穴溫度升高會導致雌龜比例過高，影響族群繁衍。"
+    },
+    {
+      question_id: 2,
+      question_description: "海獺的何種特徵使其特別易受石油污染的危害？",
+      option_1: "皮毛不防水，靠空氣層保暖",
+      option_2: "牠們的食物來源單一",
+      option_3: "牠們游泳速度緩慢",
+      answer: 1,
+      explanation: "石油破壞海獺皮毛的隔熱層，導致失溫死亡。"
+    },
+    {
+      question_id: 3,
+      question_description: "皇帝企鵝瀕危風險增加，主因是氣候變遷導致的什麼？",
+      option_1: "繁殖海冰融化",
+      option_2: "海水酸化加劇",
+      option_3: "食物短缺",
+      answer: 1,
+      explanation: "穩固的海冰是皇帝企鵝繁殖的關鍵棲地，融化直接威脅牠們的存續。"
+    },
+    {
+      question_id: 4,
+      question_description: "蘇眉魚族群難以從捕撈中恢復，主因是其何種特性？",
+      option_1: "壽命短、繁殖快",
+      option_2: "食物來源單一",
+      option_3: "生長緩慢、性成熟晚",
+      answer: 3,
+      explanation: "蘇眉魚生長慢且性成熟晚，導致被捕後族群難以補充。"
+    },
+    {
+      question_id: 5,
+      question_description: "鋸鰩的何種獨特身體部位使其成為漁業混獲的主要受害者？",
+      option_1: "鋸狀吻部",
+      option_2: "尖銳的背鰭",
+      option_3: "扁平的身體",
+      answer: 1,
+      explanation: "其鋸狀吻部極易纏繞漁網，造成意外捕獲。"
+    },
+    {
+      question_id: 6,
+      question_description: "綠蠵龜受塑膠垃圾威脅，主因常是？",
+      option_1: "塑膠改變海水鹽度",
+      option_2: "誤食塑膠袋或被漁網纏繞",
+      option_3: "塑膠增加海底沉積物",
+      answer: 2,
+      explanation: "海龜常將塑膠誤認為食物吞食，或被廢棄漁具纏繞窒息。"
+    },
+    {
+      question_id: 7,
+      question_description: "海獺數量曾因皮毛貿易銳減，其回歸如何有助於生態系統恢復？",
+      option_1: "清理海底垃圾",
+      option_2: "增加海水含氧量",
+      option_3: "控制海膽數量，恢復海帶森林",
+      answer: 3,
+      explanation: "海獺作為基石物種，控制海膽數量有助於海帶森林復甦。"
+    },
+    {
+      question_id: 8,
+      question_description: "除棲地喪失外，氣候變遷如何加劇皇帝企鵝食物短缺？",
+      option_1: "影響磷蝦等主要食物來源分佈",
+      option_2: "導致海水污染",
+      option_3: "增加競爭物種",
+      answer: 1,
+      explanation: "氣候變遷影響南極海冰，進而衝擊磷蝦等食物供應。"
+    },
+    {
+      question_id: 9,
+      question_description: "蘇眉魚族群驟減，除過度捕撈外，主要因何種漁法？",
+      option_1: "釣竿漁業",
+      option_2: "氰化物或炸魚等破壞性漁法",
+      option_3: "傳統魚籠捕撈",
+      answer: 2,
+      explanation: "活魚貿易中常使用的破壞性漁法對蘇眉魚造成致命打擊。"
+    },
+    {
+      question_id: 10,
+      question_description: "鋸鰩在IUCN紅色名錄中的最高瀕危等級是什麼？",
+      option_1: "瀕危 (EN)",
+      option_2: "易危 (VU)",
+      option_3: "極危 (CR)",
+      answer: 3,
+      explanation: "極危（CR）代表鋸鰩在野外面臨極高的滅絕風險。"
+    }
+  ],
+  [
+    {
+      question_id: 11,
+      question_description: '哪種污染物是海洋中最常見且持久的，對海洋生態造成廣泛威脅？',
+      option_1: '有機廢物',
+      option_2: '塑膠垃圾',
+      option_3: '玻璃碎片',
+      answer: 2,
+      explanation: '塑膠因其極難分解的特性，是海洋中最主要的污染物。',
+    },
+    {
+      question_id: 12,
+      question_description: '微塑膠如何對海洋生物造成主要危害？',
+      option_1: '改變海水鹽度，使其無法生存',
+      option_2: '被誤食後積聚體內並釋放毒素',
+      option_3: '阻礙陽光穿透水面影響浮游生物',
+      answer: 2,
+      explanation:
+        '微塑膠常被海洋生物誤認為食物，進入體內後會造成消化阻塞，並可能釋放有害化學物質。',
+    },
+    {
+      question_id: 13,
+      question_description: '來自農業徑流的過量營養物質（如氮和磷）流入海洋會導致什麼現象？',
+      option_1: '提升海水透明度',
+      option_2: '引發藻華（赤潮）並形成缺氧區',
+      option_3: '加速珊瑚礁生長',
+      answer: 2,
+      explanation:
+        '過量營養物質會引發藻類大量繁殖，藻類死亡分解後消耗水中氧氣，形成對海洋生物致命的「死亡區」。',
+    },
+    {
+      question_id: 14,
+      question_description: '除了大型油輪洩漏，哪項是海洋石油污染最常見但卻經常被忽視的來源？',
+      option_1: '海底火山爆發',
+      option_2: '陸地徑流、城市污水和日常船隻運作',
+      option_3: '深海探勘地震',
+      answer: 2,
+      explanation:
+        '雖然油輪洩漏影響巨大，但陸地徑流、城市污水和日常航運船隻的廢油排放，是持續且累積性更強的石油污染源。',
+    },
+    {
+      question_id: 15,
+      question_description: '「幽靈漁具」對海洋環境的威脅是什麼？',
+      option_1: '它們會發出噪音干擾海洋生物',
+      option_2: '是廢棄或遺失的漁具，在海中持續捕殺生物',
+      option_3: '它們會吸收海水中的氧氣',
+      answer: 2,
+      explanation: '被遺棄的漁網和漁線會持續在海中「捕魚」，造成大量海洋生物的意外死亡。',
+    },
+    {
+      question_id: 16,
+      question_description: '船隻、聲納等產生的人為海洋噪音，如何主要影響海洋生物？',
+      option_1: '加速水流，有助於浮游生物移動',
+      option_2: '干擾其溝通、覓食、導航和繁殖',
+      option_3: '吸引新的物種進入該區域',
+      answer: 2,
+      explanation:
+        '海洋噪音會干擾鯨魚、海豚等依賴聲音溝通和導航的海洋哺乳動物，使其迷失方向、壓力增加，甚至導致擱淺。',
+    },
+    {
+      question_id: 17,
+      question_description: '全球海洋中絕大部分的塑膠垃圾最終來源於哪裡？',
+      option_1: '海上鑽油平台與航運活動',
+      option_2: '來自陸地的垃圾和廢物',
+      option_3: '海底火山噴發物',
+      answer: 2,
+      explanation: '約八成的海洋塑膠垃圾是透過河流、海岸線丟棄和風力等從陸地進入海洋的。',
+    },
+    {
+      question_id: 18,
+      question_description: '作為個人，哪項行動最能有效減少塑膠污染對海洋的衝擊？',
+      option_1: '鼓勵製造更多塑膠製品',
+      option_2: '減少使用一次性塑膠產品',
+      option_3: '將所有垃圾焚燒處理',
+      answer: 2,
+      explanation: '「減量」是解決塑膠污染最直接有效的方法，包括自帶環保袋、水瓶和餐具。',
+    },
+    {
+      question_id: 19,
+      question_description: '重金屬和持久性有機污染物（如DDT）等化學物質，如何對海洋生物造成危害？',
+      option_1: '作為食物來源被消化吸收',
+      option_2: '在生物體內累積，並沿著食物鏈傳遞',
+      option_3: '增加海洋生物的繁殖率',
+      answer: 2,
+      explanation:
+        '這些化學污染物會在海洋生物體內累積，沿著食物鏈傳遞，對高階捕食者造成嚴重毒害，甚至影響人類健康。',
+    },
+    {
+      question_id: 20,
+      question_description: '據估計，每年約有多少噸塑膠垃圾最終流入我們的海洋？',
+      option_1: '數百萬噸',
+      option_2: '數千噸',
+      option_3: '數百噸',
+      answer: 1,
+      explanation: '每年約有數百萬（約800萬到1100萬）噸塑膠垃圾流入海洋，這是個驚人的數字。',
+    },
+  ],
+  [
+    {
+      question_id: 21,
+      question_description: '什麼是造成全球漁業資源枯竭的首要原因？',
+      option_1: '氣候變遷',
+      option_2: '過度捕撈',
+      option_3: '海洋污染',
+      answer: 2,
+      explanation: '過度捕撈是指捕魚速度快於魚類繁殖補充的速度，這是導致全球魚類資源枯竭的主因。',
+    },
+    {
+      question_id: 22,
+      question_description: '過度捕撈如何導致海洋生物滅絕？',
+      option_1: '改變海水溫度',
+      option_2: '降低族群數量使其無法恢復',
+      option_3: '增加魚類疾病傳播',
+      answer: 2,
+      explanation: '持續的過度捕撈會使魚類族群小到無法有效繁殖，最終可能導致其滅絕。',
+    },
+    {
+      question_id: 23,
+      question_description: '哪種捕魚方式常因意外捕獲非目標物種（混獲）而加劇過度捕撈問題？',
+      option_1: '延繩釣和拖網漁業',
+      option_2: '徒手捕魚',
+      option_3: '釣竿漁業',
+      answer: 1,
+      explanation:
+        '延繩釣和拖網漁業是常見的混獲來源，大量非目標生物被捕獲並丟棄，浪費資源並傷害生態。',
+    },
+    {
+      question_id: 24,
+      question_description: '過度捕撈對海洋食物鏈有何影響？',
+      option_1: '增強食物鏈穩定性',
+      option_2: '導致食物鏈失衡',
+      option_3: '增加海洋植物數量',
+      answer: 2,
+      explanation: '移除頂級掠食者或關鍵物種會破壞海洋食物鏈的平衡，影響整個生態系統。',
+    },
+    {
+      question_id: 25,
+      question_description: '「漁業補貼」可能如何加劇過度捕撈？',
+      option_1: '鼓勵永續漁業發展',
+      option_2: '讓漁民能投資更多捕魚設備，增加捕撈量',
+      option_3: '減少漁業經營成本',
+      answer: 2,
+      explanation:
+        '政府補貼有時會讓 unprofitable 的捕魚活動也能持續，導致捕魚船隊規模過大，加劇資源耗盡。',
+    },
+    {
+      question_id: 26,
+      question_description: '實施哪種管理措施能有效控制捕魚量，防止過度捕撈？',
+      option_1: '增加捕魚船隻數量',
+      option_2: '設定漁獲配額和禁漁期',
+      option_3: '取消海洋保護區',
+      answer: 2,
+      explanation:
+        '漁獲配額（TACs）限制了總捕撈量，禁漁期則給予魚類繁殖恢復的時間，都是有效的管理工具。',
+    },
+    {
+      question_id: 27,
+      question_description: '「海鮮指南」或「永續海鮮」標籤對消費者有何幫助？',
+      option_1: '告知海鮮的烹飪方法',
+      option_2: '幫助選擇對環境影響較小的海鮮產品',
+      option_3: '標明海鮮的價格',
+      answer: 2,
+      explanation: '這些指南或標籤能引導消費者做出更永續的選擇，減少對瀕危或過度捕撈魚種的需求。',
+    },
+    {
+      question_id: 28,
+      question_description: '設立「海洋保護區 (MPAs)」對減緩過度捕撈有何意義？',
+      option_1: '增加漁民捕魚範圍',
+      option_2: '提供海洋生物安全的繁殖和成長場所',
+      option_3: '限制遊客進入海洋',
+      answer: 2,
+      explanation: 'MPAs 透過禁止或限制捕魚活動，讓魚類族群有機會恢復，並溢出到鄰近的捕魚區。',
+    },
+    {
+      question_id: 29,
+      question_description:
+        '提升漁業管理透明度和打擊非法、未報告、不受規範（IUU）漁業，對過度捕撈有何影響？',
+      option_1: '對漁業無實質影響',
+      option_2: '有效減少違法捕撈，保護漁業資源',
+      option_3: '增加合法捕魚的成本',
+      answer: 2,
+      explanation: 'IUU 漁業是過度捕撈的重大推手。加強監管和打擊能確保漁業活動符合規範，保護資源。',
+    },
+    {
+      question_id: 30,
+      question_description:
+        '在消費端，鼓勵食用較低食物鏈層級的魚類（如沙丁魚而非鮪魚），如何有助於應對過度捕撈？',
+      option_1: '增加對高價魚類的需求',
+      option_2: '減輕對頂級掠食者魚類的捕撈壓力',
+      option_3: '鼓勵養殖漁業發展',
+      answer: 2,
+      explanation:
+        '食用食物鏈較低的魚類有助於減輕對大型、長壽、繁殖慢的頂級掠食者（常是過度捕撈的目標）的壓力，促進海洋生態平衡。',
+    },
+  ],
+  [
+    {
+      question_id: 31,
+      question_description: '哪項是海洋棲地破壞（如珊瑚礁、紅樹林、海草床）的最主要人為原因？',
+      option_1: '自然地質變化',
+      option_2: '沿海開發與填海造地',
+      option_3: '深海採礦活動',
+      answer: 2,
+      explanation: '沿海地區的人口增長和基礎設施開發直接導致棲地被破壞或改變，是主要的人為因素。',
+    },
+    {
+      question_id: 32,
+      question_description: '疏浚和沿海建設（如港口、碼頭）如何直接破壞海洋棲地？',
+      option_1: '增加海水鹽度，不利生物生存',
+      option_2: '物理性破壞海底結構和生物群落',
+      option_3: '引入外來物種改變生態系統',
+      answer: 2,
+      explanation: '這些活動直接挖除或覆蓋海底地形，徹底毀滅了珊瑚、海草等固定的棲地。',
+    },
+    {
+      question_id: 33,
+      question_description: '陸地上的森林砍伐和不當土地利用，如何間接導致海洋棲地破壞？',
+      option_1: '減少海水溫度，影響海洋生物',
+      option_2: '增加陸源沉積物和污染物徑流入海',
+      option_3: '吸引更多海洋生物靠近海岸線',
+      answer: 2,
+      explanation:
+        '森林砍伐導致土壤侵蝕，大量泥沙和污染物被沖入海洋，覆蓋或毒害沿海棲地，如珊瑚礁和海草床。',
+    },
+    {
+      question_id: 34,
+      question_description: '珊瑚礁被稱為「海洋雨林」，最主要原因是什麼？',
+      option_1: '它們提供大量淡水資源',
+      option_2: '擁有極高的生物多樣性並保護海岸線',
+      option_3: '它們能產生大量氧氣供全球使用',
+      answer: 2,
+      explanation:
+        '珊瑚礁是全球海洋生物多樣性的熱點，為無數物種提供食物和庇護，同時也是海岸線的天然屏障。',
+    },
+    {
+      question_id: 35,
+      question_description: '紅樹林（Mangroves）生態系統面臨的主要威脅是什麼？',
+      option_1: '深海捕撈活動的增加',
+      option_2: '為水產養殖、農業或城市擴張而砍伐',
+      option_3: '極低的海水溫度導致凍死',
+      answer: 2,
+      explanation: '紅樹林濕地常被人類活動轉換為其他用途，這是其面積急劇縮小的主因。',
+    },
+    {
+      question_id: 36,
+      question_description: '氣候變遷導致的哪兩種現象對全球珊瑚礁的破壞最大？',
+      option_1: '颱風頻率減少和海平面下降',
+      option_2: '海水溫度升高導致白化和海洋酸化',
+      option_3: '海洋深層水湧升和鹽度降低',
+      answer: 2,
+      explanation:
+        '海水暖化會導致珊瑚白化，而吸收二氧化碳導致的海洋酸化則削弱珊瑚骨骼的生長，兩者是珊瑚礁最大的氣候威脅。',
+    },
+    {
+      question_id: 37,
+      question_description: '海草床在海洋生態系統中扮演什麼重要角色？',
+      option_1: '作為主要的捕食者棲地',
+      option_2: '作為幼魚和無脊椎動物的育兒所與重要的碳匯',
+      option_3: '促進石油分解和清潔海洋',
+      answer: 2,
+      explanation:
+        '海草床是許多海洋生物的孵化和成長場所，同時能有效吸收二氧化碳，對減緩氣候變遷有重要貢獻。',
+    },
+    {
+      question_id: 38,
+      question_description: '除營養過剩外，工業廢水、農藥和塑膠微粒等污染如何直接破壞海洋棲地？',
+      option_1: '使水質變得清澈透明，提高能見度',
+      option_2: '引入有毒物質，直接毒害生物或改變棲地物理化學結構',
+      option_3: '增加水下植物的生長速度',
+      answer: 2,
+      explanation:
+        '有毒化學物質會直接毒害棲地中的生物，並在環境中累積，使棲地不再適合生存。塑膠微粒則造成物理性破壞和污染傳播。',
+    },
+    {
+      question_id: 39,
+      question_description: '哪項措施是保護和恢復受損海洋棲地最有效的方法之一？',
+      option_1: '大規模引進外來入侵物種',
+      option_2: '建立海洋保護區（MPAs）和實施棲地復育計畫',
+      option_3: '完全禁止所有海洋觀光活動',
+      answer: 2,
+      explanation:
+        '海洋保護區（MPAs）能為棲地提供保護，使其自然恢復；而主動的棲地復育計畫（如種植紅樹林或恢復珊瑚）則加速生態系統重建。',
+    },
+    {
+      question_id: 40,
+      question_description:
+        '什麼因素是驅動沿海棲地退化和破壞的根本原因之一，因為它直接增加了對海岸空間的需求？',
+      option_1: '全球海平面下降',
+      option_2: '沿海地區人口增長和基礎設施擴建',
+      option_3: '月球引力對潮汐的影響',
+      answer: 2,
+      explanation:
+        '隨著沿海地區人口的增加，對住房、旅遊、工業和交通等基礎設施的需求也隨之增加，直接導致了沿海棲地的開發和破壞。',
+    },
+  ],
+]
