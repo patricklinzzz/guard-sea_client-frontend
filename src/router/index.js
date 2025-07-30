@@ -114,11 +114,40 @@ const router = createRouter({
       props: true,
     },
     {
-      path: '/member-edit',
-      name: 'MemberEdit',
-      component: () => import('@/views/Auth/MemberEdit.vue'),
+      path: '/member',
+      component: () => import('@/views/Member/MemberView.vue'),
+      children: [
+        {
+          path: '',
+          redirect: { name: 'MemberEdit' },
+        },
+        {
+          path: 'edit',
+          name: 'MemberEdit',
+          component: () => import('@/views/Member/MemberEditView.vue'),
+        },
+        {
+          path: 'edit-password',
+          name: 'MemberEditPwd',
+          component: () => import('@/views/Member/MemberEditPwdView.vue'),
+        },
+        {
+          path: 'orders',
+          name: 'MemberOrders',
+          component: () => import('@/views/Member/MemberOrdersView.vue'),
+        },
+        {
+          path: 'events',
+          name: 'MemberEvents',
+          component: () => import('@/views/Member/MemberEventsView.vue'),
+        },
+        {
+          path: 'coupons',
+          name: 'MemberCoupons',
+          component: () => import('@/views/Member/MemberCouponsView.vue'),
+        },
+      ],
     },
-    //404保持在最後一個 要加請加在上方↑↑
     {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
