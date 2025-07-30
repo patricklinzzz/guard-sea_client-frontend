@@ -30,7 +30,7 @@
     const status_filter = ref('全部');
     const showDropdown = ref(false);
 
-    const statusOptions = ['全部', '報名中', '報名截止'];
+    const statusOptions = ['全部', '報名中', '已截止'];
 
     // 篩選分類資料
     const filtered_events = computed(() => {
@@ -120,7 +120,7 @@
             <div class="card_content">
                 <div class="detail">
                         <span class="date">{{ item.date }}</span>
-                        <span class="tag" :class="item.status"># {{ item.status }}</span>
+                        <span class="tag" :class="item.status">{{ item.status }}</span>
                 </div>
 
                 <router-link :to="{ name: 'EventDetail', params: { id: item.id } }"
@@ -175,7 +175,9 @@
     .event_nav{
         max-width: v.$container;
         margin: 0 auto 40px auto;
-
+        @include respond(md) {
+            margin-bottom: 80px;
+        }
         ul {
             display: flex;
             justify-content: center;
@@ -283,8 +285,6 @@
             font-size: v.$sub-desktop;
             border: 3px solid skyblue;
             // border-top: none;
-            // max-height: 200px;
-            // overflow-y: auto;
             overflow: hidden;
             z-index: 10;
             li {
@@ -320,6 +320,7 @@
             color: white;
             @include respond(md) {
             min-width: 114px;
+            font-size: 22px;
             }
         }
         
@@ -411,7 +412,7 @@
         &.報名中 {
             background-color: v.$color-orange;
         }
-        &.報名截止 {
+        &.已截止 {
             background-color: v.$color-yellow;
         }
         &.已結束 {

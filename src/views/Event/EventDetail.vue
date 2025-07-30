@@ -38,14 +38,12 @@
         switch (status) {
             case '報名中':
                 return { text:'立即報名', class:'status-open'};
-            case '報名截止':
+            case '已截止':
                 return { text:'報名已截止', class: 'status-closed'};
             case '已取消':
                 return { text:'活動已取消', class: 'status-cancelled'};
             case '已結束':
                 return {text:'活動已結束', class: 'status-ended'};
-            default: // 默認情況或任何其他未定義的狀態
-                return {text: '目前不可報名', class: ''};
         }
     });
 
@@ -53,7 +51,7 @@
         if (!current_event.value) return true; // 數據未載入時禁用
         
         const status = current_event.value.status;
-        return status === '報名截止' || status === '已取消' || status === '已結束';
+        return status === '已截止' || status === '已取消' || status === '已結束';
     });
 
     //返回列表

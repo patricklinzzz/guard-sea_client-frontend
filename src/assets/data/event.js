@@ -1,14 +1,14 @@
 //列表頁圖片
 import clean from '@/assets/images/event/list/clean.jpg'
-import seminar from '@/assets/images/event/list/seminar.png'
+import seminar from '@/assets/images/event/list/seminar.jpg'
 import live from '@/assets/images/event/list/live.jpg'
 import yoga from '@/assets/images/event/list/yoga.jpg'
-import vr from '@/assets/images/event/list/vr.jpg'
+import threeD from '@/assets/images/event/list/threeD.jpg'
 import night from '@/assets/images/event/list/night.jpg'
 import food from '@/assets/images/event/list/food.jpg'
 import sound from '@/assets/images/event/list/sound.jpg'
-import sand from '@/assets/images/event/list/sand.png'
-import discuss from '@/assets/images/event/list/discuss.png'
+import sand from '@/assets/images/event/list/sand.jpg'
+import discuss from '@/assets/images/event/list/discuss.jpg'
 import port from '@/assets/images/event/list/port.jpg'
 import art from '@/assets/images/event/list/art.jpg'
 import rubbish from '@/assets/images/event/list/rubbish.jpg'
@@ -146,7 +146,7 @@ export const events_all = [
     { 
         id: 5, 
         title: '深海奇遇：3D', 
-        img: vr, 
+        img: threeD, 
         bannerImage: vrBanner,
         category: '教育推廣',
         date: '2025.11.01',
@@ -205,7 +205,7 @@ export const events_all = [
         dateTime: '2025.10.21(二) 14:00 - 16:00',
         location: '國立臺灣大學漁業科學所',
         mapUrl: 'https://maps.app.goo.gl/nD25XbvTGqTpzTkM7',
-        status: '報名中',
+        status: '已截止',
         speaker: '林教授 (永續漁業研究員)',
         introductionHtml: `
             <p>我們的餐桌與海洋健康息息相關。本次講座將深入探討永續漁業的概念與實踐，了解如何選擇對海洋友善的海鮮，以及作為消費者我們能扮演的角色。</p>
@@ -230,7 +230,7 @@ export const events_all = [
         date: '2025.10.17',
         dateTime: '2025.10.17(五) 19:30 - 21:00',
         location: '線上直播',
-        status: '報名中',
+        status: '已截止',
         speaker: '聲音生態學家 張博士',
         introductionHtml: `
             <p>鯨豚是海洋中的歌者。本工作坊將引導您聆聽來自深海的聲音，學習如何辨識不同鯨豚的鳴叫，並了解聲音在海洋生態中的重要性與面臨的威脅。</p>
@@ -256,7 +256,7 @@ export const events_all = [
         dateTime: '2025.10.11(六) 10:00 - 14:00',
         location: '金山沙灘',
         mapUrl: 'https://maps.app.goo.gl/EUwDr8dDJCheF1hJA',
-        status: '報名中',
+        status: '已截止',
         speaker: '環境教育工作者 謝老師',
         introductionHtml: `
             <p>微塑膠是看不見的環境殺手。透過沙灘採樣和顯微觀察，親手發現微塑膠的存在，了解它們如何影響海洋生態，並學習如何在生活中減少塑膠足跡。</p>
@@ -282,7 +282,7 @@ export const events_all = [
         dateTime: '2025.10.01(三) 13:00 - 17:00',
         location: '臺北創新中心',
         mapUrl: 'https://maps.app.goo.gl/ngXLbauoEgNWgtBp7',
-        status: '報名中',
+        status: '已截止',
         speaker: '社會企業顧問 李經理',
         introductionHtml: `
             <p>你是否對海洋保育充滿熱情，卻不知道如何開始？本工作坊將引導您發想、規劃並實踐屬於您的海洋行動提案，從零到一打造改變的力量。</p>
@@ -308,7 +308,7 @@ export const events_all = [
         dateTime: '2025.09.21(日) 09:00 - 16:00',
         location: '蘇澳漁港',
         mapUrl: 'https://maps.app.goo.gl/D7i4Wg8rGtUNaHPA9',
-        status: '報名中', //改成slot
+        status: '已結束', 
         speaker: '漁業署代表',
         introductionHtml: `
             <p>深入漁港，了解漁業運作的同時，也一同參與港區的清潔行動。透過導覽與實作，認識海洋垃圾對漁業的影響，並學習如何共同維護海洋環境。</p>
@@ -335,7 +335,7 @@ export const events_all = [
         dateTime: '2025.09.01(一) 13:00 - 17:00',
         location: '基隆海洋廣場',
         mapUrl: 'https://maps.app.goo.gl/4Kbr5adE5L6xNGqY9',
-        status: '報名截止',
+        status: '已結束',
         speaker: '藝術家 小海',
         introductionHtml: `
             <p>以海洋為靈感，利用回收材料或天然素材，創作出獨一無二的海洋藝術品。在創作中感受海洋之美，並傳達海洋保育的訊息。</p>
@@ -361,7 +361,7 @@ export const events_all = [
         dateTime: '2025.08.13(日) 09:00 - 13:00',
         location: '新北市中角灣',
         mapUrl: 'https://maps.app.goo.gl/sUmi1t7wTduFdHjH9',
-        status: '報名截止',
+        status: '已結束',
         speaker: '環保志工隊長 阿力',
         introductionHtml: `
             <p>不僅是淨灘，更是透過廢棄物記錄，了解塑膠垃圾的來源與種類，從數據中發現問題，並倡議社區共同建立無塑生活模式。</p>

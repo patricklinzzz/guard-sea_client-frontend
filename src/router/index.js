@@ -106,6 +106,19 @@ const router = createRouter({
       path: '/event/reg/:id',
       name: 'EventReg',
       component: () => import('@/views/Event/EventReg.vue'),
+      props: true,
+    },
+    {
+      path: '/event/reg_confirm/:id',
+      name: 'EventConfirm',
+      component: () => import('@/views/Event/EventConfirm.vue'),
+      props: true
+    },
+    {
+      path: '/event/reg_success/:id',
+      name: 'EventSuccess',
+      component: () => import('@/views/Event/EventSuccess.vue'),
+      props: true,
     },
     {
       path: '/edu/species/:id',
