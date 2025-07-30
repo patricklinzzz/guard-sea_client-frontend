@@ -48,7 +48,7 @@
       align-items: center;
       justify-content: flex-end;
       margin: auto;
-      padding-bottom: 25px;
+      padding-bottom: 10px;
 
       @include respond(md) {
         align-items: flex-start;

@@ -16,9 +16,9 @@
 <style lang="scss" scoped>
   #story {
     position: relative;
-    padding: 100px 18.75vw 0 18.75vw;
+    padding: 80px 18.75vw 0 18.75vw;
     @include respond(md){
-      padding: 100px 5vw 0 5vw;
+      padding: 80px 5vw 0 5vw;
     }
     #img_diver {
       position: absolute;
@@ -26,11 +26,14 @@
       height: 150px;
       left: 50%;
       transform: translateX(-50%);
+      @include respond(md){
+        transform: translateX(-40%);
+      }
     }
     #story_container {
       padding: 75px 0;
       @include respond(md){
-        padding: 60px 0;
+        padding: 30px 0;
       }
     }
   }

@@ -62,6 +62,9 @@
     }
     p {
       margin: 50px auto;
+      @include respond(md){
+        margin: 30px auto;
+      }
     }
     button {
       float: right;
@@ -76,6 +79,7 @@
       text-wrap: nowrap;
       @include respond(md){
         grid-template-columns: repeat(auto-fill,minmax(45%,1fr));
+        padding: 30px 0;
       }
     }
   }

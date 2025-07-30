@@ -19,15 +19,19 @@
 <style lang="scss" scoped>
   #map {
     width: 62.5vw;
-    margin: auto;
+    margin: 20px auto;
     @include respond(md){
       width: 90vw;
+      margin: 0 auto;
     }
     p {
       font-size: v.$sub-desktop;
       margin-top: 40px;
       margin-bottom: 10px;
       color: v.$color-skyblue;
+      @include respond(md){
+        margin-top: 30px;
+      }
       i {
         width: 1em;
         text-align: center;
@@ -36,6 +40,9 @@
     }
     div {
       margin-bottom: 75px;
+      @include respond(md){
+        margin-bottom: 30px;
+      }
     }
   }
 </style>

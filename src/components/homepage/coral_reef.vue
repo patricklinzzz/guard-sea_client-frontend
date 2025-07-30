@@ -44,15 +44,17 @@
   #coral_reef {
     background-color: v.$color-blue-extra-dark;
     position: relative;
-    padding: 0 18.75vw;
+    padding: 30px 18.75vw 0 18.75vw;
     @include respond(md){
-      padding: 0 5vw;
+      padding: 30px 5vw 0 5vw;
     }
     #slider_container {
+      position: relative;
+      z-index: 2;
       padding: 75px 0;
       text-align: center;
       @include respond(md){
-        padding: 60px 0;
+        padding: 30px 0;
       }
     }
     img-comparison-slider {
