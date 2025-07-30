@@ -18,3 +18,12 @@
     z-index: -1;
     pointer-events: none;
 }
+
+@mixin bg-layer-fixed-extra-dark {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-color: v.$color-bg-primary-extra-dark;
+    z-index: -1;
+    pointer-events: none;
+}
