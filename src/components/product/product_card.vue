@@ -15,7 +15,7 @@
     </RouterLink>
     <div class="product_card_txt">
       <p>{{ product.name }}</p>
-      <p class="price">{{ product.price }}</p>
+      <p class="price">${{ product.price }}</p>
     </div>
   </div>
 </template>
@@ -36,6 +36,7 @@
       background-color: v.$color-white;
       .price {
         color: v.$color-orange;
+        font-weight: v.$font-bold;
       }
       p {
         text-align: center;

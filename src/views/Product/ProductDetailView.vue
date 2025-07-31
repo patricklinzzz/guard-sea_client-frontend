@@ -1,11 +1,10 @@
 <script setup>
   import { ref, computed } from 'vue'
-  import { useProductStore } from '@/stores/product'
-  import { useCartStore } from '@/stores/cart'
-  import { useRouter } from 'vue-router'
+  import { useProductStore } from '@/stores/product_store'
+  import { useCartStore } from '@/stores/cart_store'
   import Button from '@/components/buttons/button.vue'
   import ProductCard from '@/components/product/product_card.vue'
-
+  import QuantityControl from '@/components/product/quantity_button.vue'
   const props = defineProps({
     id: {
       type: [String, Number],
@@ -28,11 +27,6 @@
   const selectedSize = ref('')
   const quantity = ref(1)
 
-  const incrementQuantity = () => quantity.value++
-  const decrementQuantity = () => {
-    if (quantity.value > 1) quantity.value--
-  }
-
   const addToCart = () => {
     if (!selectedColor.value || !selectedSize.value) {
       alert('請選擇顏色與尺寸')
@@ -51,14 +45,9 @@
 
     alert('已加入購物車！')
   }
-  const router = useRouter()
-  const goBack = () => {
-    router.back()
-  }
 </script>
 
 <template>
-  <h1>商品詳細頁</h1>
   <div class="product_section">
     <div class="product_info">
       <div class="info_img">
@@ -110,15 +99,16 @@
           </div>
           <div class="option_group quantity_selection">
             <h4>數量:</h4>
-            <div class="quantity_control">
-              <button @click="decrementQuantity">-</button>
+            <QuantityControl v-model="quantity" />
+            <!-- <div class="quantity_control">
+              <button @click="decrementQuantity"><i class="fa-solid fa-minus"></i></button>
               <input type="number" min="1" :value="quantity" readonly />
-              <button @click="incrementQuantity">+</button>
-            </div>
+              <button @click="incrementQuantity"><i class="fa-solid fa-plus"></i></button>
+            </div> -->
           </div>
           <div class="cart_buttons">
             <Button variant="transparent" @click="addToCart">加入購物車</Button>
-            <Button variant="transparent">立即購買</Button>
+            <RouterLink to="/login"><Button variant="default">立即購買</Button></RouterLink>
           </div>
         </div>
       </div>
@@ -182,9 +172,9 @@
           />
         </div>
       </div>
-      <div class="go_back">
+      <RouterLink to="/productlist" class="go_back">
         <button @click="goBack">上一頁</button>
-      </div>
+      </RouterLink>
     </div>
   </div>
 </template>
@@ -194,30 +184,38 @@
     max-width: 1920px;
     display: flex;
     flex-direction: column;
-    align-content: center;
-    flex-wrap: wrap;
+    align-items: center;
     .product_info {
       display: flex;
-      flex-direction: row;
       justify-content: center;
       column-gap: 3.37rem;
-
+      max-width: 1200px;
       @include respond(md) {
-        flex-direction: column;
+        flex-wrap: wrap;
       }
+
       .info_img {
+        display: flex;
+        flex-direction: column;
         img {
           width: 100%;
         }
         .info_img_main {
           width: 25.83vw;
+          @include respond(md) {
+            width: 87.5vw;
+          }
         }
         .info_img_thumbnails {
           display: flex;
-          column-gap: 1.43rem;
-          width: 80px;
+          flex-direction: row;
+          column-gap: 1.1rem;
+          width: 7.81vw;
           height: auto;
           cursor: pointer;
+          @include respond(md) {
+            width: 26.56vw;
+          }
         }
       }
 
@@ -225,9 +223,12 @@
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
-        width: 33.69vw;
+        flex-basis: 30%;
+        @include respond(md) {
+        }
         .price {
           color: v.$color-orange;
+          font-weight: v.$font-bold;
         }
       }
       .options {
@@ -268,32 +269,6 @@
               padding: 5px 20px;
             }
           }
-          .quantity_control {
-            display: flex;
-            align-items: center;
-
-            border-radius: v.$border-radius-sm;
-            border: 2px solid v.$color-blue;
-
-            input {
-              width: 92px;
-              text-align: center;
-              border: none;
-              outline: none;
-              font-size: v.$p-desktop;
-              padding: 0;
-            }
-            button {
-              border: none;
-              outline: none;
-              background: v.$color-blue;
-              color: v.$color-white;
-              width: 35px;
-              height: 100%;
-              font-size: v.$p-desktop;
-              text-align: center;
-            }
-          }
         }
         .cart_buttons {
           display: flex;
@@ -302,14 +277,9 @@
           :deep(button) {
             width: 14.79vw;
           }
-
-          :deep(button:nth-child(2)) {
-            background-color: v.$color-orange;
-            color: v.$color-white;
-            border: none;
-
-            &:hover {
-              background-color: v.$color-orange-hover;
+          @include respond(md) {
+            :deep(button) {
+              width: 39.68vw;
             }
           }
         }
@@ -322,6 +292,9 @@
       gap: 2rem;
       max-width: 1200px;
       text-align: center;
+      @include respond(md) {
+        max-width: 320px;
+      }
 
       .product_features {
         display: flex;
@@ -345,6 +318,11 @@
         width: 20.15vw;
         justify-content: center;
         column-gap: 1rem;
+        @include respond(md) {
+          flex-wrap: wrap;
+          row-gap: 1rem;
+          width: 87.5vw;
+        }
         img {
           width: 100%;
         }
@@ -371,11 +349,19 @@
       .product_list {
         display: flex;
         column-gap: 1rem;
+        @include respond(md) {
+          padding: 1rem 0;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1rem;
+        }
         img {
           width: 100%;
         }
       }
       .go_back {
+        text-decoration: none;
+        color: inherit;
         button {
           margin: 0 auto;
           display: block;
@@ -388,6 +374,7 @@
           cursor: pointer;
           @include respond(md) {
             margin-bottom: 20px;
+            width: 88px;
             font-size: 16px;
             width: 80px;
             height: 36px;

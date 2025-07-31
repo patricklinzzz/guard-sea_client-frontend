@@ -27,7 +27,7 @@
       <img src="/src/assets/images/product/product_banner.png" alt="" />
       <h1>周邊商品</h1>
     </div>
-    <section>
+    <section class="productlist_section">
       <div class="product_category">
         <button
           v-for="cat in categories"
@@ -48,10 +48,9 @@
           </select>
         </div>
       </div>
-
-      <div class="product_grid">
+      <TransitionGroup tag="div" name="list" class="product_grid">
         <ProductCard v-for="product in filterAndSort" :key="product.id" :product="product" />
-      </div>
+      </TransitionGroup>
     </section>
   </div>
 </template>
@@ -59,6 +58,7 @@
   .productlist::before {
     @include bg-layer-fixed-dark;
   }
+
   .product_hero {
     position: relative;
     display: flex;
@@ -67,17 +67,17 @@
     img {
       width: 100%;
       height: auto;
+      object-fit: cover;
     }
     h1 {
       position: absolute;
       color: #fff;
     }
   }
-  section {
-    padding: 0 18.75vw;
+  .productlist_section {
+    padding: 5% 18.75vw;
 
     @include respond(md) {
-      padding: 0 6.25rem;
     }
     .product_category {
       display: flex;
@@ -120,15 +120,23 @@
       }
     }
     .product_sort {
+      margin: 3% 0;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+
       h2 {
         color: v.$color-text-white;
+      }
+      #sort_order {
+        font-size: v.$p-mobile;
       }
     }
     .product_grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
+      justify-content: center;
+      align-items: center;
       column-gap: 1.68rem;
       row-gap: 2.31rem;
 
@@ -137,6 +145,17 @@
         column-gap: 1.31rem;
         row-gap: 1.62rem;
       }
+    }
+    .list-enter-from {
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    .list-enter-to {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .list-enter-active {
+      transition: all 0.6s ease-out;
     }
   }
 </style>

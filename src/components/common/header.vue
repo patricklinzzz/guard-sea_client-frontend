@@ -1,6 +1,6 @@
 <script setup>
   import { RouterLink } from 'vue-router'
-  import { useCartStore } from '@/stores/cart'
+  import { useCartStore } from '@/stores/cart_store'
   import { computed, ref, onMounted, onUnmounted } from 'vue'
   import { useAuthStore } from '@/stores/auth'
   const authStore = useAuthStore()
@@ -52,7 +52,7 @@
   })
   // // 計算購物車總數量
   const cartStore = useCartStore()
-  const cartCount = computed(() => cartStore.totalQuantity)
+  const cartCount = computed(() => cartStore.itemCount)
 
   //下滑時收起 往上滑出現
   const isNavHidden = ref(false)
