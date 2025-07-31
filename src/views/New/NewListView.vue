@@ -370,8 +370,8 @@
   // new_list_start
 
   .new_list {
-    max-width: 1040px;
-    padding: 0 20px;
+    max-width: 1010px;
+    padding: 0 5px;
     margin: 0 auto;
 
     article {
