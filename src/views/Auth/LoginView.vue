@@ -152,13 +152,7 @@
             <form @submit.prevent="handleForgotPassword">
               <div class="form-group">
                 <label for="forgot-email">電子郵件</label>
-                <input
-                  type="email"
-                  id="forgot-email"
-                  v-model="email"
-                  required
-                  placeholder="電子郵件"
-                />
+                <input type="email" id="forgot-email" v-model="email" required />
               </div>
               <button type="submit" class="btn-submit">確認</button>
             </form>
@@ -172,6 +166,17 @@
 
 <script setup>
   import { ref } from 'vue'
+  // ========== START: 引入 useRouter ==========
+  import { useRouter } from 'vue-router'
+  // ========== END: 引入 useRouter ==========
+
+  // ========== START: 建立 Router 實例和預設使用者 ==========
+  const router = useRouter()
+  const defaultUser = {
+    email: 'test@example.com',
+    password: 'password123',
+  }
+  // ========== END: 建立 Router 實例和預設使用者 ==========
 
   const currentMode = ref('login')
   const email = ref('')
@@ -196,10 +201,21 @@
     passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password'
   }
 
+  // ========== START: 修改 handleLogin 函式 ==========
   const handleLogin = () => {
-    console.log('Logging in with:', email.value, password.value, rememberMe.value)
-    alert('登入功能僅為展示')
+    // 1. 比對帳號密碼
+    if (email.value === defaultUser.email && password.value === defaultUser.password) {
+      // 2. 登入成功，儲存假的 Token
+      localStorage.setItem('user-token', 'fake-user-token-for-guardsea')
+
+      // 3. 跳轉到會員中心
+      router.push({ path: '/member' })
+    } else {
+      // 4. 登入失敗，顯示錯誤訊息
+      alert('帳號或密碼錯誤！')
+    }
   }
+  // ========== END: 修改 handleLogin 函式 ==========
 
   const handleRegister = () => {
     if (!termsAccepted.value) {
@@ -222,6 +238,7 @@
 </script>
 
 <style scoped lang="scss">
+  /* 您的樣式保持不變，此處省略 */
   @use '@/assets/style/variables' as *;
   @use '@/assets/style/mixins' as *;
   @use 'sass:color';
@@ -238,6 +255,10 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
+
+    @include respond(md) {
+      align-items: flex-start;
+    }
   }
   .background-overlay {
     @include bg-layer-fixed-dark;
@@ -255,6 +276,12 @@
     z-index: 5;
     margin-top: 5rem;
     margin-bottom: 8rem;
+
+    @include respond(md) {
+      margin-top: 0;
+      margin-bottom: 2rem;
+      gap: 0;
+    }
   }
 
   .welcome-section {
@@ -340,10 +367,13 @@
   .form-section {
     width: 400px;
     max-width: 450px;
-    min-height: 650px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    padding: 3rem 0;
+
+    @include respond(md) {
+      padding: 2rem 0;
+    }
 
     h2 {
       text-align: center;
