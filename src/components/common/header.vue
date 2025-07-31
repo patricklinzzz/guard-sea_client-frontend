@@ -85,7 +85,9 @@
   <header :class="{ nav_hidden: isNavHidden }">
     <!-- 電腦導覽列 -->
     <div id="navbar">
-      <router-link to="/"><img src="../../assets/images/logo.svg" alt="" id="logo" /></router-link>
+      <router-link to="/" @click="edu_linkclick">
+        <img src="../../assets/images/logo.svg" alt="" id="logo" />
+      </router-link>
 
       <nav id="desktop_nav">
         <!-- 教育hover下拉選單 -->
@@ -124,7 +126,7 @@
         <router-link v-else to="/login" @click="edu_linkclick">
           <i class="fa-solid fa-user"></i>
         </router-link>
-        <router-link to="/cart" class="cart-icon">
+        <router-link to="/cart" class="cart-icon" @click="edu_linkclick">
           <i class="fa-solid fa-cart-shopping"></i>
           <span class="cart-count" v-if="cartCount > 0">{{ cartCount }}</span>
         </router-link>
@@ -269,7 +271,7 @@
     z-index: 1000;
 
     & > ul {
-      margin: 30px 20px;
+      margin: 0px 20px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
