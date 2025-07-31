@@ -119,6 +119,12 @@
       <!-- 手機導覽列 -->
       <nav id="mobile_nav">
         <router-link v-if="authStore.isLoggedIn" to="/member" @click="edu_linkclick">
+<<<<<<< Updated upstream
+=======
+          <i class="fa-solid fa-user"></i>
+        </router-link>
+        <router-link v-else to="/login" @click="edu_linkclick">
+>>>>>>> Stashed changes
           <i class="fa-solid fa-user"></i>
         </router-link>
         <router-link v-else to="/login" @click="edu_linkclick">
