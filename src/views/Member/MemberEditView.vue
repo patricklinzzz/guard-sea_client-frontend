@@ -32,24 +32,34 @@
           </div>
           <div class="form_group">
             <label for="gender">性別</label>
-            <input type="text" id="gender" v-model="formData.gender" />
+            <div class="select_wrapper">
+              <select id="gender" v-model="formData.gender">
+                <option value="男">男</option>
+                <option value="女">女</option>
+                <option value="不指定">不指定</option>
+              </select>
+            </div>
           </div>
           <div class="form_group">
             <label for="address">地址</label>
             <input type="text" id="address" v-model="formData.address" />
           </div>
+
           <div class="form_group">
             <label for="birthdate">生日</label>
-            <div class="input_with_icon">
-              <input
-                type="text"
-                id="birthdate"
-                v-model="formData.birthdate"
-                placeholder="年 / 月 / 日"
-              />
-              <i class="fas fa-calendar-alt"></i>
-            </div>
+            <VueDatePicker
+              id="birthdate"
+              v-model="formData.birthdate"
+              placeholder="年 / 月 / 日"
+              format="yyyy/MM/dd"
+              :max-date="new Date()"
+              :enable-time-picker="false"
+              auto-apply
+              teleport-center
+              :clearable="false"
+            ></VueDatePicker>
           </div>
+
           <div class="form_group">
             <label for="password">密碼</label>
             <input
@@ -73,6 +83,8 @@
 
 <script setup>
   import { ref, onMounted } from 'vue'
+  import VueDatePicker from '@vuepic/vue-datepicker'
+  import '@vuepic/vue-datepicker/dist/main.css'
 
   let originalData = {}
 
@@ -87,17 +99,17 @@
   })
 
   onMounted(() => {
-    // originalData = structuredClone(formData.value)
+    originalData = JSON.parse(JSON.stringify(formData.value))
   })
 
   const handleProfileUpdate = () => {
     console.log('Updating profile:', formData.value)
-    originalData = structuredClone(formData.value)
+    originalData = JSON.parse(JSON.stringify(formData.value))
     alert('會員資料已儲存')
   }
 
   const cancelChanges = () => {
-    formData.value = structuredClone(originalData)
+    formData.value = JSON.parse(JSON.stringify(originalData))
     console.log('Changes cancelled and form has been reset.')
   }
 </script>
@@ -206,7 +218,8 @@
         }
       }
 
-      input:not([type='checkbox']) {
+      input:not([type='checkbox']),
+      select {
         width: 100%;
         height: $input-height-desktop;
         padding: 0 15px;
@@ -215,6 +228,9 @@
         border-radius: $border-radius-sm;
         font-size: $p-desktop;
         color: $color-black;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
 
         &:disabled {
           background-color: #eee;
@@ -225,6 +241,21 @@
           height: $input-height-mobile;
           font-size: $p-mobile;
         }
+      }
+    }
+
+    .select_wrapper {
+      position: relative;
+
+      &::after {
+        content: '▼';
+        font-size: 12px;
+        color: $color-gray;
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        pointer-events: none;
       }
     }
 
@@ -280,5 +311,39 @@
         }
       }
     }
+  }
+
+  :deep(.dp__input) {
+    height: $input-height-desktop;
+    border: $border-base solid $border-color-gray;
+    border-radius: $border-radius-sm;
+    font-size: $p-desktop;
+    color: $color-black;
+    background-color: $color-white;
+    padding-left: 15px;
+
+    &::placeholder {
+      color: $color-gray;
+      font-size: $p-desktop;
+    }
+
+    @include respond(md) {
+      height: $input-height-mobile;
+      font-size: $p-mobile;
+      &::placeholder {
+        font-size: $p-mobile;
+      }
+    }
+  }
+
+  :deep(.dp__input_icon) {
+    left: auto;
+    right: 0;
+    padding: 0 12px;
+    height: 100%;
+  }
+
+  :deep(.dp__clear_icon) {
+    display: none;
   }
 </style>

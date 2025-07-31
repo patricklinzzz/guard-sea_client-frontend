@@ -116,6 +116,7 @@ const router = createRouter({
     {
       path: '/member',
       component: () => import('@/views/Member/MemberView.vue'),
+      meta: { requiresAuth: true },
       children: [
         {
           path: '',
@@ -161,6 +162,21 @@ const router = createRouter({
       return { top: 0, left: 0 }
     }
   },
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth) {
+    const token = localStorage.getItem('user-token')
+
+    if (token) {
+      next()
+    } else {
+      alert('請先登入才能訪問此頁面！')
+      next({ name: 'login' })
+    }
+  } else {
+    next()
+  }
 })
 
 export default router
