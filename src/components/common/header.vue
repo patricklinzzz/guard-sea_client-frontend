@@ -2,7 +2,8 @@
   import { RouterLink } from 'vue-router'
   import { useCartStore } from '@/stores/cart'
   import { computed, ref, onMounted, onUnmounted } from 'vue'
-
+  import { useAuthStore } from '@/stores/auth'
+  const authStore = useAuthStore()
   //手機menu
   const menu_open = ref(false)
   const toggle_menu = () => {
@@ -11,10 +12,10 @@
   //漢堡與x切換
   const change_ham_icon = computed(() => {
     if (menu_open.value) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'
       return 'fa-solid fa-xmark'
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = 'auto'
       return 'fa-solid fa-bars'
     }
   })
@@ -104,7 +105,10 @@
         <router-link to="/event">活動</router-link>
         <router-link to="/new">最新消息</router-link>
         <router-link to="/about">關於我們</router-link>
-        <router-link to="/login">
+        <router-link v-if="authStore.isLoggedIn" to="/member">
+          <i class="fa-solid fa-user"></i>
+        </router-link>
+        <router-link v-else to="/login">
           <i class="fa-solid fa-user"></i>
         </router-link>
         <router-link to="/cart" class="cart-icon">
@@ -114,7 +118,10 @@
       </nav>
       <!-- 手機導覽列 -->
       <nav id="mobile_nav">
-        <router-link to="/register">
+        <router-link v-if="authStore.isLoggedIn" to="/member" @click="edu_linkclick">
+          <i class="fa-solid fa-user"></i>
+        </router-link>
+        <router-link v-else to="/login" @click="edu_linkclick">
           <i class="fa-solid fa-user"></i>
         </router-link>
         <router-link to="/cart" class="cart-icon">
