@@ -3,6 +3,7 @@
   import { useRoute } from 'vue-router'
   import { ref, watch } from 'vue'
   import Button from '@/components/buttons/button.vue'
+  import BubbleEffect from '@/components/edu/BubbleEffect.vue'
 
   // 取得路由
   const route = useRoute()
@@ -47,7 +48,10 @@
         <h2 class="name">{{ animal.name }}</h2>
         <ul>
           <li>
-            <p>學名：{{ animal.english }}</p>
+            <p>
+              學名：{{ animal.english }}
+              <BubbleEffect />
+            </p>
           </li>
           <li>
             <p>海域：{{ animal.areas }}</p>
@@ -132,7 +136,7 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    // gap: 10px;
+    gap: 10px;
     color: v.$color-text-white;
     padding: 30px 20px 20px 20px;
     margin: 0 auto;
@@ -148,11 +152,18 @@
     flex-direction: column;
     gap: 20px;
     align-items: center;
-
+    transform: translateY(30px);
+    animation: fadeInUp 1s ease-out forwards;
     img {
       width: 100%;
       aspect-ratio: 4 / 3;
       object-fit: cover;
+    }
+  }
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
   .animalInfo {
@@ -213,8 +224,8 @@
       display: block;
       width: 100%;
       height: auto;
-      margin-top: -50px;
-      z-index: 999;
+      margin-top: -40px;
+
       transform: translateY(1px);
       // @media (min-width: 768px) {
       //   margin-top: -5px;
@@ -223,13 +234,14 @@
         margin-top: -70px;
       }
       @media (min-width: 1024px) {
-        margin-top: -140px;
+        margin-top: -90px;
       }
-      @media (min-width: 1124px) {
-        margin-top: -180px;
-      }
+
       @media (min-width: 1224px) {
-        margin-top: -280px;
+        margin-top: -115px;
+      }
+      @media (min-width: 2300px) {
+        margin-top: -270px;
       }
     }
   }

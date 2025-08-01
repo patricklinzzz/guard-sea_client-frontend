@@ -30,8 +30,8 @@
       </p>
     </section>
     <section class="images">
-      <img src="@/assets/images/Educate/Causes/pollution.jpeg" alt="pollution" />
-      <img src="@/assets/images/Educate/Causes/pollution.jpeg" alt="pollution" />
+      <img src="@/assets/images/Educate/Causes/overfishing1.jpeg" alt="pollution" />
+      <img src="@/assets/images/Educate/Causes/overfishing2.jpeg" alt="pollution" />
     </section>
 
     <section class="third">
@@ -87,7 +87,7 @@
 
   .title {
     height: 200px;
-    background-image: url('@/assets/images/Educate/Causes/pollution.jpeg');
+    background-image: url('@/assets/images/Educate/Causes/overfishing_banner.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -97,7 +97,7 @@
     align-items: center;
     text-align: center;
     color: v.$color-text-white;
-    text-shadow: v.$shadow-md;
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.7);
     padding: 0 20px;
 
     @media (min-width: 768px) {
