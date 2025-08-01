@@ -61,7 +61,6 @@
 </script>
 
 <template>
-<body>
 
 <div class="event_hero"></div>
 
@@ -146,7 +145,6 @@
             class="my_pagination"
         />
     </nav>
-</body>
 </template>
 
 

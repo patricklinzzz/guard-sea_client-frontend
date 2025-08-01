@@ -116,18 +116,6 @@ const router = createRouter({
       props: true,
     },
     {
-      path: '/event/reg_confirm/:id',
-      name: 'EventConfirm',
-      component: () => import('@/views/Event/EventConfirm.vue'),
-      props: true,
-    },
-    {
-      path: '/event/reg_success/:id',
-      name: 'EventSuccess',
-      component: () => import('@/views/Event/EventSuccess.vue'),
-      props: true,
-    },
-    {
       path: '/member',
       component: () => import('@/views/Member/MemberView.vue'),
       meta: { requiresAuth: true },

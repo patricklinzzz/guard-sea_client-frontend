@@ -1,198 +1,351 @@
 <script setup>
-    import Button from '@/components/buttons/button.vue'
-    import { useRouter } from 'vue-router'
-    import { useRegStore } from '@/stores/event_reg';
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useRegStore } from '@/stores/event_reg'
+import form_process from '@/components/event/form_process.vue'
+import Button from '@/components/buttons/button.vue'
+import { events_all } from '@/assets/data/event'
 
-    const props = defineProps(['id'])
-    const router = useRouter()
-    const store = useRegStore()
+const router = useRouter()
+const store = useRegStore()
 
-    const to_confirm = () => {
-        router.push(`/event/reg_confirm/${props.id}`)
-    }
+const currentStep = ref(1)
+
+const event = ref(null)
+
+const phone_error = ref('')
+const contact_phone_error = ref('')
+const email_error = ref('')
+
+//讀取資料
+    const props = defineProps({
+        id: {
+            type: [String, Number],
+            required: true
+        }
+    });
+    onMounted (()=> {
+        const found = events_all.find(e => String(e.id) === String(props.id))
+        if (found) event.value = found
+    })
+
+// 驗證邏輯
+const phone_true = () => {
+    const phone = store.formData.phone
+    const pattern = /^09\d{8}$/
+    phone_error.value = pattern.test(phone) ? '' : '請輸入正確的手機號碼格式'
+}
+const contact_phone_true = () => {
+    const phone = store.formData.contact_phone.trim()
+    const pattern = /^09\d{8}$/
+    contact_phone_error.value = phone === '' ? '' : (pattern.test(phone) ? '' : '請輸入正確的手機號碼格式')
+}
+const email_true = () => {
+    const email = store.formData.email.trim()
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    email_error.value = email === '' ? '' : (pattern.test(email) ? '' : '請輸入正確的Email格式')
+}
+
+const toConfirm = () => {
+    phone_true()
+    contact_phone_true()
+    email_true()
+    if (phone_error.value || contact_phone_error.value || email_error.value) return
+    currentStep.value = 2
+}
+
+const submit = () => {
+    currentStep.value = 3
+    // 可加：發送 API / form.reset()
+}
+
+const go_back_event = () => {
+    store.resetForm()
+    router.push('/event')      // 跳轉回活動列表
+}
 </script>
 
 <template>
-    <body>
-        <div class="wrapper">
-            <h1>報名流程</h1>
-            <section class="process">
-                <div class="box_member">
-                    <img src="@/assets/images/event/member_fff.svg" alt="icon_member" class="icon_member">
-                    <p>填寫資料</p>
-                </div>
-                <div class="line"></div> 
-                <div class="box_confirm">
-                    <img src="@/assets/images/event/confirm.svg" alt="icon_confirm" class="icon_confirm">
-                    <p>確認資料</p>
-                </div>
-                <div class="line"></div>
-                <div class="box_success">
-                    <img src="@/assets/images/event/success.svg" alt="icon_success" class="icon_success">
-                    <p>報名成功</p>
-                </div>
-            </section>
+    <div class="wrapper">
+        <form_process :current-step="currentStep" />
 
-            <form @submit.prevent="to_confirm">
-                <div class="content">
-                    <div class="info">
-                        <div class="form_left">
-                            <div class="input_group">
-                                <p>
-                                    <label for="name">姓名<span class="required">*</span></label>
-                                </p>
-                                <input id="name" v-model="store.formData.name" placeholder="請輸入姓名" required/>
-                            </div>
-                            <div class="input_group">
-                                <p>
-                                    <label for="phone">電話<span class="required">*</span></label>
-                                </p>
-                                <input id="phone" v-model="store.formData.phone" placeholder="請輸入電話" required/>
-                            </div>
-                            <div class="input_group">
-                                <p>
-                                    <label for="email">Email</label>
-                                </p>
-                                <input v-model="store.formData.email" placeholder="請輸入Email"/>
-                            </div>
-                        </div>
-
-                        <div class="form_right">
-                            <div class="input_group">
-                                <p>
-                                    <label for="contact_person">緊急聯絡人</label>
-                                </p>
-                                <input id="contact_person" v-model="store.formData.contact_person" placeholder="請輸入姓名">
-                            </div>
-                            <div class="input_group">
-                                <p>
-                                    <label for="contact_phone">緊急聯絡人電話</label>
-                                </p>
-                                <input id="contact_phone" v-model="store.formData.contact_phone" placeholder="請輸入電話">
-                            </div>
-                        </div>
-                    </div>
+        <!-- Step 1：填寫資料 -->
+        <form v-if="currentStep === 1" @submit.prevent="toConfirm">
+        <div class="content">
+            <div class="info">
+                <div class="form_left">
                     <div class="input_group">
-                        <p>
-                            <label for="note">備註</label>
-                        </p>
-                        <textarea v-model="store.formData.note"></textarea>
+                        <label>
+                            <p>姓名<span class="required">*</span></p>
+                            <input id="name" v-model="store.formData.name" placeholder="請輸入姓名" required />
+                        </label>
+                    </div>
+
+                    <div class="input_group">
+                        <label>
+                            <p>電話<span class="required">*</span></p>
+                            <input id="phone" v-model="store.formData.phone" @blur="phone_true" placeholder="請輸入電話" required />
+                            <sub v-if="phone_error" class="msg_error">{{ phone_error }}</sub>
+                        </label>
+                    </div>
+
+                    <div class="input_group">
+                        <label>
+                            <p>Email</p>
+                            <input v-model="store.formData.email" @blur="email_true" placeholder="請輸入Email" />
+                            <sub v-if="email_error" class="msg_error">{{ email_error }}</sub>
+                        </label>
+                        </div>
+                    </div>
+
+                <div class="form_right">
+                    <div class="input_group">
+                        <label>
+                            <p>緊急聯絡人</p>
+                            <input id="contact_person" v-model="store.formData.contact_person" placeholder="請輸入姓名" />
+                        </label>
+                    </div>
+
+                    <div class="input_group">
+                        <label>
+                            <p>緊急聯絡人電話</p>
+                            <input id="contact_phone" v-model="store.formData.contact_phone" @blur="contact_phone_true" placeholder="請輸入電話" />
+                            <sub v-if="contact_phone_error" class="msg_error">{{ contact_phone_error }}</sub>
+                        </label>
                     </div>
                 </div>
-                <Button type="submit" class="next">下一步</Button> 
-                <!-- button要放在form裡面，不然不能送出 -->
-            </form>
+            </div>
+            <div class="input_group">
+                <label>
+                    <p>備註</p>
+                    <textarea v-model="store.formData.note"></textarea>
+                </label>
+            </div>
         </div>
-    </body>
+        <Button type="submit" class="next">下一步</Button>
+        </form>
+
+        <!-- Step 2：確認資料 -->
+        <div v-else-if="currentStep === 2">
+        <div class="info_check">
+                <h3>活動資訊</h3>
+            <ul class="info_event">
+                <li><span>活動名稱：</span>{{ event?.title }}</li>
+                <li><span>活動時間：</span>{{ event?.dateTime }}</li>
+                <li><span>活動地點：</span>{{ event?.location }}</li>
+            </ul>
+                <h3>參加者資訊</h3>
+            <ul class="info_member">
+                <li><span>姓名：</span>{{ store.formData.name }}</li>
+                <li><span>電話：</span>{{ store.formData.phone }}</li>
+                <li><span>Email：</span>{{ store.formData.email }}</li>
+                <li><span>緊急聯絡人：</span>{{ store.formData.contact_person }}</li>
+                <li><span>緊急連絡人電話：</span>{{ store.formData.contact_phone }}</li>
+                <li><span>備註：</span>{{ store.formData.note }}</li>
+            </ul>
+        </div>
+        <div class="button_items">
+            <Button @click="currentStep--" class="back">返回修改</Button>
+            <Button @click="submit">確認報名</Button>
+        </div>
+        </div>
+
+        <!-- Step 3：報名成功 -->
+        <div v-else-if="currentStep === 3" class="success">
+        <div class="circle">
+            <img src="@/assets/images/event/success_fff.svg" alt="icon_success" class="icon_success" />
+            <h2>您已報名成功</h2>
+        </div>
+        <div class="button_items">
+            <Button @click="go_back_event" class="back">返回活動頁面</Button>
+            <Button class="event_member">報名活動查詢</Button>
+        </div>
+        </div>
+    </div>
 </template>
 
 <style lang="scss" scoped>
-    .wrapper{
-        max-width: 900px;
-        width: 100%;
-        margin: 60px auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 50px;
-        @include respond(md) {
-            width: 80%;
-            margin: 30px auto;
-            gap: 30px;
-        }
-    }
-    h1 {
-        text-align: center;
-    }
-    .process {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: center;
-        text-align: center;
-    }
-    .icon_member,
-    .icon_confirm,
-    .icon_success {
-        max-width: 100px;
-        max-height: 100px;
+    .wrapper {
+    max-width: 750px;
+    margin: 60px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+
+    @include respond(md) {
         width: 80%;
-        height: 80%;
-        padding: 20px;
-        flex: 1;
-        color: v.$color-black;
-        background-color: v.$color-skyblue-light;
-        border-radius: v.$border-radius-md;
-        @include respond(md) {
-            width: 60%;
-            height: 60%;
-        padding: 10px;
-        }
+        margin: 30px auto;
+        gap: 20px;
     }
-    .icon_member {
-        stroke: #fff;
-        background-color: v.$color-blue;
-    }
-    .line {
-        max-width: 1000px;
-        flex: 1;
-        height: 2px;
-        border-bottom: 2px dashed v.$color-gray;
     }
 
     form {
         width: 80%;
         margin: 0 auto 40px;
     }
+
     .content {
         display: flex;
         flex-direction: column;
-        justify-content: center;
         gap: 30px;
         padding: 40px 60px;
-        margin-bottom: 40px;
+        margin-bottom: 50px;
         background-color: v.$color-skyblue-light;
         border-radius: v.$border-radius-md;
         border: 3px solid v.$color-skyblue;
-    }
-    .info {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
         @include respond(md){
-            flex-direction: column;
-            gap: 30px;
+            gap: 10px;
+            padding: 20px 20px;
+            margin-bottom: 30px;
+            align-items: center;
         }
     }
+
+    .info {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        @include respond(md) {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+
     .form_left,
-    .form_right{
+    .form_right {
         max-width: 250px;
-        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 30px;
+        @include respond(md){
+            gap: 10px;
+        }
     }
+
     .input_group {
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+
         label {
-            margin-bottom: 4px;
+            margin-bottom: 0.5rem;
         }
+
         .required {
             color: v.$color-error;
         }
+
         input,
         textarea {
-            flex: 1;
+            width: 100%;
             border: none;
             border-radius: v.$border-radius-sm;
-            padding: .5rem;
+            padding: 0.5rem;
+            font-size: v.$sub-desktop;
+
+            @include respond(md) {
+                font-size: v.$sub-mobile;
+            }
+        }
+
+        textarea {
+            height: 120px;
+            resize: none;
+        }
+    }
+
+    .msg_error {
+        color: v.$color-error;
+        margin-top: 2px;
+        font-size: v.$sub-desktop;
+
+        @include respond(md) {
+            font-size: v.$sub-mobile;
         }
     }
 
     .next {
         display: block;
         margin: 0 auto;
+    }
+
+    .button_items {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+
+        @include respond(md) {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+    }
+
+    .back {
+        background-color: #E0E0E0;
+        color: v.$color-black;
+
+        &:hover {
+            background-color: v.$color-gray;
+        }
+    }
+
+    .info_check {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        margin: 0 auto 50px;
+        border-radius: v.$border-radius-md;
+        border: 3px solid v.$color-skyblue;
+        @include respond(md){
+            
+        }
+        h3 {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: v.$color-skyblue-light;
+            text-align: center;
+            font-weight: v.$font-bold;
+        }
+        ul {
+            padding: 0 3rem;
+            @include respond(md){
+                padding: 0 1.5rem;
+            }
+            li {
+                font-size: v.$p-desktop;
+                letter-spacing: v.$letter-spacing-normal;
+                padding-bottom: 1rem;
+                @include respond(md){
+                    font-size: v.$p-mobile;
+                    padding-bottom: .5rem;
+                }
+                span {
+                    font-weight: v.$font-bold;
+                }
+            }
+        }
+        .info_member {
+            padding-bottom: 30px;
+        }
+    }
+
+        .circle {
+        width: 270px;
+        height: 270px;
+        background-color: v.$color-blue;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto 50px;
+
+        @include respond(md) {
+            width: 170px;
+            height: 170px;
+            margin-bottom: 30px;
+        }
     }
 </style>

@@ -61,7 +61,6 @@
 </script>
 
 <template>
-<body>
     <div class="detail_pic">
         <img :src="current_event.bannerImage" alt="current_event.title">
     </div>
@@ -125,7 +124,6 @@
     </section>
     <Button @click="go_back"
     class="go_back">返回活動列表</Button>
-</body>
 </template>
 
 <style lang="scss" scoped>
@@ -134,7 +132,7 @@
         width: 100%;
         aspect-ratio: 40 / 11;
         overflow: hidden;
-        margin: 30px auto;
+        margin: 30px auto 0;
         border-radius: v.$border-radius-md;
 
         & img {
