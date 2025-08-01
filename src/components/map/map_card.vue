@@ -32,7 +32,7 @@
     <i class="fa-solid fa-x" id="btn_close" @click="closePopup"></i>
     <img :src="imgUrl" alt="生物圖片" />
     <div>
-      <p>{{ title }}</p>
+      <p v-html="title"></p>
       <Button variant="round" @click="goToLink"><i class="fa-solid fa-chevron-right"></i></Button>
     </div>
   </div>
@@ -42,9 +42,10 @@
     position: absolute;
     top: 20px;
     left: 10px;
-    width: 30%;
+    width: auto;
     height: auto;
-    max-height: 80%;
+    max-width: 50vw;
+    max-height: 410px;
     background-color: rgba(v.$color-blue-dark, 0.5);
     backdrop-filter: blur(10px);
     z-index: 1000;
@@ -58,21 +59,21 @@
       mix-blend-mode: difference;
       font-size: 20px;
       cursor: pointer;
+      margin-bottom: -20px;
     }
     img {
-      width: 100%;
+      width: 160px;
       border-radius: v.$border-radius-md;
     }
     div {
       flex-grow: 1;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
-      @include respond(md) {
-        flex-direction: column;
-        gap: 15px;
-      }
+      flex-direction: column;
       p {
+        width: fit-content;
+        text-wrap: balance;
         mix-blend-mode: difference;
         font-weight: bold;
       }

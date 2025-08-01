@@ -5,12 +5,13 @@
   import Card from '@/components/map/map_card.vue'
   import { useRouter } from 'vue-router'
   import { creaturesData } from '@/assets/data/map_creatures.js'
+  import { areasData } from '@/assets/data/map_area.js'
 
   const router = useRouter()
 
   const map = ref(null)
 
-  const indoPacificCenter = ref(null) // 印度太平洋
+  const area = ref([]) // 各區域的圓
   const creatureMarkers = ref([]) // 用來儲存生物標記的陣列
 
   const showHoverText = ref(false) //顯示目前移到的圓圈地名
@@ -38,51 +39,55 @@
     }
 
     map.value = L.map('map_container', {
-      maxBounds: window.L.latLngBounds([-85, -180], [85, 180]),
+      maxBounds: window.L.latLngBounds([-85, -250], [85, 180]),
       maxBoundsViscosity: 1,
       zoomAnimation: true,
       zoomControl: false,
-    }).setView([0, 0], 2)
+    }).setView([0, 0], 1)
 
     L.tileLayer(
       'https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}',
       {
         maxZoom: 8,
-        minZoom: 2,
+        minZoom: 1,
         attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>',
       }
     ).addTo(map.value)
 
-    // 印度太平洋
-    const indoPacificCoords = [-33, 80] // 圓心座標
-    const indoPacificRadius = 3000000 // 圓形半徑
-    indoPacificCenter.value = L.circle(indoPacificCoords, {
-      color: 'orange',
-      weight: 1.5,
-      dashArray: '10, 10',
-      fillColor: '#FA0',
-      fillOpacity: 0.08,
-      radius: indoPacificRadius,
-      className: 'animated_circle',
-    }).addTo(map.value)
-    // 印度太平洋點擊
-    indoPacificCenter.value.on('click', () => {
-      const centerLatLng = indoPacificCenter.value.getLatLng()
-      map.value.setView(centerLatLng, 3, {
-        animate: true,
-        duration: 1.0, // 動畫持續時間
-        easeLinearity: 0.5, // 動畫平滑度
+    // 各區域的圓
+    function addArea(areas) {
+      areas.forEach((data) => {
+        const newArea = L.circle(data.center_pointer, {
+          color: 'orange',
+          weight: 1.5,
+          dashArray: '10, 10',
+          fillColor: '#FA0',
+          fillOpacity: 0.08,
+          radius: data.radius,
+          className: 'animated_circle',
+        }).addTo(map.value)
+        area.value.push(newArea)
+        // 各區域的圓點擊
+        newArea.on('click', () => {
+          const centerLatLng = newArea.getLatLng()
+          map.value.setView(centerLatLng, 3, {
+            animate: true,
+            duration: 1.5, // 動畫持續時間
+            easeLinearity: 0, // 動畫平滑度
+          })
+        })
+        //各區域的圓-滑鼠移至圓圈內時顯示文字
+        newArea.on('mouseover', (e) => {
+          showHoverText.value = true
+          hoverText.value = `${data.hover_text}`
+          updateHoverPosition(e.containerPoint)
+        })
+        newArea.on('mouseout', () => {
+          showHoverText.value = false // 滑鼠移出隱藏提示框
+        })
       })
-    })
-    //印度太平洋-滑鼠移至圓圈內時顯示文字
-    indoPacificCenter.value.on('mouseover', (e) => {
-      showHoverText.value = true
-      hoverText.value = '印度洋'
-      updateHoverPosition(e.containerPoint)
-    })
-    indoPacificCenter.value.on('mouseout', () => {
-      showHoverText.value = false // 滑鼠移出隱藏提示框
-    })
+    }
+    addArea(areasData)
     // 滑鼠移動時更新提示框位置
     map.value.on('mousemove', (e) => {
       if (showHoverText.value) {
@@ -96,8 +101,6 @@
         y: point.y - 10,
       }
     }
-
-    addCreatureMarkers(creaturesData)
 
     function addCreatureMarkers(creatures) {
       creatureMarkers.value.forEach((marker) => {
@@ -123,22 +126,29 @@
             actionLink: data.actionLink,
             title: data.title,
           }
+          const CenterLatLng = [data.latLng[0], data.latLng[1] - 15]
+          map.value.setView(CenterLatLng, 3, {
+            animate: true,
+            duration: 1.5, // 動畫持續時間
+            easeLinearity: 0, // 動畫平滑度
+          })
           showCard.value = true
         })
       })
     }
+    addCreatureMarkers(creaturesData)
   })
 
   onBeforeUnmount(() => {
     if (map.value) {
-      if (indoPacificCenter.value) {
-        indoPacificCenter.value.remove()
-        indoPacificCenter.value = null
-      }
+      area.value.forEach((circle) => {
+        circle.remove()
+      })
       creatureMarkers.value.forEach((marker) => {
         marker.remove()
       })
       creatureMarkers.value = []
+      area.value = []
 
       map.value.remove()
       map.value = null
@@ -175,7 +185,7 @@
 <style scoped lang="scss">
   #map_container {
     width: 62.5vw;
-    height: 40vw;
+    height: 450px;
     margin: auto;
     @include respond(md) {
       width: 90vw;
