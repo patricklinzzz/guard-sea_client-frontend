@@ -46,18 +46,20 @@
           </div>
 
           <div class="form_group">
-            <label for="birthdate">生日</label>
-            <VueDatePicker
-              id="birthdate"
-              v-model="formData.birthdate"
-              placeholder="年 / 月 / 日"
-              format="yyyy/MM/dd"
-              :max-date="new Date()"
-              :enable-time-picker="false"
-              auto-apply
-              teleport-center
-              :clearable="false"
-            ></VueDatePicker>
+            <label>
+              生日
+              <VueDatePicker
+                id="birthdate"
+                v-model="formData.birthdate"
+                placeholder="年 / 月 / 日"
+                format="yyyy/MM/dd"
+                :max-date="new Date()"
+                :enable-time-picker="false"
+                auto-apply
+                teleport-center
+                :clearable="false"
+              ></VueDatePicker>
+            </label>
           </div>
 
           <div class="form_group">
