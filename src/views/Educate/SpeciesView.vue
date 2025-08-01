@@ -3,6 +3,10 @@
   import { speciesData } from '@/assets/data/Species.js'
   import BubbleEffect from '@/components/edu/BubbleEffect.vue'
   import LightRays from '@/components/edu/LightRays.vue'
+  import { useRouter, useRoute } from 'vue-router'
+  // 獲取路由
+  const router = useRouter()
+  const route = useRoute() // 獲取當前路由實例，用於監聽路由變化
 
   // 海域分類
   const areas = ['全部生物', '廣泛海域', '印度太平洋', '北太平洋', '極地海域', '特殊海域']

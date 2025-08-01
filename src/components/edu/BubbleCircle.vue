@@ -1,6 +1,8 @@
 <script setup>
   import { ref } from 'vue'
-  const props = defineProps(['text', 'link'])
+
+  const props = defineProps(['text'])
+  const emit = defineEmits(['click'])
 
   const bubbles = ref([])
 
@@ -25,14 +27,23 @@
       }, 1500)
     }
   }
+
+  function handleClick(event) {
+    emit('click', event)
+  }
 </script>
 
 <template>
-  <div class="bubble-container" @mouseover="popBubbles">
-    <router-link :to="link" class="circle-link">
+  <div
+    class="bubble-container"
+    @mouseover="popBubbles"
+    @click="handleClick"
+    role="button"
+    tabindex="0"
+  >
+    <div class="circle-link">
       <h2>{{ text }}</h2>
-    </router-link>
-
+    </div>
     <span v-for="bubble in bubbles" :key="bubble.id" class="bubble" :style="bubble.style"></span>
   </div>
 </template>
@@ -42,6 +53,7 @@
     position: relative;
     display: inline-block;
     overflow: visible;
+    cursor: pointer;
   }
 
   .circle-link {
@@ -57,7 +69,6 @@
     color: v.$color-text-white;
     font-size: v.$h2-mobile;
     transition: all 0.6s ease;
-
     animation: floatCircle 4s ease-in-out infinite;
 
     @media (min-width: 768px) {
@@ -103,8 +114,4 @@
       transform: translateY(-15px);
     }
   }
-
-  // nav a:nth-child(2) {
-  //   animation-delay: 2s;
-  // }
 </style>

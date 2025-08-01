@@ -1,51 +1,64 @@
 <script setup>
   import BubbleCircle from '@/components/edu/BubbleCircle.vue'
   import LightRays from '@/components/edu/LightRays.vue'
+  import { RouterLink } from 'vue-router'
 </script>
 
 <template>
   <LightRays />
-
   <div class="wrapper">
     <nav>
-      <BubbleCircle text="生物圖鑑" link="/edu/species" />
-      <BubbleCircle text="滅絕原因" link="/edu/causes" />
-      <BubbleCircle text="知識測驗" link="/edu/quiz" />
+      <router-link to="/edu/species" custom v-slot="{ navigate }">
+        <BubbleCircle text="生物圖鑑" r="150" @click="navigate"></BubbleCircle>
+      </router-link>
+      <router-link to="/edu/causes" custom v-slot="{ navigate }">
+        <BubbleCircle text="滅絕原因" r="150" @click="navigate"></BubbleCircle>
+      </router-link>
+      <router-link to="/edu/quiz" custom v-slot="{ navigate }">
+        <BubbleCircle text="知識測驗" r="150" @click="navigate"></BubbleCircle>
+      </router-link>
     </nav>
-    <div class="fish-container">
-      <svg
-        class="fish"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 64 32"
-        width="80"
-        height="30"
-        fill="#3F8EAF"
-      >
-        <!-- 魚身體 -->
-        <path d="M2 16c8-12 20-12 32 0-12 12-24 12-32 0z" />
-        <!-- 魚尾巴 -->
-        <path d="M34 16l10-6v12l-10-6z" />
-      </svg>
-      <svg
-        class="fish2"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 64 32"
-        width="70"
-        height="25"
-        fill="#3F8EAF"
-      >
-        <!-- 魚身體 -->
-        <path d="M2 16c8-12 20-12 32 0-12 12-24 12-32 0z" />
-        <!-- 魚尾巴 -->
-        <path d="M34 16l10-6v12l-10-6z" />
-      </svg>
-    </div>
+  </div>
+
+  <div class="fish-container">
+    <svg
+      class="fish"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 32"
+      width="80"
+      height="30"
+      fill="#3F8EAF"
+    >
+      <!-- 魚身體 -->
+      <path d="M2 16c8-12 20-12 32 0-12 12-24 12-32 0z" />
+      <!-- 魚尾巴 -->
+      <path d="M34 16l10-6v12l-10-6z" />
+    </svg>
+    <svg
+      class="fish2"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 32"
+      width="70"
+      height="25"
+      fill="#3F8EAF"
+    >
+      <!-- 魚身體 -->
+      <path d="M2 16c8-12 20-12 32 0-12 12-24 12-32 0z" />
+      <!-- 魚尾巴 -->
+      <path d="M34 16l10-6v12l-10-6z" />
+    </svg>
   </div>
 </template>
 
 <style scoped lang="scss">
   .wrapper::before {
     @include bg-layer-fixed-dark;
+  }
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
   }
   nav {
     display: grid;
