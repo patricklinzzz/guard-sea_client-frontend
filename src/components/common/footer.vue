@@ -32,6 +32,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     height: 415px;
+    z-index: 999;
 
     @include respond(md) {
       background-image: url(../../assets/images/footer/footer_bg2.svg);

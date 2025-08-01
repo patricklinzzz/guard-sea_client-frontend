@@ -1,6 +1,8 @@
 <script setup>
   import { ref, computed } from 'vue'
   import { speciesData } from '@/assets/data/Species.js'
+  import BubbleEffect from '@/components/edu/BubbleEffect.vue'
+  import LightRays from '@/components/edu/LightRays.vue'
 
   // 海域分類
   const areas = ['全部生物', '廣泛海域', '印度太平洋', '北太平洋', '極地海域', '特殊海域']
@@ -19,6 +21,7 @@
 <template>
   <main class="wrapper">
     <div class="container">
+      <LightRays />
       <nav class="area-nav">
         <button
           v-for="area in areas"
@@ -30,8 +33,16 @@
         </button>
       </nav>
 
-      <h2>{{ currentArea }}</h2>
-      <p class="info">點擊查看介紹</p>
+      <h2>
+        {{ currentArea }}
+      </h2>
+
+      <p class="info">
+        <BubbleEffect />
+        點擊查看介紹
+        <BubbleEffect />
+      </p>
+
       <section class="gallery">
         <router-link
           v-for="item in filteredAnimals"
@@ -47,10 +58,15 @@
         </router-link>
       </section>
     </div>
+
     <p class="slogan">
+      <BubbleEffect />
       願地球未來仍能與形形色色
       <br />
+      <BubbleEffect />
+
       的生物綿延不絕地連結
+      <BubbleEffect />
     </p>
   </main>
 </template>
