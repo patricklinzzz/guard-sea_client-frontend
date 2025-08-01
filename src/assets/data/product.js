@@ -49,7 +49,7 @@ export const fakeProducts = [
   },
   {
     id: 4,
-    name: '守護珊瑚毛巾',
+    name: '珊瑚毛巾',
     price: 1500,
     imageUrl: new URL('@/assets/images/product/towel_blue.png', import.meta.url).href,
     images: [

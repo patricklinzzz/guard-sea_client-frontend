@@ -100,11 +100,6 @@
           <div class="option_group quantity_selection">
             <h4>數量:</h4>
             <QuantityControl v-model="quantity" />
-            <!-- <div class="quantity_control">
-              <button @click="decrementQuantity"><i class="fa-solid fa-minus"></i></button>
-              <input type="number" min="1" :value="quantity" readonly />
-              <button @click="incrementQuantity"><i class="fa-solid fa-plus"></i></button>
-            </div> -->
           </div>
           <div class="cart_buttons">
             <Button variant="transparent" @click="addToCart">加入購物車</Button>
@@ -308,9 +303,15 @@
           border-radius: 50%;
           width: 7.5vw;
           height: 7.5vw;
+          aspect-ratio: 1 / 1;
           display: flex;
           justify-content: center;
           align-items: center;
+          @include respond(md) {
+            width: 25vw;
+            height: 25vw;
+            aspect-ratio: 1 / 1;
+          }
         }
       }
       .info_main_img {
@@ -334,7 +335,7 @@
 
         th,
         td {
-          border: 1px solid #ddd;
+          border: 1px solid v.$color-orange;
           padding: 0.5rem 1rem;
           text-align: center;
         }
@@ -342,8 +343,12 @@
       .slogan {
         width: 30.72vw;
         justify-self: center;
+        margin: 1rem 0;
         img {
           width: 100%;
+        }
+        @include respond(md) {
+          width: 80vw;
         }
       }
       .product_list {
