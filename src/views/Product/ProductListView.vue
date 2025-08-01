@@ -2,6 +2,7 @@
   import { ref, computed } from 'vue'
   import { fakeProducts } from '@/assets/data/product'
   import ProductCard from '@/components/product/product_card.vue'
+  import CategoryButtons from '@/components/buttons/category_button.vue'
   const selectCategory = ref('全部商品')
   const categories = ['全部商品', '機能服飾', '各類包款', '周邊小物']
 
@@ -28,16 +29,7 @@
       <h1>周邊商品</h1>
     </div>
     <section class="productlist_section">
-      <div class="product_category">
-        <button
-          v-for="cat in categories"
-          :key="cat"
-          @click="selectCategory = cat"
-          :class="{ active: selectCategory === cat }"
-        >
-          {{ cat }}
-        </button>
-      </div>
+      <CategoryButtons :categories="categories" v-model:currentCategory="selectCategory" />
       <div class="product_sort">
         <h2>{{ selectCategory }}</h2>
         <div>
@@ -48,7 +40,7 @@
           </select>
         </div>
       </div>
-      <TransitionGroup tag="div" name="list" class="product_grid">
+      <TransitionGroup appear tag="div" name="list" class="product_grid">
         <ProductCard v-for="product in filterAndSort" :key="product.id" :product="product" />
       </TransitionGroup>
     </section>
@@ -76,49 +68,10 @@
   }
   .productlist_section {
     padding: 5% 18.75vw;
-
     @include respond(md) {
+      padding: 1rem;
     }
-    .product_category {
-      display: flex;
-      justify-content: center;
-      column-gap: 1.5rem;
-      button {
-        position: relative;
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
-        color: v.$color-text-white;
-        font-size: v.$h3-desktop;
-        &.active {
-          background-color: v.$color-skyblue-light;
-          color: v.$color-black;
-          border-radius: v.$border-radius-sm;
-        }
-        &:nth-child(n + 2):nth-child(-n + 4)::before {
-          content: '';
-          display: block;
-          position: absolute;
-          left: -10%;
-          top: 20%;
-          height: 1.5rem;
-          width: 2px;
-          background-color: white;
-        }
-      }
-      @include respond(md) {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
 
-        button {
-          font-size: v.$h3-mobile;
-          white-space: nowrap;
-          &:nth-child(3)::before {
-            display: none !important;
-          }
-        }
-      }
-    }
     .product_sort {
       margin: 3% 0;
       display: flex;
@@ -142,8 +95,7 @@
 
       @include respond(md) {
         grid-template-columns: repeat(2, 1fr);
-        column-gap: 1.31rem;
-        row-gap: 1.62rem;
+        row-gap: 1rem;
       }
     }
     .list-enter-from {

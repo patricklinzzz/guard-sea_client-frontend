@@ -9,7 +9,7 @@
   const cartStore = useCartStore()
   const couponStore = useCouponStore()
 
-  //預設使用者
+  //================預設使用者
   onMounted(() => {
     if (import.meta.env.DEV) {
       console.log('開發模式：正在為購物車設定預設使用者優惠券...')
@@ -20,13 +20,13 @@
     }
   })
 
-  //購物車與訂單金額計算
+  //==============購物車與訂單金額計算
   const totalAmount = computed(() =>
     cartStore.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   )
   const shippingFee = 60
 
-  //優惠券
+  //=====================優惠券
   const selectedCouponCode = ref(null)
   const availableCoupons = computed(() => couponStore.formattedAvailableCoupons)
   const applyCoupon = (coupon) => {
@@ -43,13 +43,13 @@
     const coupon = couponStore.getCouponByCode(selectedCouponCode.value)
     return coupon ? coupon.value : 0
   })
-  //計算最後總金額
+  //==================計算最後總金額
   const finalTotal = computed(() => {
     const total = totalAmount.value + shippingFee - discount.value
     return total > 0 ? total : 0
   })
 
-  //監聽數量按鈕
+  //==================監聽數量按鈕
   watch(
     () => cartStore.items,
     (newItems) => {
@@ -60,7 +60,7 @@
     },
     { deep: true }
   )
-  //確認購物車有沒有東西,才進行下一步
+  //====================確認購物車有沒有東西,才進行下一步
   const router = useRouter()
   const goToNextStep = () => {
     if (cartStore.items.length === 0) {
@@ -68,11 +68,6 @@
       return
     }
     router.push('/shippinginfo')
-  }
-  //綁定運送方式按鈕
-  const isShippingSelected = ref(false)
-  const toggleShipping = () => {
-    isShippingSelected.value = !isShippingSelected.value
   }
 </script>
 
@@ -140,11 +135,7 @@
       </div>
       <div class="shipping">
         <h2>配送方式</h2>
-        <label
-          class="shipping-label"
-          @click="toggleShipping"
-          :class="{ active: isShippingSelected }"
-        >
+        <label class="shipping-label active">
           <span class="custom-radio"></span>
           <span class="shipping-text">宅配到府</span>
         </label>
@@ -280,10 +271,6 @@
       }
       .coupon_section {
         margin: 2rem 0;
-
-        h3 {
-          margin-bottom: 1rem;
-        }
         .coupon_list {
           display: grid;
           grid-template-columns: repeat(2, max-content);
@@ -296,16 +283,15 @@
           }
           .coupon {
             display: flex;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem;
             border: 2px solid #ccc;
-            width: 24.17vw;
+            width: 30vw;
             cursor: pointer;
             align-items: center;
             border-radius: v.$border-radius-sm;
             column-gap: 1rem;
             @include respond(md) {
-              width: 258px;
-              padding: 0.1rem 0.5rem;
+              width: 90vw;
             }
             .coupon_value {
               display: flex;
@@ -320,24 +306,23 @@
               font-weight: 500;
               transition: all 0.2s ease-in-out;
               padding: 0.5rem 1rem;
+
               @include respond(md) {
-                width: 25vw;
-                height: 25vw;
+                width: 28vw;
+                height: 28vw;
                 aspect-ratio: 1 / 1;
-                // > h3 {
-                //   font-size: 8px;
-                // }
               }
               &.active {
                 background-color: #ec6c26;
               }
             }
             .coupon_txt {
+              h3 {
+                margin-bottom: 0.5rem;
+              }
               .coupon_title {
                 font-weight: bold;
-              }
-              .coupon_code {
-                color: #666;
+                line-height: 1rem;
               }
             }
           }
