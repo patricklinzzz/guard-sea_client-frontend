@@ -3,7 +3,6 @@
   import { useRoute } from 'vue-router'
   import { ref, watch } from 'vue'
   import Button from '@/components/buttons/button.vue'
-  import BubbleEffect from '@/components/edu/BubbleEffect.vue'
 
   // 取得路由
   const route = useRoute()
@@ -48,10 +47,7 @@
         <h2 class="name">{{ animal.name }}</h2>
         <ul>
           <li>
-            <p>
-              學名：{{ animal.english }}
-              <BubbleEffect />
-            </p>
+            <p>學名：{{ animal.english }}</p>
           </li>
           <li>
             <p>海域：{{ animal.areas }}</p>

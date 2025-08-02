@@ -4,11 +4,13 @@
   import BubbleEffect from '@/components/edu/BubbleEffect.vue'
   import LightRays from '@/components/edu/LightRays.vue'
   import { useRouter, useRoute } from 'vue-router'
-  // 獲取路由
+  import CategoryButtons from '@/components/buttons/category_button.vue'
+
   const router = useRouter()
   const route = useRoute() // 獲取當前路由實例，用於監聽路由變化
 
   // 海域分類
+
   const areas = ['全部生物', '廣泛海域', '印度太平洋', '北太平洋', '極地海域', '特殊海域']
   const currentArea = ref('')
 
@@ -40,7 +42,8 @@
   <main class="wrapper">
     <div class="container">
       <LightRays />
-      <nav class="area-nav">
+      <CategoryButtons :categories="areas" v-model:currentCategory="currentArea" class="category" />
+      <!-- <nav class="area-nav">
         <button
           v-for="area in areas"
           :key="area"
@@ -49,16 +52,19 @@
         >
           <h3>{{ area }}</h3>
         </button>
-      </nav>
+      </nav> -->
 
-      <h2>
+      <h2 class="title">
         {{ currentArea }}
       </h2>
 
-      <p class="info">
-        <BubbleEffect />
+   <p class="info">
         點擊查看介紹
-        <BubbleEffect />
+        <div class="bw">
+          <BubbleEffect />
+          
+          <BubbleEffect />
+        </div>
       </p>
 
       <section class="gallery">
@@ -77,14 +83,16 @@
       </section>
     </div>
 
-    <p class="slogan">
-      <BubbleEffect />
+   <p class="slogan">
       願地球未來仍能與形形色色
-      <br />
-      <BubbleEffect />
-
-      的生物綿延不絕地連結
-      <BubbleEffect />
+            <br />
+            的生物綿延不絕地連結
+      <div class="bw1">
+        <BubbleEffect />
+      </div>
+      <div class="bw2">
+        <BubbleEffect />
+      </div>
     </p>
   </main>
 </template>
@@ -104,60 +112,60 @@
       margin: 0 auto;
       padding: 0 16px;
       max-width: 1200px;
-      .area-nav {
-        display: grid;
-        justify-content: center;
-        gap: 12px;
-        margin: 16px auto;
-        grid-template-columns: repeat(2, 1fr);
-        @media (min-width: 425px) {
-          grid-template-columns: repeat(3, 1fr);
-        }
-        @media (min-width: v.$breakpoint-md) {
-          grid-template-columns: repeat(6, 1fr);
-        }
-      }
+      // .area-nav {
+      //   display: grid;
+      //   justify-content: center;
+      //   gap: 12px;
+      //   margin: 16px auto;
+      //   grid-template-columns: repeat(2, 1fr);
+      //   @media (min-width: 425px) {
+      //     grid-template-columns: repeat(3, 1fr);
+      //   }
+      //   @media (min-width: v.$breakpoint-md) {
+      //     grid-template-columns: repeat(6, 1fr);
+      //   }
+      // }
 
-      .area-btn {
-        appearance: none;
-        border: none;
-        background-color: transparent;
-        color: v.$color-white;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        outline: none;
-        box-shadow: none;
-        position: relative;
-        // margin-right: 5px;
+      // .area-btn {
+      //   appearance: none;
+      //   border: none;
+      //   background-color: transparent;
+      //   color: v.$color-white;
+      //   border-radius: 4px;
+      //   cursor: pointer;
+      //   transition: background-color 0.3s ease;
+      //   outline: none;
+      //   box-shadow: none;
+      //   position: relative;
+      //   // margin-right: 5px;
 
-        &.active {
-          background-color: v.$color-skyblue-light;
-          color: v.$color-blue-dark;
-          border-radius: v.$border-radius-sm;
-        }
+      //   &.active {
+      //     background-color: v.$color-skyblue-light;
+      //     color: v.$color-blue-dark;
+      //     border-radius: v.$border-radius-sm;
+      //   }
 
-        &::after {
-          content: '';
-          position: absolute;
-          right: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 1px;
-          height: 24px;
-          background-color: #fff;
-          // margin-right: -15px;
-        }
+      //   &::after {
+      //     content: '';
+      //     position: absolute;
+      //     right: 0;
+      //     top: 50%;
+      //     transform: translateY(-50%);
+      //     width: 1px;
+      //     height: 24px;
+      //     background-color: #fff;
+      //     // margin-right: -15px;
+      //   }
 
-        &:last-child::after {
-          display: none;
-        }
-      }
+      //   &:last-child::after {
+      //     display: none;
+      //   }
+      // }
 
-      .area-btn.active h3 {
-        color: v.$color-blue-dark;
-        text-align: center;
-      }
+      // .area-btn.active h3 {
+      //   color: v.$color-blue-dark;
+      //   text-align: center;
+      // }
       .info {
         color: v.$color-skyblue;
         text-align: center;
@@ -226,5 +234,58 @@
     animation: breathing 3s ease-in-out infinite;
     transition: transform 0.3s ease;
     will-change: transform;
+  }
+  .category {
+    padding: 20px 0px 20px 0px;
+    // max-width: 1300px;
+    // margin: 0px;
+    // flex-wrap: nowrap !important;
+  }
+  // .category :deep(li) {
+  //   flex-wrap: nowrap !important; // ✅ 強制不換行
+  // }
+
+  // .category ul {
+  //   flex-wrap: nowrap; // 🔐 強制單行不換行
+  // }
+</style>
+
+<style>
+  .category {
+    flex-wrap: nowrap;
+  }
+  .category button {
+    flex-wrap: nowrap;
+    width: auto;
+  }
+
+  .category li {
+    flex-wrap: nowrap;
+    width: 100%;
+    padding: 0px;
+    white-space: nowrap;
+  }
+  .category ul {
+    flex-wrap: nowrap;
+
+    /* max-width: 1700px; */
+  }
+    .bw {
+    position: absolute; 
+    width: 95%; 
+    pointer-events: none; 
+    overflow: visible; 
+  }
+  .bw1 {
+    position: absolute; 
+    width: 98%; 
+    pointer-events: none; 
+    overflow: visible; 
+  }
+  .bw2 {
+    position: absolute;
+    width: 80%; 
+    pointer-events: none; 
+    overflow: visible; 
   }
 </style>

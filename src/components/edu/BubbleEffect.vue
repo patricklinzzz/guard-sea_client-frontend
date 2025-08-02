@@ -38,7 +38,7 @@
 
 <style lang="scss" scoped>
   .bubble-container {
-    position: relative;
+    position: absolute;
     display: inline-block;
     overflow: visible;
   }
