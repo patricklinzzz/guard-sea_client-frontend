@@ -17,32 +17,34 @@
   import { gsap } from 'gsap'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   gsap.registerPlugin(ScrollTrigger)
-  import { onMounted, onUnmounted } from 'vue'
+  import { onMounted } from 'vue'
   import aboutus from '@/assets/images/homepage/aboutus.png'
   import turtle from '@/assets/images/homepage/turtle.png'
 
   onMounted(() => {
-    let turtle = document.getElementById('turtle')
+    const turtle = document.getElementById('turtle')
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: turtle,
         start: 'center bottom',
         end: 'bottom top',
         scrub: true,
-        // markers:true
+        // markers: true,
       },
     })
     tl.to(turtle, {
       x: -200,
-      y: -150,
       duration: 0.4,
     })
     tl.to(turtle, {
       scaleX: -1,
+      y: -10,
       duration: 0.1,
     })
     tl.to(turtle, {
-      x: '+=300',
+      x: '+=100',
+      scaleX: -0.3,
+      scaleY: 0.3,
       duration: 0.7,
     })
   })
@@ -54,6 +56,7 @@
     height: 10vh;
     min-height: 300px;
     article {
+      z-index: 2;
       position: absolute;
       display: flex;
       justify-content: center;
@@ -79,6 +82,9 @@
       position: absolute;
       right: -150px;
       top: 0;
+      @include respond(md) {
+        display: none;
+      }
     }
   }
 </style>

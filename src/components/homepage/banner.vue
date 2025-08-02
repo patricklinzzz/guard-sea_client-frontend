@@ -4,9 +4,12 @@
   const router = useRouter()
   import { gsap } from 'gsap'
   import { SplitText } from 'gsap/SplitText'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
   gsap.registerPlugin(SplitText)
+  gsap.registerPlugin(ScrollTrigger)
 
-  import banner from '@/assets/images/homepage/banner.png'
+  // import banner from '@/assets/images/homepage/banner.png'
+  import bannerV from '@/assets/images/homepage/banner.mp4'
   import bg1 from '@/assets/images/homepage/bg1.png'
   import gwawa from '@/assets/images/homepage/gwawa.png'
   import Button from '@/components/buttons/button.vue'
@@ -22,6 +25,7 @@
   onMounted(() => {
     document.fonts.ready.then(() => {
       const title = document.querySelector('h1')
+      const banner = document.getElementById('banner')
       splitTextInstance = new SplitText(title, { type: 'chars' })
       const chars = splitTextInstance.chars
       const tl = gsap.timeline({
@@ -34,6 +38,20 @@
         y: 50,
         opacity: 0,
         stagger: 0.1,
+      })
+
+      gsap.to(title, {
+        scrollTrigger: {
+          trigger: banner,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+          // markers:true,
+        },
+        scale: 3,
+        opacity: 0,
+        x: 150,
+        y: 200,
       })
     })
 
@@ -73,7 +91,10 @@
       <img :src="gwawa" alt="" />
       <p id="hi" v-show="isHiVisible">👋Hi</p>
     </div>
-    <img :src="banner" alt="" class="bg" />
+    <!-- <img :src="banner" alt="" class="bg" /> -->
+    <div id="video_container">
+      <video :src="bannerV" autoplay muted loop height="100%"></video>
+    </div>
     <article>
       <h1>守護海洋,從了解開始</h1>
       <div id="buttons">
@@ -88,6 +109,28 @@
   #banner {
     position: relative;
     background-color: v.$color-blue-extra-dark;
+    #video_container {
+      width: 100%;
+      height: 500px;
+      position: relative;
+      overflow: hidden;
+      video {
+        position: absolute;
+        top: -90px;
+        width: 100%;
+        height: 680px;
+        object-fit: cover;
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 20%;
+        background: linear-gradient(to top, rgba(#001526, 0.8) 0%, transparent 100%);
+      }
+    }
     .bg {
       width: 100%;
       vertical-align: middle;
@@ -98,6 +141,10 @@
       top: 0;
       right: -85px;
       rotate: 15deg;
+      z-index: 2;
+      @include respond(md){
+        display:none
+      }
       cursor: pointer;
       img {
         width: 150px;
