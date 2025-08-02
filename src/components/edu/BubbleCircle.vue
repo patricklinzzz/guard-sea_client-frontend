@@ -177,7 +177,7 @@
         --fzB: v-bind('(+r + 20) * 0.0117647059 + "rem"');
         font-size: var(--fzB);
       }
-      .small{
+      .small {
         font-size: 1rem;
       }
       // width: 170px;
