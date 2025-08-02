@@ -35,17 +35,35 @@
 </template>
 
 <script setup>
+  import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
+  gsap.registerPlugin(ScrollTrigger)
+  import { onMounted } from 'vue'
   import action1 from '@/assets/images/homepage/action1.png'
   import action2 from '@/assets/images/homepage/action2.png'
   import action3 from '@/assets/images/homepage/action3.png'
   import whale from '@/assets/images/homepage/whale.png'
+
+  onMounted(() => {
+    const whale = document.getElementById('whale')
+    gsap.from(whale, {
+      scrollTrigger: {
+        trigger: whale,
+        start: 'center bottom',
+        toggleActions: 'play reverse play reverse',
+      },
+      x: -100,
+      rotation:40,
+      duration:1.5,
+    })
+  })
 </script>
 
 <style lang="scss" scoped>
   #action {
     margin-top: 40px;
     position: relative;
-    @include respond(md){
+    @include respond(md) {
       margin-top: 30px;
     }
     h2 {
@@ -112,7 +130,7 @@
       position: absolute;
       bottom: -30%;
       left: -3%;
-      @include respond(md){
+      @include respond(md) {
         display: none;
       }
     }
