@@ -3,10 +3,18 @@
   import { fakeProducts } from '@/assets/data/product'
   import ProductCard from '@/components/product/product_card.vue'
   import CategoryButtons from '@/components/buttons/category_button.vue'
+  import DropdownFilter from '@/components/event/dropdown_filter.vue'
   const selectCategory = ref('全部商品')
   const categories = ['全部商品', '機能服飾', '各類包款', '周邊小物']
 
-  const sortOrder = ref('')
+  const sortOptionMap = {
+    價格低到高: 'price_asc',
+    價格高到低: 'price_desc',
+  }
+  const displayOptions = Object.keys(sortOptionMap)
+  const selectSortText = ref('價格低到高')
+
+  const sortOrder = computed(() => sortOptionMap[selectSortText.value])
 
   const filterAndSort = computed(() => {
     let result = [...fakeProducts]
@@ -25,20 +33,13 @@
 <template>
   <div class="productlist">
     <div class="product_hero">
-      <img src="/src/assets/images/product/product_banner.png" alt="" />
       <h1>周邊商品</h1>
     </div>
+
     <section class="productlist_section">
       <CategoryButtons :categories="categories" v-model:currentCategory="selectCategory" />
       <div class="product_sort">
-        <h2>{{ selectCategory }}</h2>
-        <div>
-          <select id="sort_order" v-model="sortOrder">
-            <option value="">排序</option>
-            <option value="price_asc">價格低到高</option>
-            <option value="price_desc">價格高到低</option>
-          </select>
-        </div>
+        <DropdownFilter v-model="selectSortText" :options="displayOptions"></DropdownFilter>
       </div>
       <TransitionGroup appear tag="div" name="list" class="product_grid">
         <ProductCard v-for="product in filterAndSort" :key="product.id" :product="product" />
@@ -52,18 +53,23 @@
   }
 
   .product_hero {
-    position: relative;
+    background-image: url('@/assets/images/product/product_banner.png');
+    width: 100%;
+    height: 300px;
+    background-size: cover;
     display: flex;
-    justify-content: center;
     align-items: center;
-    img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
+    justify-content: center;
+    background-repeat: no-repeat;
+    @include respond(md) {
+      height: 180px;
+      background-position: 49% center;
+      margin-bottom: 30px;
     }
     h1 {
       position: absolute;
       color: #fff;
+      text-shadow: 0 4px 4px rgba(0, 0, 0, 0.7);
     }
   }
   .productlist_section {
@@ -75,7 +81,7 @@
     .product_sort {
       margin: 3% 0;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
 
       h2 {
