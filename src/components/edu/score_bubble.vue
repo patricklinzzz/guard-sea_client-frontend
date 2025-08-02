@@ -71,7 +71,6 @@
             :y="+size * 1.1 + baseline"
             fill="white"
             text-anchor="middle"
-            font-size="1.5rem"
           >
             測試你的海洋知識
           </text>
@@ -80,7 +79,6 @@
             :y="+size * 1.3 + baseline"
             fill="white"
             text-anchor="middle"
-            font-size="1.5rem"
           >
             成為解救海洋的一份子
           </text>
@@ -155,11 +153,11 @@
   .sub_title {
     text {
       font-family: v.$font-sans;
-      font-size: v.$h3-desktop;
+      font-size: v.$p-desktop;
       letter-spacing: v.$letter-spacing-base;
 
       @include respond(md) {
-        font-size: v.$h3-mobile;
+        font-size: v.$p-mobile;
       }
     }
   }

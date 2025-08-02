@@ -38,13 +38,14 @@
 
 <style lang="scss" scoped>
   .bubble-container {
-    position: relative;
+    position: absolute;
     display: inline-block;
     overflow: visible;
   }
 
   .bubble {
     position: absolute;
+    display: block;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     pointer-events: none;
