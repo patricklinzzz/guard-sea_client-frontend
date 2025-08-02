@@ -4,11 +4,13 @@
   import BubbleEffect from '@/components/edu/BubbleEffect.vue'
   import LightRays from '@/components/edu/LightRays.vue'
   import { useRouter, useRoute } from 'vue-router'
-  // 獲取路由
+  import CategoryButtons from '@/components/buttons/category_button.vue'
+
   const router = useRouter()
   const route = useRoute() // 獲取當前路由實例，用於監聽路由變化
 
   // 海域分類
+
   const areas = ['全部生物', '廣泛海域', '印度太平洋', '北太平洋', '極地海域', '特殊海域']
   const currentArea = ref('')
 
@@ -40,7 +42,8 @@
   <main class="wrapper">
     <div class="container">
       <LightRays />
-      <nav class="area-nav">
+      <CategoryButtons :categories="areas" v-model:currentCategory="currentArea" class="category" />
+      <!-- <nav class="area-nav">
         <button
           v-for="area in areas"
           :key="area"
@@ -49,16 +52,19 @@
         >
           <h3>{{ area }}</h3>
         </button>
-      </nav>
+      </nav> -->
 
-      <h2>
+      <h2 class="title">
         {{ currentArea }}
       </h2>
 
       <p class="info">
-        <BubbleEffect />
         點擊查看介紹
-        <BubbleEffect />
+        <div class="bw">
+          <BubbleEffect />
+          
+          <BubbleEffect />
+        </div>
       </p>
 
       <section class="gallery">
@@ -78,13 +84,15 @@
     </div>
 
     <p class="slogan">
-      <BubbleEffect />
       願地球未來仍能與形形色色
-      <br />
-      <BubbleEffect />
-
-      的生物綿延不絕地連結
-      <BubbleEffect />
+            <br />
+            的生物綿延不絕地連結
+      <div class="bw1">
+        <BubbleEffect />
+      </div>
+      <div class="bw2">
+        <BubbleEffect />
+      </div>
     </p>
   </main>
 </template>
@@ -227,4 +235,36 @@
     transition: transform 0.3s ease;
     will-change: transform;
   }
+  .category {
+    padding: 20px 0px 20px 0px;
+    // max-width: 1300px;
+    // margin: 0px;
+    // flex-wrap: nowrap !important;
+  }
+  .category :deep(li) {
+    flex-wrap: nowrap !important; // ✅ 強制不換行
+  }
+
+  .bw {
+    position: absolute; 
+    width: 95%; 
+    pointer-events: none; 
+    overflow: visible; 
+  }
+  .bw1 {
+    position: absolute; 
+    width: 98%; 
+    pointer-events: none; 
+    overflow: visible; 
+  }
+  .bw2 {
+    position: absolute;
+    width: 80%; 
+    pointer-events: none; 
+    overflow: visible; 
+  }
+
+  // .category ul {
+  //   flex-wrap: nowrap; // 🔐 強制單行不換行
+  // }
 </style>

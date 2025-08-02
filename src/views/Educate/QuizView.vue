@@ -2,7 +2,8 @@
   import { quizData } from '@/assets/data/quiz.js'
   import Button from '@/components/buttons/button.vue'
   import ScoreBubble from '@/components/edu/score_bubble.vue'
-  import FloatBubble from '@/components/edu/circle.vue'
+  import BubbleCircle from '@/components/edu/BubbleCircle.vue'
+  import LightRays from '@/components/edu/LightRays.vue'
   import { RouterLink } from 'vue-router'
   import { gsap } from 'gsap'
   import { ref, computed, inject } from 'vue'
@@ -234,8 +235,18 @@
 </script>
 
 <template>
+  <LightRays />
   <main class="wrapper">
-    <img :src="doge" alt="" class="doge" @click="() => {doge_toggle = !doge_toggle}"/>
+    <img
+      :src="doge"
+      alt=""
+      class="doge"
+      @click="
+        () => {
+          doge_toggle = !doge_toggle
+        }
+      "
+    />
     <div v-if="doge_toggle" class="devMode">
       <Button @click="skipResult">skipResult</Button>
       <Button
@@ -254,16 +265,15 @@
         <div v-if="!quiz_start" class="quiz_main">
           <ScoreBubble class="quiz_title" score="110" size="160"></ScoreBubble>
           <div class="float_bubbles">
-            <FloatBubble
+            <BubbleCircle
               v-for="(txt, index) in bubble_text"
               :text="txt"
               :key="index"
               :class="{ selected: quiz_type_selected === index }"
-              :style="{ 'animation-delay': index * 0.3 + 's' }"
               r="80"
               @click="bubble_pick(index)"
               class="float_bubble"
-            ></FloatBubble>
+            ></BubbleCircle>
           </div>
           <Transition @before-enter="onBeforeEnter" @enter="onEnter" @leave="onLeave" mode="out-in">
             <p :key="quiz_type_selected">{{ quiz_slogan }}</p>
@@ -524,12 +534,7 @@
     }
   }
 
-  .selected {
-    background-color: v.$color-blue-navy;
-    color: v.$color-text-white;
-    border: 3px solid v.$color-skyblue;
-    transform: scale(1.05);
-  }
+
   .coupon_na {
     width: 280px;
   }

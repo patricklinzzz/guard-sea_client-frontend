@@ -59,6 +59,13 @@
     justify-content: center;
     align-items: center;
     margin: 0 auto;
+    height: calc(100vh - 170px);
+    @media (min-width: 768px) {
+      height: calc(100vh - 280px);
+    }
+    @media (min-width: 1024px) {
+      height: calc(100vh - 480px);
+    }
   }
   nav {
     display: grid;
