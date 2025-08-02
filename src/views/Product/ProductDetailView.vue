@@ -183,10 +183,12 @@
     .product_info {
       display: flex;
       justify-content: center;
+      padding: 2%;
       column-gap: 3.37rem;
       max-width: 1200px;
       @include respond(md) {
         flex-wrap: wrap;
+        padding: 5%;
       }
 
       .info_img {
@@ -197,6 +199,7 @@
         }
         .info_img_main {
           width: 25.83vw;
+          align-self: center;
           @include respond(md) {
             width: 87.5vw;
           }
@@ -217,8 +220,11 @@
       .info_txt {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1rem;
         flex-basis: 30%;
+        > h3 {
+          text-align: justify;
+        }
         @include respond(md) {
         }
         .price {
@@ -287,6 +293,9 @@
       gap: 2rem;
       max-width: 1200px;
       text-align: center;
+      p {
+        color: v.$color-text-main;
+      }
       @include respond(md) {
         max-width: 320px;
       }

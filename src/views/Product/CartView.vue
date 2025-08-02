@@ -74,7 +74,7 @@
 <template>
   <section class="cart_section">
     <div class="cart_banner">
-      <img src="/src/assets/images/product/cart_banner.png" alt="購物車" />
+      <!-- <img src="/src/assets/images/product/cart_banner.png" alt="購物車" /> -->
       <h1>購物車</h1>
     </div>
 
@@ -174,13 +174,18 @@
 <style lang="scss" scoped>
   .cart_section {
     .cart_banner {
-      position: relative;
+      background-image: url('@/assets/images/product/cart_banner.png');
+      width: 100%;
+      height: 300px;
+      background-size: cover;
       display: flex;
-      justify-content: center;
       align-items: center;
-      img {
-        width: 100%;
-        height: auto;
+      justify-content: center;
+      background-repeat: no-repeat;
+      @include respond(md) {
+        height: 180px;
+        background-position: 49% center;
+        margin-bottom: 30px;
       }
       h1 {
         position: absolute;

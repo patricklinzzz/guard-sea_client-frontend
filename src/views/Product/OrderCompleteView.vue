@@ -15,7 +15,6 @@
 <template>
   <section class="completion_section" v-if="order">
     <div class="completion_banner">
-      <img src="/src/assets/images/product/cart_banner.png" alt="訂單完成" />
       <h1>購物車</h1>
     </div>
 
@@ -68,13 +67,18 @@
   .completion_section {
     max-width: 1920px;
     .completion_banner {
-      position: relative;
+      background-image: url('@/assets/images/product/cart_banner.png');
+      width: 100%;
+      height: 300px;
+      background-size: cover;
       display: flex;
-      justify-content: center;
       align-items: center;
-      img {
-        width: 100%;
-        height: auto;
+      justify-content: center;
+      background-repeat: no-repeat;
+      @include respond(md) {
+        height: 180px;
+        background-position: 49% center;
+        margin-bottom: 30px;
       }
       h1 {
         position: absolute;
