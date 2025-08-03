@@ -1,5 +1,5 @@
 <script setup>
-  // remaining objectives: 
+  // remaining objectives:
   // RWD
   // irregular bubble + (constant animaiton?)
   // pngs? + svg expand into view transition?
@@ -40,6 +40,10 @@
     // console.log(cause_title.value)
   }
   const isEasingEnabled = ref(true)
+  const inTransition = ref(false)
+  const handleTransitionStart = (swiper) => {
+    inTransition.value = true
+  }
   const handleTransitionEnd = (swiper) => {
     if (swiper.activeIndex === 5) {
       isEasingEnabled.value = false
@@ -51,6 +55,7 @@
     setTimeout(() => {
       isEasingEnabled.value = true
     }, 0)
+    inTransition.value = false
   }
   const handleSlideChange = (swiper) => {
     // console.log('Active index:', swiper.activeIndex)
@@ -77,7 +82,7 @@
 
   onMounted(() => {
     const base = {
-      duration: 1,
+      duration: 1.5,
       paused: true,
       ease: 'power3.out',
     }
@@ -90,7 +95,7 @@
   <main class="wrapper">
     <swiper
       :slidesPerView="'1'"
-      :spaceBetween="100"
+      speed="800"
       :loop="true"
       :centeredSlides="true"
       :allowTouchMove="false"
@@ -98,6 +103,7 @@
       :initialSlide="4"
       class="mySwiper"
       @slideChange="handleSlideChange"
+      @transitionStart="handleTransitionStart"
       @transitionEnd="handleTransitionEnd"
       @swiper="onSwiper"
     >
@@ -116,11 +122,20 @@
     </swiper>
     <h1 class="cause" :ref="(el) => init_title(el)">海洋汙染</h1>
     <div class="button_wrap">
-      <Arrow class="left_arrow" direction="left" @click="arrow_pressed(false)"></Arrow>
+      <Arrow
+        :class="{ arrow_disabled: inTransition }"
+        class="left_arrow"
+        direction="left"
+        @click="arrow_pressed(false)"
+      ></Arrow>
       <router-link :to="dynamic_link" custom v-slot="{ navigate }">
         <Button @click="navigate" class="button">了解更多</Button>
       </router-link>
-      <Arrow class="right_arrow" @click="arrow_pressed(true)"></Arrow>
+      <Arrow
+        :class="{ arrow_disabled: inTransition }"
+        class="right_arrow"
+        @click="arrow_pressed(true)"
+      ></Arrow>
     </div>
   </main>
 </template>
@@ -137,7 +152,7 @@
   .mySwiper {
     margin-top: 20px;
     width: 100%;
-    padding: 0 28%;
+    padding: 0 24%;
     .swiper-slide {
       position: relative;
       scale: 0.6;
@@ -147,6 +162,9 @@
       &.swiper-slide-active {
         scale: 1;
       }
+    }
+    @include respond(md) {
+      padding: 0;
     }
   }
   .button_wrap {
@@ -159,7 +177,12 @@
       margin-inline: 50px;
     }
   }
-
+  .arrow_disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.5;
+    transform: 0.3 ease;
+  }
   .easing_enabled {
     transition:
       transform 0.3s ease,
