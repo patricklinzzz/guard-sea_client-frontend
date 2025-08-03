@@ -32,26 +32,30 @@
     if (containerTimeline) {
       containerTimeline.pause()
     }
-    gsap.to(containerEl.value, {
-      scale: 1.05,
-      duration: 0.3,
-      ease: 'power2.out',
-    })
-    popBubbles()
+    if (containerEl.value) {
+      gsap.to(containerEl.value, {
+        scale: 1.05,
+        duration: 0.3,
+        ease: 'power2.out',
+      })
+      popBubbles()
+    }
   }
 
   const handleMouseLeave = () => {
     if (containerTimeline) {
       containerTimeline.resume()
     }
-    gsap.to(containerEl.value, {
-      scale: 1,
-      duration: 0.3,
-      ease: 'power2.out',
-    })
-    if (intervalId !== null) {
-      clearInterval(intervalId)
-      intervalId = null
+    if (containerEl.value) {
+      gsap.to(containerEl.value, {
+        scale: 1,
+        duration: 0.3,
+        ease: 'power2.out',
+      })
+      if (intervalId !== null) {
+        clearInterval(intervalId)
+        intervalId = null
+      }
     }
   }
   function popBubbles(event) {
