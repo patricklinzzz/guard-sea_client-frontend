@@ -90,7 +90,7 @@
   <main class="wrapper">
     <swiper
       :slidesPerView="'1'"
-      :spaceBetween="100"
+
       :loop="true"
       :centeredSlides="true"
       :allowTouchMove="false"
@@ -137,7 +137,7 @@
   .mySwiper {
     margin-top: 20px;
     width: 100%;
-    padding: 0 28%;
+    padding: 0 24%;
     .swiper-slide {
       position: relative;
       scale: 0.6;
@@ -148,6 +148,9 @@
         scale: 1;
       }
     }
+    @include respond(md) {
+      padding: 0;
+      }
   }
   .button_wrap {
     display: flex;

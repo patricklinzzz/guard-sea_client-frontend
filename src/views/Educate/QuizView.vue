@@ -6,7 +6,7 @@
   import LightRays from '@/components/edu/LightRays.vue'
   import { RouterLink } from 'vue-router'
   import { gsap } from 'gsap'
-  import { ref, computed, inject } from 'vue'
+  import { ref, computed, inject, onMounted, onUnmounted } from 'vue'
 
   import doge from '@/assets/images/Educate/quiz/doge.png'
 
@@ -15,6 +15,7 @@
   const options_ref = ref(null)
   const quiz_type_selected = ref(null)
   const quiz_chosen = ref(null)
+  const r = ref(80)
 
   const quiz_start = ref(false)
   const start_anime_end = ref(false)
@@ -164,6 +165,7 @@
   const result_next = (navigate) => {
     result_next_clicked.value = true
     if (score.value >= pass_grade) {
+      //if not logged in: alert login
       if (coupon_redeemable) {
         //generate coupon code, record score, coupon code to backend
 
@@ -232,6 +234,23 @@
     return coupon_redeemable.value ? 'redeemable' : 'not redeemable'
   })
   const doge_toggle = ref(true)
+
+  const isMobile = ref(false)
+
+  const checkBreakpoints = () => {
+    const width = window.innerWidth
+    isMobile.value = width < 425
+    r.value = isMobile.value ? 120 : 80
+  }
+
+  onMounted(() => {
+    checkBreakpoints()
+    window.addEventListener('resize', checkBreakpoints)
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', checkBreakpoints)
+  })
 </script>
 
 <template>
@@ -263,14 +282,18 @@
     <div class="content_block">
       <Transition @leave="onLeaveStart">
         <div v-if="!quiz_start" class="quiz_main">
-          <ScoreBubble class="quiz_title" score="110" size="160"></ScoreBubble>
+          <ScoreBubble v-if="!isMobile" class="quiz_title" score="110" size="160"></ScoreBubble>
+          <div v-if="isMobile" class="mobile_title">
+            <h1>守護者挑戰</h1>
+            <p>選擇主題，挑戰高分解鎖折扣</p>
+          </div>
           <div class="float_bubbles">
             <BubbleCircle
               v-for="(txt, index) in bubble_text"
               :text="txt"
               :key="index"
               :class="{ selected: quiz_type_selected === index }"
-              r="80"
+              :r="r"
               @click="bubble_pick(index)"
               class="float_bubble"
             ></BubbleCircle>
@@ -358,7 +381,7 @@
                 :class="{ coupon_na: !coupon_redeemable }"
                 v-if="redeem_coupon_clicked"
               >
-                <router-link :to="'/member-edit'" custom v-slot="{ navigate }">
+                <router-link :to="'/member/coupons'" custom v-slot="{ navigate }">
                   <Button
                     v-if="coupon_redeemable"
                     @click="navigate"
@@ -390,6 +413,9 @@
       @media (min-width: 768px) {
         margin-left: 20%;
       }
+      @media (max-width: 425px) {
+        max-width: 260px;
+      }
     }
   }
   .wrapper::before {
@@ -403,8 +429,15 @@
       margin-block: 20px;
     }
     .float_bubbles {
-      display: flex;
+      width: fit-content;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
+      @media (max-width: 425px) {
+        grid-template-columns: repeat(2, 1fr);
+        margin-inline: auto;
+        margin-top: 25px;
+      }
     }
     button {
       display: block;
@@ -415,6 +448,17 @@
       color: white;
       margin-inline: auto;
       margin-block: 16px;
+    }
+    @media (max-width: 425px) {
+      margin-top: 25px;
+      color: white;
+      h1{
+        width: fit-content;
+        margin: auto;
+      }
+      p{
+        text-align: center;
+      }
     }
   }
   .question_block {
@@ -533,7 +577,6 @@
       }
     }
   }
-
 
   .coupon_na {
     width: 280px;

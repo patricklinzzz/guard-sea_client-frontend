@@ -39,7 +39,7 @@
       justify-content: center;
       align-items: center;
       height: 40px;
-
+      
       @include respond(md) {
         flex-wrap: wrap;
         padding: 0px 20px;
@@ -89,7 +89,7 @@
         }
 
         button {
-          width: 124px;
+          // width: 124px;
           line-height: 40px;
           border: none;
           background-color: transparent;

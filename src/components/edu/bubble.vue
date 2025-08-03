@@ -230,5 +230,9 @@
     width: 420px;
     height: 420px;
     cursor: pointer;
+    @include respond(md) {
+      width: 300px;
+      height: 300px;
+      }
   }
 </style>

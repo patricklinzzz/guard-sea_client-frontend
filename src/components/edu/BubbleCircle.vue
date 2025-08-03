@@ -119,7 +119,7 @@
       @mouseleave="handleMouseLeave"
       class="circle-link"
     >
-      <h2 :class="{ small: r <= 100 }">{{ text }}</h2>
+      <h2 :class="{ small: r <= 120 }">{{ text }}</h2>
     </div>
     <TransitionGroup @enter="onEnter">
       <span
@@ -137,6 +137,7 @@
 
 <style lang="scss" scoped>
   .bubble-container {
+    width: fit-content;
     position: relative;
     display: inline-block;
     overflow: visible;
