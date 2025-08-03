@@ -95,7 +95,7 @@
   <main class="wrapper">
     <swiper
       :slidesPerView="'1'"
-      speed="800"
+      :speed="800"
       :loop="true"
       :centeredSlides="true"
       :allowTouchMove="false"

@@ -36,62 +36,63 @@
 </script>
 
 <template>
-  <div class="wrapper">
-    <div class="container">
-      <div class="images" v-if="animal.image2">
-        <img :src="animal.image2" alt="圖片2" />
+  <div>
+    <div class="wrapper">
+      <div class="container">
+        <div class="images" v-if="animal.image2">
+          <img :src="animal.image2" alt="圖片2" />
+        </div>
+        <!-- <p class="english">{{ animals[0].english }}</p> -->
+
+        <div class="animalInfo">
+          <h2 class="name">{{ animal.name }}</h2>
+          <ul>
+            <li>
+              <p>學名：{{ animal.english }}</p>
+            </li>
+            <li>
+              <p>海域：{{ animal.areas }}</p>
+            </li>
+            <li>
+              <p>分類：{{ animal.classification }}</p>
+            </li>
+            <li>
+              <p>體長：{{ animal.length }}</p>
+            </li>
+            <li>
+              <p>瀕危指標：{{ animal.status }}</p>
+            </li>
+            <li>
+              <p>體重：{{ animal.weight }}</p>
+            </li>
+            <li>
+              <p>壽命：{{ animal.lifespan }}</p>
+            </li>
+            <li>
+              <p>分布：{{ animal.distribution }}</p>
+            </li>
+          </ul>
+        </div>
       </div>
-      <!-- <p class="english">{{ animals[0].english }}</p> -->
+    </div>
+    <div class="wave">
+      <img src="@/assets/images/Educate/wave.png" alt="波浪" />
+    </div>
+    <div class="description">
+      <div class="description_first">
+        <h2>詳細介紹</h2>
+        <p>{{ animal.description }}</p>
+      </div>
 
-      <div class="animalInfo">
-        <h2 class="name">{{ animal.name }}</h2>
-        <ul>
-          <li>
-            <p>學名：{{ animal.english }}</p>
-          </li>
-          <li>
-            <p>海域：{{ animal.areas }}</p>
-          </li>
-          <li>
-            <p>分類：{{ animal.classification }}</p>
-          </li>
-          <li>
-            <p>體長：{{ animal.length }}</p>
-          </li>
-          <li>
-            <p>瀕危指標：{{ animal.status }}</p>
-          </li>
-          <li>
-            <p>體重：{{ animal.weight }}</p>
-          </li>
-          <li>
-            <p>壽命：{{ animal.lifespan }}</p>
-          </li>
-          <li>
-            <p>分布：{{ animal.distribution }}</p>
-          </li>
-        </ul>
+      <div class="images" v-if="animal.image3">
+        <img :src="animal.image3" alt="圖片 3" />
+        <img :src="animal.image4" alt="圖片 4" />
       </div>
     </div>
-  </div>
-  <div class="wave">
-    <img src="@/assets/images/Educate/wave.png" alt="波浪" />
-  </div>
-  <div class="description">
-    <div class="description_first">
-      <h2>詳細介紹</h2>
-      <p>{{ animal.description }}</p>
-    </div>
 
-    <div class="images" v-if="animal.image3">
-      <img :src="animal.image3" alt="圖片 3" />
-      <img :src="animal.image4" alt="圖片 4" />
-    </div>
-  </div>
+    <div class="viewMore"><h1>點擊生物看更多</h1></div>
 
-  <div class="viewMore"><h1>點擊生物看更多</h1></div>
-
-  <!-- <section class="gallery">
+    <!-- <section class="gallery">
     <router-link
       v-for="item in randomAnimals"
       :key="item.id"
@@ -105,20 +106,21 @@
       </p>
     </router-link> -->
 
-  <router-link to="/edu/species" class="gallery__more"><Button>更多生物></Button></router-link>
-  <div class="more">
-    <router-link
-      v-for="item in shuffledSpecies"
-      :key="item.id"
-      :to="`/edu/species/${item.id}`"
-      class="gallery__card breathing"
-    >
-      <img :src="item.image1" :alt="item.name" class="gallery__img" />
-      <h3>{{ item.name }}</h3>
-      <p class="sub-text">
-        <sub>{{ item.english }}</sub>
-      </p>
-    </router-link>
+    <router-link to="/edu/species" class="gallery__more"><Button>更多生物></Button></router-link>
+    <div class="more">
+      <router-link
+        v-for="item in shuffledSpecies"
+        :key="item.id"
+        :to="`/edu/species/${item.id}`"
+        class="gallery__card breathing"
+      >
+        <img :src="item.image1" :alt="item.name" class="gallery__img" />
+        <h3>{{ item.name }}</h3>
+        <p class="sub-text">
+          <sub>{{ item.english }}</sub>
+        </p>
+      </router-link>
+    </div>
   </div>
 
   <!-- <div class="animals"></div> -->
