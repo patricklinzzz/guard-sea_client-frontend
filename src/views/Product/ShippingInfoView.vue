@@ -2,6 +2,7 @@
   import { reactive, ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useCartStore } from '@/stores/cart_store'
+  import { validatePhone } from '@/utils/validators.js'
   import Button from '@/components/buttons/button.vue'
 
   const cartStore = useCartStore()
@@ -19,11 +20,39 @@
   const selectPayment = (method) => {
     selectedPayment.value = method
   }
+  const nameError = ref('')
+  const phoneError = ref('')
+  const addressError = ref('')
+
+  const validateRequired = (value, errorMessage = '此欄位為必填') => {
+    if (String(value || '').trim() === '') {
+      return errorMessage
+    }
+    return ''
+  }
+
+  const validateNameField = () => {
+    nameError.value = validateRequired(formData.name, '請輸入收件人姓名')
+  }
+  const validatePhoneField = () => {
+    phoneError.value = validatePhone(formData.phone)
+  }
+  const validateAddressField = () => {
+    addressError.value = validateRequired(formData.address, '請輸入配送地址')
+  }
+  const validateForm = () => {
+    validateNameField()
+    validatePhoneField()
+    validateAddressField()
+    return !nameError.value && !phoneError.value && !addressError.value
+  }
   const submitOrder = () => {
-    if (!formData.name || !formData.phone || !formData.address) {
-      alert('請填寫完整的收件人資料！')
+    const isFormValid = validateForm()
+    if (!isFormValid) {
+      console.log('表單資料有誤')
       return
     }
+    console.log('表單驗證通過')
     const orderDetails = {
       recipient: { ...formData },
       paymentMethod: selectedPayment.value === 'credit_card' ? '信用卡' : '貨到付款',
@@ -56,15 +85,23 @@
         <div class="form-fields">
           <div class="form-group">
             <label for="name">姓名</label>
-            <input type="text" id="name" v-model="formData.name" />
+            <input type="text" id="name" v-model="formData.name" @blur="validateNameField" />
+            <p v-if="nameError" class="error-text">{{ nameError }}</p>
           </div>
           <div class="form-group">
             <label for="phone">電話</label>
-            <input type="tel" id="phone" v-model="formData.phone" />
+            <input type="tel" id="phone" v-model="formData.phone" @blur="validatePhoneField" />
+            <p v-if="phoneError" class="error-text">{{ phoneError }}</p>
           </div>
           <div class="form-group">
             <label for="address">地址</label>
-            <input type="text" id="address" v-model="formData.address" />
+            <input
+              type="text"
+              id="address"
+              v-model="formData.address"
+              @blur="validateAddressField"
+            />
+            <p v-if="addressError" class="error-text">{{ addressError }}</p>
           </div>
         </div>
         <div class="shipping_pay">
@@ -160,6 +197,12 @@
             border: 1px solid v.$color-black;
             border-radius: v.$border-radius-sm;
           }
+        }
+        .error-text {
+          color: #d9534f;
+          font-size: 14px;
+          margin-top: 4px;
+          height: 16px;
         }
       }
       .payment_options {
