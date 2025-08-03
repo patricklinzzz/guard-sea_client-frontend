@@ -2,9 +2,15 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useRegStore } from '@/stores/event_reg'
+import { events_all } from '@/assets/data/event'
+
+import { validatePhone, validateOptionalPhone, validateEmail } from '@/utils/validators.js'
+
+import AnimatedAnimal from '@/components/event/AnimatedAnimal.vue'
+import turtle from '@/assets/images/dec/seaturtle.svg'
+
 import form_process from '@/components/event/form_process.vue'
 import Button from '@/components/buttons/button.vue'
-import { events_all } from '@/assets/data/event'
 
 const router = useRouter()
 const store = useRegStore()
@@ -16,6 +22,17 @@ const event = ref(null)
 const phone_error = ref('')
 const contact_phone_error = ref('')
 const email_error = ref('')
+
+// 驗證邏輯
+const phone_true = () => {
+    phone_error.value = validatePhone(store.formData.phone)
+}
+const contact_phone_true = () => {
+    contact_phone_error.value = validateOptionalPhone(store.formData.contact_phone)
+}
+const email_true = () => {
+    email_error.value = validateEmail(store.formData.email)
+}
 
 //讀取資料
     const props = defineProps({
@@ -29,22 +46,6 @@ const email_error = ref('')
         if (found) event.value = found
     })
 
-// 驗證邏輯
-const phone_true = () => {
-    const phone = store.formData.phone
-    const pattern = /^09\d{8}$/
-    phone_error.value = pattern.test(phone) ? '' : '請輸入正確的手機號碼格式'
-}
-const contact_phone_true = () => {
-    const phone = store.formData.contact_phone.trim()
-    const pattern = /^09\d{8}$/
-    contact_phone_error.value = phone === '' ? '' : (pattern.test(phone) ? '' : '請輸入正確的手機號碼格式')
-}
-const email_true = () => {
-    const email = store.formData.email.trim()
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    email_error.value = email === '' ? '' : (pattern.test(email) ? '' : '請輸入正確的Email格式')
-}
 
 const toConfirm = () => {
     phone_true()
@@ -66,105 +67,124 @@ const go_back_event = () => {
 </script>
 
 <template>
-    <div class="wrapper">
-        <form_process :current-step="currentStep" />
+    <div class="animal_wrapper">
+        <AnimatedAnimal
+            :imgSrc="turtle"
+            alt="Sea Turtle"
+            :size="160"
+            :sizeMobile="100"
+            direction="rtl"
+            endLeft="70%"
+            bottom="20px"
+            :showBubbles="true"
+            :bubbleLeft="'15%'"
+            :animationDuration="'12s'"
+            :zIndex="3"
+        />
+        <div class="wrapper">
+            <form_process :current-step="currentStep" />
 
-        <!-- Step 1：填寫資料 -->
-        <form v-if="currentStep === 1" @submit.prevent="toConfirm">
-        <div class="content">
-            <div class="info">
-                <div class="form_left">
-                    <div class="input_group">
-                        <label>
-                            <p>姓名<span class="required">*</span></p>
-                            <input id="name" v-model="store.formData.name" placeholder="請輸入姓名" required />
-                        </label>
-                    </div>
+            <!-- Step 1：填寫資料 -->
+            <form v-if="currentStep === 1" @submit.prevent="toConfirm">
+            <div class="content">
+                <div class="info">
+                    <div class="form_left">
+                        <div class="input_group">
+                            <label>
+                                <p>姓名<span class="required">*</span></p>
+                                <input id="name" v-model="store.formData.name" placeholder="請輸入姓名" required />
+                            </label>
+                        </div>
 
-                    <div class="input_group">
-                        <label>
-                            <p>電話<span class="required">*</span></p>
-                            <input id="phone" v-model="store.formData.phone" @blur="phone_true" placeholder="請輸入電話" required />
-                            <sub v-if="phone_error" class="msg_error">{{ phone_error }}</sub>
-                        </label>
-                    </div>
+                        <div class="input_group">
+                            <label>
+                                <p>電話<span class="required">*</span></p>
+                                <input id="phone" v-model="store.formData.phone" @blur="phone_true" placeholder="請輸入電話" required />
+                            </label>
+                            <sub v-show="phone_error" class="msg_error">{{ phone_error }}</sub>
+                        </div>
 
-                    <div class="input_group">
-                        <label>
-                            <p>Email</p>
-                            <input v-model="store.formData.email" @blur="email_true" placeholder="請輸入Email" />
-                            <sub v-if="email_error" class="msg_error">{{ email_error }}</sub>
-                        </label>
+                        <div class="input_group">
+                            <label>
+                                <p>Email</p>
+                                <input v-model="store.formData.email" @blur="email_true" placeholder="請輸入Email" />
+                            </label>
+                            <sub v-show="email_error" class="msg_error">{{ email_error }}</sub>
+                            </div>
+                        </div>
+
+                    <div class="form_right">
+                        <div class="input_group">
+                            <label>
+                                <p>緊急聯絡人</p>
+                                <input id="contact_person" v-model="store.formData.contact_person" placeholder="請輸入姓名" />
+                            </label>
+                        </div>
+
+                        <div class="input_group">
+                            <label>
+                                <p>緊急聯絡人電話</p>
+                                <input id="contact_phone" v-model="store.formData.contact_phone" @blur="contact_phone_true" placeholder="請輸入電話" />
+                            </label>
+                            <sub v-show="contact_phone_error" class="msg_error">{{ contact_phone_error }}</sub>
                         </div>
                     </div>
-
-                <div class="form_right">
-                    <div class="input_group">
-                        <label>
-                            <p>緊急聯絡人</p>
-                            <input id="contact_person" v-model="store.formData.contact_person" placeholder="請輸入姓名" />
-                        </label>
-                    </div>
-
-                    <div class="input_group">
-                        <label>
-                            <p>緊急聯絡人電話</p>
-                            <input id="contact_phone" v-model="store.formData.contact_phone" @blur="contact_phone_true" placeholder="請輸入電話" />
-                            <sub v-if="contact_phone_error" class="msg_error">{{ contact_phone_error }}</sub>
-                        </label>
-                    </div>
+                </div>
+                <div class="input_group">
+                    <label>
+                        <p>備註</p>
+                        <textarea v-model="store.formData.note"></textarea>
+                    </label>
                 </div>
             </div>
-            <div class="input_group">
-                <label>
-                    <p>備註</p>
-                    <textarea v-model="store.formData.note"></textarea>
-                </label>
+            <Button type="submit" class="next">下一步</Button>
+            </form>
+
+            <!-- Step 2：確認資料 -->
+            <div v-else-if="currentStep === 2">
+            <div class="info_check">
+                    <h3>活動資訊</h3>
+                <ul class="info_event">
+                    <li><span>活動名稱：</span>{{ event?.title }}</li>
+                    <li><span>活動時間：</span>{{ event?.dateTime }}</li>
+                    <li><span>活動地點：</span>{{ event?.location }}</li>
+                </ul>
+                    <h3>參加者資訊</h3>
+                <ul class="info_member">
+                    <li><span>姓名：</span>{{ store.formData.name }}</li>
+                    <li><span>電話：</span>{{ store.formData.phone }}</li>
+                    <li><span>Email：</span>{{ store.formData.email }}</li>
+                    <li><span>緊急聯絡人：</span>{{ store.formData.contact_person }}</li>
+                    <li><span>緊急連絡人電話：</span>{{ store.formData.contact_phone }}</li>
+                    <li><span>備註：</span>{{ store.formData.note }}</li>
+                </ul>
             </div>
-        </div>
-        <Button type="submit" class="next">下一步</Button>
-        </form>
+            <div class="button_items">
+                <Button @click="currentStep--" class="back">返回修改</Button>
+                <Button @click="submit">確認報名</Button>
+            </div>
+            </div>
 
-        <!-- Step 2：確認資料 -->
-        <div v-else-if="currentStep === 2">
-        <div class="info_check">
-                <h3>活動資訊</h3>
-            <ul class="info_event">
-                <li><span>活動名稱：</span>{{ event?.title }}</li>
-                <li><span>活動時間：</span>{{ event?.dateTime }}</li>
-                <li><span>活動地點：</span>{{ event?.location }}</li>
-            </ul>
-                <h3>參加者資訊</h3>
-            <ul class="info_member">
-                <li><span>姓名：</span>{{ store.formData.name }}</li>
-                <li><span>電話：</span>{{ store.formData.phone }}</li>
-                <li><span>Email：</span>{{ store.formData.email }}</li>
-                <li><span>緊急聯絡人：</span>{{ store.formData.contact_person }}</li>
-                <li><span>緊急連絡人電話：</span>{{ store.formData.contact_phone }}</li>
-                <li><span>備註：</span>{{ store.formData.note }}</li>
-            </ul>
-        </div>
-        <div class="button_items">
-            <Button @click="currentStep--" class="back">返回修改</Button>
-            <Button @click="submit">確認報名</Button>
-        </div>
-        </div>
-
-        <!-- Step 3：報名成功 -->
-        <div v-else-if="currentStep === 3" class="success">
-        <div class="circle">
-            <img src="@/assets/images/event/success_fff.svg" alt="icon_success" class="icon_success" />
-            <h2>您已報名成功</h2>
-        </div>
-        <div class="button_items">
-            <Button @click="go_back_event" class="back">返回活動頁面</Button>
-            <Button class="event_member">報名活動查詢</Button>
-        </div>
+            <!-- Step 3：報名成功 -->
+            <div v-else-if="currentStep === 3" class="success">
+            <div class="circle">
+                <img src="@/assets/images/event/success_fff.svg" alt="icon_success" class="icon_success" />
+                <h2>您已報名成功</h2>
+            </div>
+            <div class="button_items">
+                <Button @click="go_back_event" class="back">返回活動頁面</Button>
+                <Button class="event_member">報名活動查詢</Button>
+            </div>
+            </div>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
+    .animal_wrapper {
+        position: relative;
+    }
+
     .wrapper {
     max-width: 750px;
     margin: 60px auto;
@@ -226,10 +246,6 @@ const go_back_event = () => {
         display: flex;
         flex-direction: column;
 
-        label {
-            margin-bottom: 0.5rem;
-        }
-
         .required {
             color: v.$color-error;
         }
@@ -255,7 +271,6 @@ const go_back_event = () => {
 
     .msg_error {
         color: v.$color-error;
-        margin-top: 2px;
         font-size: v.$sub-desktop;
 
         @include respond(md) {

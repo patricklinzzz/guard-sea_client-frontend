@@ -1,35 +1,21 @@
 <script setup>
-    import { ref, onMounted, computed } from 'vue'
+    import { ref, computed } from 'vue'
+    import DropdownFilter from '@/components/event/dropdown_filter.vue'
     import PageNumber from '@/components/buttons/page_number.vue'
     import { events_all } from '@/assets/data/event.js'
 
-    //活動資料（可用 API 或 props 傳進來）
+    //活動資料
     const events = ref(events_all)
 
     //頁碼
-    const current_page = ref(1) //當前頁碼，預設第一頁
-    const items_per_page = 12 //每頁12筆資料
-
-    //show_per_page_items
-    const filter_items = computed(() => filtered_events.value)
-    const show_per_page_items = computed(() => {
-        const start = (current_page.value - 1) * items_per_page
-
-        const end = start + items_per_page
-
-        return filter_items.value.slice(start, end)
-    })
-
-    // 預設標題
-    const h1_title = ref('全部活動'); 
+    const current_page = ref(1)
+    const items_per_page = 12
 
     //分類活動
     const events_cat_all = ref('全部活動');
     const events_cat = ['全部活動', '實體行動', '教育推廣', '線上參與'];
 
     const status_filter = ref('全部');
-    const showDropdown = ref(false);
-
     const statusOptions = ['全部', '報名中', '已截止'];
 
     // 篩選分類資料
@@ -37,80 +23,68 @@
     return events.value
         .filter(event => {
         const matchCategory =
-            events_cat_all.value === '全部活動' ||
-            event.category === events_cat_all.value;
+            events_cat_all.value === '全部活動' || event.category === events_cat_all.value;
         const matchStatus =
-            status_filter.value === '全部' || 
-            event.status === status_filter.value;
-
+            status_filter.value === '全部' || event.status === status_filter.value;
         return matchCategory && matchStatus;
         })
         .sort((a, b) => {
         const dateA = new Date(a.date.replaceAll('.', '/'));
         const dateB = new Date(b.date.replaceAll('.', '/'));
-        return dateB - dateA; // 固定從新到舊
+        return dateB - dateA;
         });
     });
 
-    // 根據分類更新 H1 標題
+    const filter_items = computed(() => filtered_events.value)
+    const show_per_page_items = computed(() => {
+    const start = (current_page.value - 1) * items_per_page
+    const end = start + items_per_page
+    return filter_items.value.slice(start, end)
+    })
+
+    // 切換分類
     function change_cate(item) {
-        h1_title.value = item
-        events_cat_all.value = item
-        current_page.value = 1
+    events_cat_all.value = item
+    current_page.value = 1
     }
 </script>
 
 <template>
-
-<div class="event_hero"></div>
-
-<div class="wrapper">
-    <nav class="event_nav">
-        <ul>
-            <li v-for="item in events_cat"
-            :key="item">
-                <button
-                    :class="{ active: events_cat_all === item }"
-                    @click="() => change_cate(item)"
-                >
-                    <h3>{{ item }}</h3>
-                </button>
-            </li>
-        </ul>
-    </nav>
-    
-    <div class="box">
-        <h1>{{ h1_title }}</h1>
-        <div class="status_filter">
-            <div class="dropdown_wrapper" @click="showDropdown = !showDropdown">
-                <input
-                type="text"
-                readonly
-                :value="status_filter"
-                placeholder="請選擇活動狀態"
-                />
-                <span class="arrow">▼</span>
-            </div>
-            <ul v-if="showDropdown" class="dropdown_list">
-                <li
-                v-for="option in statusOptions"
-                :key="option"
-                @click="() => { status_filter = option; showDropdown = false; }"
-                >
-                {{ option }}
-                </li>
-            </ul>
+    <div class="event_hero">
+        <div class="hero_title">
+            <h1>活動</h1>
         </div>
     </div>
 
-    <div class="card_list">
+    <div class="wrapper">
+        <nav class="event_nav">
+        <ul>
+            <li v-for="item in events_cat" :key="item">
+            <button
+                :class="{ active: events_cat_all === item }"
+                @click="() => change_cate(item)"
+            >
+                <h3>{{ item }}</h3>
+            </button>
+            </li>
+        </ul>
+        </nav>
+
+        <div class="box">
+            <DropdownFilter
+                v-model="status_filter"
+                :options="statusOptions"
+                placeholder="請選擇活動狀態"
+            />
+        </div>
+
+        <div class="card_list">
         <div 
             v-for="(item, index) in show_per_page_items"
             :key="item.id"
             class="event_card"
         >
-            <router-link :to="{ name: 'EventDetail', params: { id: item.id } }"
-            class="event_card_link">
+            <router-link :to="{ name: 'EventDetail', params: { id: item.id } }" class="event_card_link">
             <div class="event_pic">
                 <img :src="item.img" :alt="item.title" />
             </div>
@@ -118,12 +92,11 @@
 
             <div class="card_content">
                 <div class="detail">
-                        <span class="date">{{ item.date }}</span>
-                        <span class="tag" :class="item.status">{{ item.status }}</span>
+                    <span class="date">{{ item.date }}</span>
+                    <span class="tag" :class="item.status">{{ item.status }}</span>
                 </div>
 
-                <router-link :to="{ name: 'EventDetail', params: { id: item.id } }"
-                class="event_card_link">
+                <router-link :to="{ name: 'EventDetail', params: { id: item.id } }" class="event_card_link">
                     <p class="title">{{ item.title }}</p>
                 </router-link>
 
@@ -133,20 +106,18 @@
                 </span>
             </div>
         </div>
+        </div>
     </div>
-</div>
 
-<!-- 分頁按鈕區 -->
     <nav>
         <PageNumber
-            v-model="current_page"
-            :total-items="filter_items.length"
-            :items-per-page="items_per_page"
-            class="my_pagination"
+        v-model="current_page"
+        :total-items="filter_items.length"
+        :items-per-page="items_per_page"
+        class="my_pagination"
         />
     </nav>
 </template>
-
 
 
 <style lang="scss" scoped>
@@ -157,16 +128,24 @@
 
     .event_hero {
         background-image: url('@/assets/images/event/eventBanner.jpg');
-        background-size: cover;
-        background-position: center;
         width: 100%;
         height: 300px;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-repeat: no-repeat;
         margin-bottom: 50px;
 
         @include respond(md) {
             height: 180px;
             background-position: 49% center;
             margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #fff;
+            text-shadow: 0 4px 4px rgba(0, 0, 0, 0.7);
         }
     }
     
@@ -230,73 +209,13 @@
         max-width: 1040px;
         margin: 0 auto;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         margin-bottom: 40px;
         h1 {
             color: white;
         }
         @include respond(md) {
             margin: 40px 20px;
-        }
-    }
-
-    .status_filter {
-        position: relative;
-        width: 160px;
-
-        .dropdown_wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 6px 12px;
-            border: 2px solid v.$color-skyblue;
-            border-radius: 6px;
-            background-color: white;
-            cursor: pointer;
-        }
-
-        input {
-            font-size: v.$sub-desktop;
-            border: none;
-            background: none;
-            outline: none;
-            width: 100%;
-            cursor: pointer;
-            @include respond(md) {
-                font-size: v.$sub-mobile;
-            }
-        }
-
-        .arrow {
-            margin-left: 8px;
-            color: v.$color-blue-dark;
-        }
-
-        .dropdown_list {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: v.$color-blue-dark;
-            color: #fff;
-            border-radius: 6px;
-            font-size: v.$sub-desktop;
-            border: 3px solid skyblue;
-            // border-top: none;
-            overflow: hidden;
-            z-index: 10;
-            li {
-                padding: 10px 12px;
-                cursor: pointer;
-                transition: 0.2s;
-                &:hover {
-                    background-color: v.$color-blue;
-                }
-            }
-
-            @include respond(md) {
-                font-size: v.$sub-mobile;
-            }
         }
     }
 
@@ -384,6 +303,7 @@
         flex: 1;
         font-family: v.$font-sans;
         font-size: v.$sub-desktop;
+        color: v.$color-black;
 
         @include respond(md) {
             padding: 3% 4%;

@@ -88,9 +88,11 @@
             <div class="location">
                 <img src="@/assets/images/event/location.svg" alt="icon_location">
                 <h3 v-if="current_event.mapUrl">
-                    <a :href="current_event.mapUrl" target="_blank" rel="noopener noreferrer">
-                        {{ current_event.location }}
-                    </a>
+                    {{ current_event.location }}
+                    <p><a :href="current_event.mapUrl" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-solid fa-location-arrow"></i>
+                        搜尋地圖
+                    </a></p>
                 </h3>
                 <h3 v-else>
                     {{ current_event.location }}
@@ -152,7 +154,7 @@
     .wrapper,
     .registration_info {
         max-width: 1040px;
-        margin: 0 auto 30px;
+        margin: 0 auto;
         padding: 40px;
         border-bottom: v.$border-hairline solid v.$color-orange;
         display: flex;
@@ -168,7 +170,7 @@
 
         @include respond(md) {
             width: 90%;
-            margin: 0 auto 20px;
+            margin: 0 auto;
             padding: 20px;
             gap: 20px;
         }
@@ -211,6 +213,12 @@
             }
         }
         .location{
+            h3 {
+                display: flex;
+                flex-direction: row;
+                gap: 15px;
+                align-items: center;
+            }
             a {
                 text-decoration: none;
                 color: v.$color-orange;
