@@ -8,7 +8,7 @@
   gsap.registerPlugin(SplitText)
   gsap.registerPlugin(ScrollTrigger)
 
-  // import banner from '@/assets/images/homepage/banner.png'
+  import loading from '@/components/common/loading.vue'
   import bannerV from '@/assets/images/homepage/banner.mp4'
   import bg1 from '@/assets/images/homepage/bg1.png'
   import gwawa from '@/assets/images/homepage/gwawa.png'
@@ -85,26 +85,29 @@
     isHiVisible.value = false
   }
 </script>
+
 <template>
-  <section id="banner">
-    <div id="gwawa" @mouseenter="gwawaME" @mouseleave="gwawaML" @click="toggleHi" ref="gwawaEl">
-      <img :src="gwawa" alt="" />
-      <p id="hi" v-show="isHiVisible">👋Hi</p>
-    </div>
-    <!-- <img :src="banner" alt="" class="bg" /> -->
-    <div id="video_container">
-      <video :src="bannerV" autoplay muted loop height="100%"></video>
-    </div>
-    <article>
-      <h1>守護海洋,從了解開始</h1>
-      <div id="buttons">
-        <Button variant="transparent" @click="router.push('/edu/species')">了解更多</Button>
-        <Button @click="router.push('/event')">我想參與</Button>
+  <loading>
+    <section id="banner">
+      <div id="gwawa" @mouseenter="gwawaME" @mouseleave="gwawaML" @click="toggleHi" ref="gwawaEl">
+        <img :src="gwawa" alt="" />
+        <p id="hi" v-show="isHiVisible">👋Hi</p>
       </div>
-    </article>
-    <img :src="bg1" alt="" class="bg" />
-  </section>
+      <div id="video_container">
+        <video :src="bannerV" autoplay muted loop height="100%"></video>
+      </div>
+      <article>
+        <h1>守護海洋,從了解開始</h1>
+        <div id="buttons">
+          <Button variant="transparent" @click="router.push('/edu/species')">了解更多</Button>
+          <Button @click="router.push('/event')">我想參與</Button>
+        </div>
+      </article>
+      <img :src="bg1" alt="" class="bg" />
+    </section>
+  </loading>
 </template>
+
 <style scoped lang="scss">
   #banner {
     position: relative;
@@ -142,10 +145,10 @@
       right: -85px;
       rotate: 15deg;
       z-index: 2;
-      @include respond(md){
-        display:none
-      }
       cursor: pointer;
+      @include respond(md) {
+        display: none;
+      }
       img {
         width: 150px;
       }
