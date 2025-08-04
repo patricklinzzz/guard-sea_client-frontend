@@ -131,4 +131,31 @@
       color: #a6a6a6;
     }
   }
+
+  //客製化頁碼_給其他頁面參考_如果引入此頁碼組件 但想要在自己分頁改其他樣式顏色可以參考以下作法放在自己頁面start
+
+  // :deep(.my_pagination button) {
+  //   border-color: #00bcd4;
+  //   color: #00bcd4;
+  // }
+
+  // :deep(.my_pagination button.active) {
+  //   background-color: #00bcd4;
+  //   color: white;
+  // }
+
+  // :deep(.my_pagination button:disabled) {
+  //   opacity: 0.4;
+  //   color: #aaa;
+  // }
+
+  // :deep(.my_pagination .arrow svg path) {
+  //   stroke: #00bcd4;
+  // }
+
+  // :deep(.my_pagination button:disabled svg path) {
+  //   stroke: #ccc;
+  // }
+
+  //客製化頁碼_給其他頁面參考_end
 </style>
