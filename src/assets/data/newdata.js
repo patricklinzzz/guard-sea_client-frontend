@@ -31,7 +31,7 @@ import guardturtles2 from '@/assets/images/new/eventimg/guardturtles2.jpg'
 import huadongoceankids1 from '@/assets/images/new/eventimg/huadongoceankids1.jpg'
 import huadongoceankids2 from '@/assets/images/new/eventimg/huadongoceankids2.jpg'
 import northcoast1 from '@/assets/images/new/eventimg/northcoast1.jpg'
-import northcoast2 from '../../assets/images/new/eventimg/northcoast2.jpg'
+import northcoast2 from '@/assets/images/new/eventimg/northcoast2.jpg'
 
 export const newdata = [
   {
