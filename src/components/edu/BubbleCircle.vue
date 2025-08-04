@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted, onUnmounted, defineOptions } from 'vue'
+  import { ref, onMounted, onUnmounted } from 'vue'
   import gsap from 'gsap'
   defineOptions({
     inheritAttrs: false,
@@ -58,6 +58,13 @@
       }
     }
   }
+
+  function removeBubble(id, duration) {
+    setTimeout(() => {
+      bubbles.value = bubbles.value.filter((b) => b.id !== id)
+    }, duration)
+  }
+
   function popBubbles(event) {
     if (intervalId === null) {
       intervalId = setInterval(() => {
@@ -76,10 +83,7 @@
             y: y,
             containerY,
           })
-
-          setTimeout(() => {
-            bubbles.value = bubbles.value.filter((b) => b.id !== id)
-          }, 1500)
+          removeBubble(id, 1500)
         }
       }, 100)
     }
@@ -90,7 +94,8 @@
   }
 
   const onEnter = (el, done) => {
-    const bubbleData = bubbles.value.find((b) => b.id === parseInt(el.__vnode.key))
+    const bubbleId = parseInt(el.dataset.id, 10)
+    const bubbleData = bubbles.value.find((b) => b.id === bubbleId)
     if (bubbleData) {
       gsap.fromTo(
         el,
@@ -107,9 +112,16 @@
           scale: 1.8,
           duration: 1.5,
           ease: 'power1.out',
+          onComplete: () => {
+            done()
+          },
         }
       )
+    } else {
+      done()
     }
+  }
+  const onLeave = (el, done) => {
     done()
   }
 </script>
@@ -125,10 +137,11 @@
     >
       <h2 :class="{ small: r <= 120 }">{{ text }}</h2>
     </div>
-    <TransitionGroup @enter="onEnter">
+    <TransitionGroup @enter="onEnter" @leave="onLeave">
       <span
         v-for="bubble in bubbles"
         :key="bubble.id"
+        :data-id="bubble.id"
         class="bubble"
         :style="{
           width: bubble.size + 'px',
