@@ -7,24 +7,12 @@
     <div class="coupon_list_section">
       <h3>優惠卷清單</h3>
       <div class="coupon_list">
-        <div class="coupon_card" v-for="coupon in paginatedCoupons" :key="coupon.id">
-          <div class="coupon_value_box">
-            <span class="label">購物金</span>
-            <span class="value">$ {{ coupon.value }}</span>
-          </div>
-          <div class="coupon_details">
-            <h3 class="title">{{ coupon.title }}</h3>
-
-            <p>
-              <span class="label">優惠代碼：</span>
-              <strong>{{ coupon.code }}</strong>
-            </p>
-            <p>
-              <span class="label">使用期限：</span>
-              {{ coupon.expiry }}
-            </p>
-          </div>
-        </div>
+        <!-- 
+          這裡就是改動的核心：
+          我們用 v-for 循環 CouponCard 元件，
+          並透過 :coupon="coupon" 將每一筆優惠券資料傳遞進去。
+        -->
+        <CouponCard v-for="coupon in paginatedCoupons" :key="coupon.id" :coupon="coupon" />
       </div>
     </div>
 
@@ -42,42 +30,69 @@
   import { ref, computed } from 'vue'
   import PageNumber from '@/components/buttons/page_number.vue'
 
+  import CouponCard from '@/components/product/coupon_card.vue'
+
   const currentPage = ref(1)
   const itemsPerPage = ref(5)
 
   const allCoupons = ref([
-    { id: 'c001', value: 50, title: '首次購物限定', code: 'SAVE50-erhtyh', expiry: '沒有限制' },
-    { id: 'c002', value: 30, title: '歡迎見面禮', code: 'WELCOME30-gfjdkkk', expiry: '沒有限制' },
+    // 為了讓子元件能正確顯示，我們直接提供 `validityPeriod` 欄位
+    {
+      id: 'c001',
+      value: 50,
+      title: '首次購物限定',
+      code: 'SAVE50',
+      validityPeriod: '使用期限: 沒有限制',
+    },
+    {
+      id: 'c002',
+      value: 30,
+      title: '歡迎見面禮',
+      code: 'WELCOME30',
+      validityPeriod: '使用期限: 沒有限制',
+    },
     {
       id: 'c003',
       value: 50,
       title: '漁業永續問答闖關禮',
-      code: 'FISHSAFE50-jkfhggg',
-      expiry: '14天',
+      code: 'FISHSAFE50',
+      validityPeriod: '使用期限: 2025-08-18',
     },
     {
       id: 'c004',
       value: 50,
       title: '海洋知識家闖關禮',
-      code: 'OCEANBIO50-skfneiv',
-      expiry: '14天',
+      code: 'OCEANBIO50',
+      validityPeriod: '使用期限: 2025-09-01',
     },
     {
       id: 'c005',
       value: 30,
       title: '環保海洋守護者闖關禮',
-      code: 'CLEANSEA30-kdhfien',
-      expiry: '14天',
+      code: 'CLEANSEA30',
+      validityPeriod: '使用期限: 2025-09-15',
     },
     {
       id: 'c006',
       value: 60,
       title: '生態平衡維護者闖關禮',
-      code: 'ECOGUARD50-aksjfir',
-      expiry: '14天',
+      code: 'ECOGUARD50',
+      validityPeriod: '使用期限: 2025-10-01',
     },
-    { id: 'c007', value: 60, title: '活動感謝禮', code: 'THANKYOU60-mcnjosw', expiry: '14天' },
-    { id: 'c008', value: 20, title: '好友分享禮', code: 'SHARE20-abcdefg', expiry: '30天' },
+    {
+      id: 'c007',
+      value: 60,
+      title: '活動感謝禮',
+      code: 'THANKYOU60',
+      validityPeriod: '使用期限: 2025-10-10',
+    },
+    {
+      id: 'c008',
+      value: 20,
+      title: '好友分享禮',
+      code: 'SHARE20',
+      validityPeriod: '使用期限: 2025-11-20',
+    },
   ])
 
   const paginatedCoupons = computed(() => {
@@ -96,6 +111,11 @@
     background-color: $color-bg-light;
     border-radius: $border-radius-md;
     padding: 20px 40px 40px;
+    // RWD 手機版寬度修正
+    @include respond(md) {
+      width: 100%;
+      padding: 20px;
+    }
   }
 
   .coupon_content_header {
@@ -113,91 +133,17 @@
     color: $color-text-main;
     margin-bottom: 20px;
   }
-
-  .coupon_card {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    background-color: $color-white;
-    border-radius: $border-radius-md;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: $shadow-sm;
-  }
-
-  .coupon_value_box {
-    flex-shrink: 0;
-    width: 120px;
-    height: 100px;
-    background-color: $color-orange;
-    color: $color-text-white;
-    border-radius: $border-radius-sm;
+  .coupon_list {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 20px; // 使用 gap 來控制卡片之間的間距，比 margin-bottom 更好
     align-items: center;
-    gap: 4px;
-
-    .label {
-      font-size: $sub-desktop;
-    }
-    .value {
-      font-size: $h2-desktop;
-      font-weight: $font-bold;
+    :deep(.coupon_value) {
+      background-color: $color-orange;
     }
   }
 
-  .coupon_details {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    .title {
-      color: $color-text-main;
-      margin: 0;
-    }
-
-    p {
-      color: $color-text-main;
-      margin: 0;
-      .label {
-        color: $color-text-sub;
-      }
-      strong {
-        font-weight: $font-bold;
-      }
-    }
-  }
-
-  @include respond(md) {
-    .coupon_content_area {
-      padding: 20px;
-    }
-
-    .coupon_card {
-      flex-direction: column;
-      align-items: stretch;
-      padding: 15px;
-    }
-
-    .coupon_value_box {
-      width: 100%;
-      height: auto;
-      padding: 15px;
-      .label {
-        font-size: $sub-mobile;
-      }
-      .value {
-        font-size: $h2-mobile;
-      }
-    }
-
-    .coupon_details {
-      text-align: left;
-      gap: 10px;
-    }
-  }
-
+  // 分頁按鈕的樣式維持不變
   :deep(.my_pagination button) {
     background-color: $color-white;
     border: $border-base solid $border-color-gray;

@@ -40,12 +40,20 @@
 
       <div class="form-section">
         <transition name="fade" mode="out-in">
+          <!-- Login Form -->
           <div v-if="currentMode === 'login'" key="login">
             <h2>登入</h2>
             <form @submit.prevent="handleLogin">
               <div class="form-group">
                 <label for="login-email">電子郵件</label>
-                <input type="email" id="login-email" v-model="email" required />
+                <input
+                  type="email"
+                  id="login-email"
+                  v-model="email"
+                  :class="{ 'has-error': emailError }"
+                  @input="clearError('email')"
+                />
+                <div v-if="emailError" class="error-message">{{ emailError }}</div>
               </div>
               <div class="form-group">
                 <label for="login-password">密碼</label>
@@ -54,7 +62,8 @@
                     :type="passwordFieldType"
                     id="login-password"
                     v-model="password"
-                    required
+                    :class="{ 'has-error': passwordError }"
+                    @input="clearError('password')"
                   />
                   <span class="toggle-password" @click="togglePasswordVisibility">
                     <i
@@ -62,6 +71,7 @@
                     ></i>
                   </span>
                 </div>
+                <div v-if="passwordError" class="error-message">{{ passwordError }}</div>
               </div>
               <div class="form-options-login">
                 <label class="remember-me">
@@ -88,25 +98,47 @@
             </div>
           </div>
 
+          <!-- Register Form -->
           <div v-else-if="currentMode === 'register'" key="register">
             <h2>註冊</h2>
             <form @submit.prevent="handleRegister">
               <div class="form-group">
                 <label for="name">姓名</label>
-                <input type="text" id="name" v-model="name" required />
+                <input
+                  type="text"
+                  id="name"
+                  v-model="name"
+                  :class="{ 'has-error': nameError }"
+                  @input="clearError('name')"
+                />
+                <div v-if="nameError" class="error-message">{{ nameError }}</div>
               </div>
               <div class="form-group">
                 <label for="gender">性別</label>
-                <input type="text" id="gender" v-model="gender" required />
+                <input
+                  type="text"
+                  id="gender"
+                  v-model="gender"
+                  :class="{ 'has-error': genderError }"
+                  @input="clearError('gender')"
+                />
+                <div v-if="genderError" class="error-message">{{ genderError }}</div>
               </div>
               <div class="form-group">
                 <label for="register-email">電子郵件</label>
                 <div class="input-with-button">
-                  <input type="email" id="register-email" v-model="email" required />
+                  <input
+                    type="email"
+                    id="register-email"
+                    v-model="email"
+                    :class="{ 'has-error': emailError }"
+                    @input="clearError('email')"
+                  />
                   <button type="button" class="btn-verify" @click="sendVerificationCode">
                     發送驗證碼
                   </button>
                 </div>
+                <div v-if="emailError" class="error-message">{{ emailError }}</div>
               </div>
               <div class="form-group">
                 <label for="register-password">密碼</label>
@@ -115,7 +147,8 @@
                     :type="passwordFieldType"
                     id="register-password"
                     v-model="password"
-                    required
+                    :class="{ 'has-error': passwordError }"
+                    @input="clearError('password')"
                   />
                   <span class="toggle-password" @click="togglePasswordVisibility">
                     <i
@@ -123,6 +156,7 @@
                     ></i>
                   </span>
                 </div>
+                <div v-if="passwordError" class="error-message">{{ passwordError }}</div>
               </div>
               <div class="terms-agreement">
                 <label class="remember-me">
@@ -146,13 +180,21 @@
             </div>
           </div>
 
+          <!-- Forgot Password Form -->
           <div v-else key="forgotPassword">
             <h2>忘記密碼</h2>
             <p class="form-subtitle">密碼重設信將寄至您的信箱</p>
             <form @submit.prevent="handleForgotPassword">
               <div class="form-group">
                 <label for="forgot-email">電子郵件</label>
-                <input type="email" id="forgot-email" v-model="email" required />
+                <input
+                  type="email"
+                  id="forgot-email"
+                  v-model="email"
+                  :class="{ 'has-error': emailError }"
+                  @input="clearError('email')"
+                />
+                <div v-if="emailError" class="error-message">{{ emailError }}</div>
               </div>
               <button type="submit" class="btn-submit">確認</button>
             </form>
@@ -165,18 +207,18 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
-  // ========== START: 引入 useRouter ==========
+  // --- 修改：從 'vue' 引入 onMounted ---
+  import { ref, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
-  // ========== END: 引入 useRouter ==========
+  import { useAuthStore } from '@/stores/auth'
 
-  // ========== START: 建立 Router 實例和預設使用者 ==========
   const router = useRouter()
+  const authStore = useAuthStore()
+
   const defaultUser = {
     email: 'test@example.com',
     password: 'password123',
   }
-  // ========== END: 建立 Router 實例和預設使用者 ==========
 
   const currentMode = ref('login')
   const email = ref('')
@@ -187,6 +229,37 @@
   const termsAccepted = ref(false)
   const rememberMe = ref(false)
 
+  const nameError = ref('')
+  const genderError = ref('')
+  const emailError = ref('')
+  const passwordError = ref('')
+
+  // --- 新增：組件掛載時，檢查是否有儲存的登入資訊 ---
+  onMounted(() => {
+    const storedEmail = localStorage.getItem('rememberedEmail')
+    const storedPassword = localStorage.getItem('rememberedPassword')
+
+    if (storedEmail && storedPassword) {
+      email.value = storedEmail
+      password.value = storedPassword
+      rememberMe.value = true // 如果有儲存的資料，也將核取方塊打勾
+    }
+  })
+
+  const clearAllErrors = () => {
+    nameError.value = ''
+    genderError.value = ''
+    emailError.value = ''
+    passwordError.value = ''
+  }
+
+  const clearError = (field) => {
+    if (field === 'name') nameError.value = ''
+    if (field === 'gender') genderError.value = ''
+    if (field === 'email') emailError.value = ''
+    if (field === 'password') passwordError.value = ''
+  }
+
   const changeMode = (mode) => {
     currentMode.value = mode
     email.value = ''
@@ -195,29 +268,86 @@
     gender.value = ''
     termsAccepted.value = false
     rememberMe.value = false
+    clearAllErrors()
   }
 
   const togglePasswordVisibility = () => {
     passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password'
   }
 
-  // ========== START: 修改 handleLogin 函式 ==========
-  const handleLogin = () => {
-    // 1. 比對帳號密碼
-    if (email.value === defaultUser.email && password.value === defaultUser.password) {
-      // 2. 登入成功，儲存假的 Token
-      localStorage.setItem('user-token', 'fake-user-token-for-guardsea')
+  const validateEmail = () => {
+    if (!email.value) {
+      emailError.value = '請輸入電子郵件'
+      return false
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email.value)) {
+      emailError.value = '請輸入有效的電子郵件格式'
+      return false
+    }
+    emailError.value = ''
+    return true
+  }
 
-      // 3. 跳轉到會員中心
+  const validatePassword = () => {
+    if (!password.value) {
+      passwordError.value = '請輸入密碼'
+      return false
+    }
+    passwordError.value = ''
+    return true
+  }
+
+  const handleLogin = () => {
+    const isEmailValid = validateEmail()
+    const isPasswordValid = validatePassword()
+
+    if (!isEmailValid || !isPasswordValid) {
+      return
+    }
+
+    if (email.value === defaultUser.email && password.value === defaultUser.password) {
+      // --- 修改：在登入成功時，根據 rememberMe 的狀態儲存或移除資料 ---
+      if (rememberMe.value) {
+        // 如果「記住我」被勾選，就儲存帳號密碼
+        localStorage.setItem('rememberedEmail', email.value)
+        localStorage.setItem('rememberedPassword', password.value)
+      } else {
+        // 如果沒有被勾選，就移除之前可能儲存的資料
+        localStorage.removeItem('rememberedEmail')
+        localStorage.removeItem('rememberedPassword')
+      }
+
+      const fakeToken = 'fake-user-token-for-guardsea'
+      localStorage.setItem('user-token', fakeToken)
+      authStore.login(fakeToken)
       router.push({ path: '/member' })
     } else {
-      // 4. 登入失敗，顯示錯誤訊息
       alert('帳號或密碼錯誤！')
     }
   }
-  // ========== END: 修改 handleLogin 函式 ==========
 
   const handleRegister = () => {
+    clearAllErrors()
+    let isValid = true
+
+    if (!name.value) {
+      nameError.value = '請輸入姓名'
+      isValid = false
+    }
+    if (!gender.value) {
+      genderError.value = '請輸入性別'
+      isValid = false
+    }
+    if (!validateEmail()) {
+      isValid = false
+    }
+    if (!validatePassword()) {
+      isValid = false
+    }
+
+    if (!isValid) return
+
     if (!termsAccepted.value) {
       alert('請先閱讀並同意服務條款與隱私政策')
       return
@@ -227,18 +357,23 @@
   }
 
   const handleForgotPassword = () => {
+    if (!validateEmail()) {
+      return
+    }
     console.log('Password reset requested for:', email.value)
     alert('密碼重設信已寄出（此為展示訊息）')
   }
 
   const sendVerificationCode = () => {
-    console.log('Sending verification code to:', email.value)
-    alert('哈哈不給你')
+    if (validateEmail()) {
+      console.log('Sending verification code to:', email.value)
+      alert('哈哈不給你')
+    }
   }
 </script>
 
 <style scoped lang="scss">
-  /* 您的樣式保持不變，此處省略 */
+  /* 您的 SCSS 樣式維持不變 */
   @use '@/assets/style/variables' as *;
   @use '@/assets/style/mixins' as *;
   @use 'sass:color';
@@ -381,6 +516,9 @@
     }
     .form-group {
       margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 22px;
+
       label {
         display: block;
         margin-bottom: 8px;
@@ -399,6 +537,17 @@
         border-radius: $border-radius-md;
         font-size: $p-desktop;
         color: $color-black;
+        &.has-error {
+          border-color: $color-yellow;
+        }
+      }
+      .error-message {
+        color: $color-yellow;
+        font-size: 14px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding-top: 4px;
       }
     }
     input[type='checkbox'] {
