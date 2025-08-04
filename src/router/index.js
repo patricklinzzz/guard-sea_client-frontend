@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
+import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -173,7 +174,6 @@ router.beforeEach((to, from, next) => {
     if (token) {
       next()
     } else {
-      alert('請先登入才能訪問此頁面！')
       next({ name: 'login' })
     }
   } else {
