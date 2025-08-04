@@ -7,11 +7,6 @@
     <div class="coupon_list_section">
       <h3>優惠卷清單</h3>
       <div class="coupon_list">
-        <!-- 
-          這裡就是改動的核心：
-          我們用 v-for 循環 CouponCard 元件，
-          並透過 :coupon="coupon" 將每一筆優惠券資料傳遞進去。
-        -->
         <CouponCard v-for="coupon in paginatedCoupons" :key="coupon.id" :coupon="coupon" />
       </div>
     </div>
@@ -36,7 +31,6 @@
   const itemsPerPage = ref(5)
 
   const allCoupons = ref([
-    // 為了讓子元件能正確顯示，我們直接提供 `validityPeriod` 欄位
     {
       id: 'c001',
       value: 50,
@@ -111,7 +105,7 @@
     background-color: $color-bg-light;
     border-radius: $border-radius-md;
     padding: 20px 40px 40px;
-    // RWD 手機版寬度修正
+
     @include respond(md) {
       width: 100%;
       padding: 20px;
@@ -136,14 +130,13 @@
   .coupon_list {
     display: flex;
     flex-direction: column;
-    gap: 20px; // 使用 gap 來控制卡片之間的間距，比 margin-bottom 更好
+    gap: 20px;
     align-items: center;
     :deep(.coupon_value) {
       background-color: $color-orange;
     }
   }
 
-  // 分頁按鈕的樣式維持不變
   :deep(.my_pagination button) {
     background-color: $color-white;
     border: $border-base solid $border-color-gray;
