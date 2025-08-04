@@ -8,7 +8,7 @@
   gsap.registerPlugin(SplitText)
   gsap.registerPlugin(ScrollTrigger)
 
-  import loading from '@/components/common/loading.vue'
+  import Loading from '@/components/common/loading.vue'
   import bannerV from '@/assets/images/homepage/banner.mp4'
   import bg1 from '@/assets/images/homepage/bg1.png'
   import gwawa from '@/assets/images/homepage/gwawa.png'
@@ -17,65 +17,67 @@
   let splitTextInstance = null
   const gwawaEl = ref(null)
   let gwawaTimeline = null
+  let scrollTriggers = []
   const isHiVisible = ref(false)
   const toggleHi = () => {
     isHiVisible.value = !isHiVisible.value
   }
 
-  onMounted(() => {
+  const loadingFinish = () => {
     document.fonts.ready.then(() => {
       const title = document.querySelector('h1')
       const banner = document.getElementById('banner')
+      if (!title || !banner) return
+
       splitTextInstance = new SplitText(title, { type: 'chars' })
       const chars = splitTextInstance.chars
+
       const tl = gsap.timeline({
         defaults: {
           duration: 0.8,
           ease: 'power2.out',
         },
       })
-      tl.from(chars, {
-        y: 50,
-        opacity: 0,
-        stagger: 0.1,
-      })
+      tl.from(chars, { y: 50, opacity: 0, stagger: 0.1 })
 
-      gsap.to(title, {
+      const st = gsap.to(title, {
         scrollTrigger: {
           trigger: banner,
           start: 'top top',
           end: 'bottom top',
           scrub: true,
-          // markers:true,
         },
         scale: 3,
         opacity: 0,
         x: 150,
         y: 200,
       })
+      scrollTriggers.push(st.scrollTrigger)
+      ScrollTrigger.refresh()
     })
+  }
 
-    gwawaTimeline = gsap.timeline({
-      paused: true,
-      defaults: {
-        duration: 1,
-        ease: 'sine.out',
-      },
-    })
-    gwawaTimeline.to(gwawaEl.value, {
-      x: -25,
-      y: 0,
-      rotation: -60,
-    })
+  onMounted(() => {
+    gwawaTimeline = gsap
+      .timeline({
+        paused: true,
+        defaults: {
+          duration: 1,
+          ease: 'sine.out',
+        },
+      })
+      .to(gwawaEl.value, { x: -25, y: 0, rotation: -60 })
+  })
 
-    onUnmounted(() => {
-      if (splitTextInstance) {
-        splitTextInstance.revert()
-      }
-      if (gwawaTimeline) {
-        gwawaTimeline.kill()
-      }
-    })
+  onUnmounted(() => {
+    if (splitTextInstance) {
+      splitTextInstance.revert()
+    }
+    if (gwawaTimeline) {
+      gwawaTimeline.kill()
+    }
+    scrollTriggers.forEach((st) => st.kill())
+    scrollTriggers = []
   })
   const gwawaME = () => {
     gwawaTimeline.play()
@@ -87,7 +89,7 @@
 </script>
 
 <template>
-  <loading>
+  <Loading @loaded="loadingFinish">
     <section id="banner">
       <div id="gwawa" @mouseenter="gwawaME" @mouseleave="gwawaML" @click="toggleHi" ref="gwawaEl">
         <img :src="gwawa" alt="" />
@@ -105,7 +107,7 @@
       </article>
       <img :src="bg1" alt="" class="bg" />
     </section>
-  </loading>
+  </Loading>
 </template>
 
 <style scoped lang="scss">

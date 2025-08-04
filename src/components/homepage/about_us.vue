@@ -17,13 +17,15 @@
   import { gsap } from 'gsap'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   gsap.registerPlugin(ScrollTrigger)
-  import { onMounted } from 'vue'
+  import { onMounted, onUnmounted } from 'vue'
   import aboutus from '@/assets/images/homepage/aboutus.png'
   import turtle from '@/assets/images/homepage/turtle.png'
 
+  let tl = null
+
   onMounted(() => {
     const turtle = document.getElementById('turtle')
-    const tl = gsap.timeline({
+    tl = gsap.timeline({
       scrollTrigger: {
         trigger: turtle,
         start: 'center bottom',
@@ -47,6 +49,12 @@
       scaleY: 0.3,
       duration: 0.7,
     })
+  })
+
+  onUnmounted(() => {
+    if (tl) {
+      tl.kill()
+    }
   })
 </script>
 
