@@ -7,7 +7,8 @@
   import { RouterLink } from 'vue-router'
   import { gsap } from 'gsap'
   import { ref, computed, inject, onMounted, onUnmounted } from 'vue'
-
+  import AnimatedAnimal from '@/components/event/AnimatedAnimal.vue'
+  import turtle from '@/assets/images/dec/seaturtle.svg'
   import doge from '@/assets/images/Educate/quiz/doge.png'
 
   const quiz_cur = ref(null)
@@ -27,7 +28,7 @@
 
   const pass_grade = 60
   const q_index = ref(0)
-  const bubble_text = ['海洋生物', '海洋汙染', '過度捕撈', '生態破壞']
+  const bubble_text = ['海洋生物', '海洋汙染', '過度捕撈', '生境破壞']
   let q_order = [...Array(10).keys()]
   const question_num = ref('Q' + (q_index.value + 1))
 
@@ -400,6 +401,21 @@
         </div>
       </Transition>
     </div>
+    <div class="swim">
+      <AnimatedAnimal
+        :imgSrc="turtle"
+        alt="Sea Turtle"
+        :sizeMobile="100"
+        :size="160"
+        direction="rtl"
+        endLeft="70%"
+        bottom="20px"
+        :showBubbles="true"
+        :bubbleLeft="'15%'"
+        :animationDuration="'12s'"
+        :zIndex="3"
+      />
+    </div>
   </main>
 </template>
 
@@ -452,11 +468,11 @@
     @media (max-width: 425px) {
       margin-top: 25px;
       color: white;
-      h1{
+      h1 {
         width: fit-content;
         margin: auto;
       }
-      p{
+      p {
         text-align: center;
       }
     }

@@ -19,7 +19,6 @@
       </router-link>
     </nav>
   </div>
-
   <div class="fish-container">
     <svg
       class="fish"
