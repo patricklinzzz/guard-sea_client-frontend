@@ -40,9 +40,9 @@
 
 <template>
   <main class="wrapper">
+    <LightRays />
+    <CategoryButtons :categories="areas" v-model:currentCategory="currentArea" class="category" />
     <div class="container">
-      <LightRays />
-      <CategoryButtons :categories="areas" v-model:currentCategory="currentArea" class="category" />
       <!-- <nav class="area-nav">
         <button
           v-for="area in areas"

@@ -39,7 +39,7 @@ h3 {
   font-family: $font-sans;
   font-size: $h3-desktop;
   letter-spacing: $letter-spacing-base;
-
+  margin-right: -$letter-spacing-base;
   @include respond(md) {
     font-size: $h3-mobile;
   }
