@@ -163,8 +163,11 @@
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    margin: 0;
+
     line-height: 1;
+    h2 {
+      margin-right: -5px;
+    }
 
     @media (min-width: 768px) {
       gap: 50px;

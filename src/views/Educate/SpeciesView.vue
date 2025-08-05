@@ -58,14 +58,14 @@
         {{ currentArea }}
       </h2>
 
-      <p class="info">
-        點擊查看介紹
+      <div class="info">
+        <p>點擊查看介紹</p>
         <div class="bw">
           <BubbleEffect />
-          
+
           <BubbleEffect />
         </div>
-      </p>
+      </div>
 
       <section class="gallery">
         <router-link
@@ -83,17 +83,19 @@
       </section>
     </div>
 
-    <p class="slogan">
-      願地球未來仍能與形形色色
-            <br />
-            的生物綿延不絕地連結
+    <div class="slogan">
+      <p>
+        願地球未來仍能與形形色色
+        <br />
+        的生物綿延不絕地連結
+      </p>
       <div class="bw1">
         <BubbleEffect />
       </div>
       <div class="bw2">
         <BubbleEffect />
       </div>
-    </p>
+    </div>
   </main>
 </template>
 
@@ -261,23 +263,22 @@
 
     /* max-width: 1700px; */
   }
-    .bw {
-    position: absolute; 
-    width: 95%; 
-    pointer-events: none; 
-    overflow: visible; 
+  .bw {
+    position: absolute;
+    width: 95%;
+    pointer-events: none;
+    overflow: visible;
   }
   .bw1 {
-    position: absolute; 
-    width: 98%; 
-    pointer-events: none; 
-    overflow: visible; 
+    position: absolute;
+    width: 98%;
+    pointer-events: none;
+    overflow: visible;
   }
   .bw2 {
     position: absolute;
-    width: 80%; 
-    pointer-events: none; 
-    overflow: visible; 
+    width: 80%;
+    pointer-events: none;
+    overflow: visible;
   }
-
 </style>

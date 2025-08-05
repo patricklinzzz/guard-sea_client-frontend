@@ -10,6 +10,7 @@
   import AnimatedAnimal from '@/components/event/AnimatedAnimal.vue'
   import turtle from '@/assets/images/dec/seaturtle.svg'
   import doge from '@/assets/images/Educate/quiz/doge.png'
+  import dolphin from '@/assets/images/dec/dolphin.svg'
 
   const quiz_cur = ref(null)
   const question_block_ref = ref(null)
@@ -403,16 +404,31 @@
     </div>
     <div class="swim">
       <AnimatedAnimal
+        class="desktop-only"
         :imgSrc="turtle"
         alt="Sea Turtle"
         :sizeMobile="100"
         :size="160"
         direction="rtl"
-        endLeft="70%"
-        bottom="20px"
+        endLeft="60%"
+        bottom="20%"
         :showBubbles="true"
         :bubbleLeft="'15%'"
         :animationDuration="'12s'"
+        :zIndex="3"
+      />
+      <AnimatedAnimal
+        class="desktop-only"
+        :imgSrc="dolphin"
+        alt="Dolphin"
+        :size="140"
+        :sizeMobile="100"
+        direction="ltr"
+        endLeft="80%"
+        bottom="50%"
+        :showBubbles="true"
+        :bubbleLeft="'10%'"
+        :animationDuration="'15s'"
         :zIndex="3"
       />
     </div>
@@ -421,7 +437,7 @@
 
 <style lang="scss" scoped>
   .wrapper {
-    height: 600px;
+    height: 450px;
     .content_block {
       width: fit-content;
       margin: auto;
@@ -608,5 +624,14 @@
     bottom: 0;
     width: 30px;
     height: 50px;
+  }
+  .desktop-only {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .desktop-only {
+      display: block;
+    }
   }
 </style>
