@@ -12,11 +12,11 @@
   <div class="product_card">
     <RouterLink :to="`/productlist/${product.id}`">
       <img :src="product.imageUrl" :alt="product.name" />
+      <div class="product_card_txt">
+        <p>{{ product.name }}</p>
+        <p class="price">${{ product.price }}</p>
+      </div>
     </RouterLink>
-    <div class="product_card_txt">
-      <p>{{ product.name }}</p>
-      <p class="price">${{ product.price }}</p>
-    </div>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -25,6 +25,12 @@
     border-radius: v.$border-radius-md;
     overflow: hidden;
     border: 2px solid v.$color-skyblue;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+      display: block;
+    }
+
     @include respond(md) {
       width: 40.62vw;
     }
