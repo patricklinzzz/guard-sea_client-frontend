@@ -159,9 +159,13 @@
     height: 90px;
     text-align: center;
     display: flex;
-    padding: 10px;
+    padding: 0px;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
+    margin: 0;
+    line-height: 1;
+
     @media (min-width: 768px) {
       gap: 50px;
       width: 130px;
