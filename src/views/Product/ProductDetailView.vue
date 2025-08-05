@@ -222,11 +222,15 @@
         flex-direction: column;
         gap: 1rem;
         flex-basis: 30%;
+        > h2 {
+          @include respond(md) {
+            padding-top: 10px;
+          }
+        }
         > h3 {
           text-align: justify;
         }
-        @include respond(md) {
-        }
+
         .price {
           color: v.$color-orange;
           font-weight: v.$font-bold;
