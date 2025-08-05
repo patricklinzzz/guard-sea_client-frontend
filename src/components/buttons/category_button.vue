@@ -39,7 +39,7 @@
       justify-content: center;
       align-items: center;
       height: 40px;
-      
+
       @include respond(md) {
         flex-wrap: wrap;
         padding: 0px 20px;
@@ -52,13 +52,6 @@
         padding: 0px 10px;
         line-height: 40px;
 
-        @include respond(md) {
-          width: 50%;
-          padding: 0px 15px;
-          line-height: 38px;
-          margin-bottom: 8px;
-        }
-
         &:not(:last-child)::after {
           content: '';
           position: absolute;
@@ -69,8 +62,12 @@
           height: 24px;
           background-color: white;
         }
-
         @include respond(md) {
+          width: 50%;
+          padding: 0px 15px;
+          line-height: 38px;
+          margin-bottom: 8px;
+
           &::after {
             display: none;
           }
@@ -86,6 +83,9 @@
             background-color: white;
             display: block;
           }
+        }
+        @media (max-width: 320px) {
+          padding: 0px 10px;
         }
 
         button {
@@ -106,9 +106,8 @@
           h3 {
             color: white;
             font-family: v.$font-sans;
-
             @include respond(md) {
-              min-width: 114px;
+              min-width: 120px;
               font-size: 22px;
             }
           }
