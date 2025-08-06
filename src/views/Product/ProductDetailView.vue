@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
   import { ref, computed } from 'vue'
   import { useProductStore } from '@/stores/product_store'
   import { useCartStore } from '@/stores/cart_store'
@@ -45,8 +45,60 @@
 
     alert('已加入購物車！')
   }
-</script>
+</script> -->
+<script setup>
+  import { ref, computed } from 'vue'
+  import { useProductStore } from '@/stores/product_store'
+  import { useCartStore } from '@/stores/cart_store'
+  import Button from '@/components/buttons/button.vue'
+  import ProductCard from '@/components/product/product_card.vue'
+  import QuantityControl from '@/components/product/quantity_button.vue'
 
+  const props = defineProps({
+    id: {
+      type: [String, Number],
+      required: true,
+    },
+  })
+
+  const productStore = useProductStore()
+  const cartStore = useCartStore()
+
+  const info = computed(() => productStore.getProductById(props.id))
+
+  const selectedImageIndex = ref(0)
+
+  const currentImage = computed(() => {
+    return info.value.images[selectedImageIndex.value]
+  })
+
+  const selectImage = (index) => {
+    selectedImageIndex.value = index
+  }
+
+  const selectedColor = ref('')
+  const selectedSize = ref('')
+  const quantity = ref(1)
+
+  const addToCart = () => {
+    if (!selectedColor.value || !selectedSize.value) {
+      alert('請選擇顏色與尺寸')
+      return
+    }
+
+    cartStore.addItem({
+      id: info.value.id,
+      name: info.value.name,
+      price: info.value.price,
+      image: info.value.imageUrl,
+      color: selectedColor.value,
+      size: selectedSize.value,
+      quantity: quantity.value,
+    })
+
+    alert('已加入購物車！')
+  }
+</script>
 <template>
   <div class="product_section">
     <div class="product_info">
@@ -61,7 +113,7 @@
             :src="img"
             class="thumbnail"
             :class="{ active: currentImageIndex === index }"
-            @click="setMainImage(index)"
+            @click="selectImage(index)"
             alt=""
           />
         </div>
@@ -151,7 +203,7 @@
       </table>
       <div class="support_banner">
         <div class="slogan">
-          <img src="/src/assets/images/product/slogan.png" alt="" />
+          <img src="/src/assets/images/product/slogan.jpg" alt="" />
         </div>
         <p>
           您購買的每一件商品，我們將捐助「綠蠵龜野放計畫」，支持追蹤器、照護飼料與環境復育珊瑚重生，讓愛海的你成為改變的一部分。
