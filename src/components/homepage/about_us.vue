@@ -9,7 +9,7 @@
         </p>
       </div>
     </article>
-    <img :src="turtle" alt="" id="turtle" />
+    <img :src="turtle" alt="" id="turtle" ref="turtleRef" />
   </section>
 </template>
 
@@ -17,33 +17,33 @@
   import { gsap } from 'gsap'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   gsap.registerPlugin(ScrollTrigger)
-  import { onMounted, onUnmounted } from 'vue'
+  import { onMounted, onUnmounted, ref } from 'vue'
   import aboutus from '@/assets/images/homepage/aboutus.png'
   import turtle from '@/assets/images/homepage/turtle.png'
 
   let tl = null
+  const turtleRef = ref(null)
 
   onMounted(() => {
-    const turtle = document.getElementById('turtle')
     tl = gsap.timeline({
       scrollTrigger: {
-        trigger: turtle,
+        trigger: turtleRef.value,
         start: 'center bottom',
         end: 'bottom top',
-        scrub: true,
+        scrub: 1.5,
         // markers: true,
       },
     })
-    tl.to(turtle, {
+    tl.to(turtleRef.value, {
       x: -200,
       duration: 0.4,
     })
-    tl.to(turtle, {
+    tl.to(turtleRef.value, {
       scaleX: -1,
       y: -10,
       duration: 0.1,
     })
-    tl.to(turtle, {
+    tl.to(turtleRef.value, {
       x: '+=100',
       scaleX: -0.3,
       scaleY: 0.3,
