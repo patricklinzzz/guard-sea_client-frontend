@@ -2,9 +2,9 @@
   import { ref, onMounted } from 'vue'
   import { gsap } from 'gsap'
 
-  import Pollution from '@/assets/images/Educate/Causes/pollution.jpg'
-  import Overfishing from '@/assets/images/Educate/Causes/overfishing.jpg'
-  import Degradation from '@/assets/images/Educate/Causes/degradation.jpg'
+  import Pollution from '@/assets/images/Educate/Causes/pollution_banner.jpeg'
+  import Overfishing from '@/assets/images/Educate/Causes/overfishing_banner.jpeg'
+  import Degradation from '@/assets/images/Educate/Causes/degradation_banner.jpeg'
 
   function pointsInPath(path, numPoints = 10) {
     const pathLength = path.getTotalLength()
@@ -98,14 +98,19 @@
   }
   const props = defineProps(['code', 'title'])
   const svg = ref(null)
+  const g = ref(null)
   const buttonPath = ref(null)
   const pathD = ref('M 210 10 A 200 200 0 1 1 210 410 A 200 200 0 1 1 210 10 Z')
+  //const pathD = ref('M 322 111 A 200 200 0 1 1 210 410 A 200 200 0 1 1 230 72 Z')
 
   const init_svg = (el) => {
     svg.value = el ? el : null
   }
   const init_path = (el) => {
     buttonPath.value = el ? el : null
+  }
+  const init_g = (el) => {
+    g.value = el ? el : null
   }
 
   function createLiquidPath(path, options) {
@@ -154,6 +159,15 @@
         ? Overfishing
         : Degradation
   onMounted(() => {
+    if(g.value){
+      gsap.to(g.value, {
+      y: -12,                  
+      duration: 1.5,           
+      ease: "power1.inOut",    
+      yoyo: true,              
+      repeat: -1               
+    });
+    }
     window.addEventListener('mousemove', (e) => {
       const { x, y } = transformCoords(e)
 
@@ -208,7 +222,15 @@
   <svg viewBox="0 0 420 420" :ref="(el) => init_svg(el)">
     <defs>
       <mask :id="'bubble_mask_' + code">
-        <path :ref="(el) => init_path(el)" :d="pathD" fill="#fff" stroke="black" stroke-width="3" />
+        <g :ref="(el) => init_g(el)">
+          <path
+            :ref="(el) => init_path(el)"
+            :d="pathD"
+            fill="#fff"
+            stroke="black"
+            stroke-width="3"
+          />
+        </g>
       </mask>
     </defs>
     <image
@@ -230,9 +252,10 @@
     width: 420px;
     height: 420px;
     cursor: pointer;
+
     @include respond(md) {
       width: 300px;
       height: 300px;
-      }
+    }
   }
 </style>
