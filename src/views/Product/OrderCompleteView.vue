@@ -54,7 +54,10 @@
       </div>
 
       <div class="actions">
-        <Button variant="gray" to="/orders">查詢訂單</Button>
+        <RouterLink to="login">
+          <Button variant="gray" to="/orders">查詢訂單</Button>
+        </RouterLink>
+
         <RouterLink to="/productlist">
           <Button variant="default" to="/products">周邊商品</Button>
         </RouterLink>
@@ -67,7 +70,7 @@
   .completion_section {
     max-width: 1920px;
     .completion_banner {
-      background-image: url('@/assets/images/product/cart_banner.png');
+      background-image: url('@/assets/images/product/cart_banner.jpg');
       width: 100%;
       height: 300px;
       background-size: cover;

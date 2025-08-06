@@ -136,7 +136,7 @@
 <style lang="scss" scoped>
   .shipping_section {
     .shipping_banner {
-      background-image: url('@/assets/images/product/cart_banner.png');
+      background-image: url('@/assets/images/product/cart_banner.jpg');
       width: 100%;
       height: 300px;
       background-size: cover;

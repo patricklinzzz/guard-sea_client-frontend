@@ -53,7 +53,7 @@
   }
 
   .product_hero {
-    background-image: url('@/assets/images/product/product_banner.png');
+    background-image: url('@/assets/images/product/product_banner.jpg');
     width: 100%;
     height: 300px;
     background-size: cover;

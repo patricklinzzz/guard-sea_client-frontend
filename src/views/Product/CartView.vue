@@ -167,7 +167,7 @@
 <style lang="scss" scoped>
   .cart_section {
     .cart_banner {
-      background-image: url('@/assets/images/product/cart_banner.png');
+      background-image: url('@/assets/images/product/cart_banner.jpg');
       width: 100%;
       height: 300px;
       background-size: cover;
