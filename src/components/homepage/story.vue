@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-  import diver from '@/assets/images/homepage/diver.png'
+  import diver from '@/assets/images/homepage/diver.svg'
   import storyCard from '@/components/cards/story.vue'
 </script>
 

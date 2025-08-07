@@ -25,7 +25,7 @@
   import ProductCard from '@/components/product/product_card.vue'
   import { fakeProducts } from '@/assets/data/product'
   import { useRouter } from 'vue-router'
-  import banner from '@/assets/images/homepage/store_banner.png'
+  import banner from '@/assets/images/homepage/store_banner.svg'
   const router = useRouter()
   const productsToShow = computed(() => {
     let products = [...fakeProducts]
@@ -55,6 +55,7 @@
         left: 50%;
         transform: translateX(-50%) translateY(-50%);
         text-wrap: nowrap;
+        font-size: 1.2em;
         @include respond(md) {
           font-size: 1em;
         }

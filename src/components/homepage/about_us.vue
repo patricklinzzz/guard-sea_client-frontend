@@ -19,7 +19,7 @@
   gsap.registerPlugin(ScrollTrigger)
   import { onMounted, onUnmounted, ref } from 'vue'
   import aboutus from '@/assets/images/homepage/aboutus.png'
-  import turtle from '@/assets/images/homepage/turtle.png'
+  import turtle from '@/assets/images/homepage/turtle.svg'
 
   let tl = null
   const turtleRef = ref(null)

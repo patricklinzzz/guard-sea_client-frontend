@@ -30,25 +30,25 @@
         </p>
       </div>
     </div>
-    <img :src="whale" alt="" id="whale" />
+    <img :src="whale" alt="" id="whale" ref="whaleRef" />
   </section>
 </template>
 
 <script setup>
   import { gsap } from 'gsap'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
-  gsap.registerPlugin(ScrollTrigger)
-  import { onMounted } from 'vue'
-  import action1 from '@/assets/images/homepage/action1.png'
-  import action2 from '@/assets/images/homepage/action2.png'
-  import action3 from '@/assets/images/homepage/action3.png'
-  import whale from '@/assets/images/homepage/whale.png'
+  import { onMounted, ref } from 'vue'
+  import action1 from '@/assets/images/homepage/action1.svg'
+  import action2 from '@/assets/images/homepage/action2.svg'
+  import action3 from '@/assets/images/homepage/action3.svg'
+  import whale from '@/assets/images/homepage/whale.svg'
 
+  gsap.registerPlugin(ScrollTrigger)
+  const whaleRef = ref(null)
   onMounted(() => {
-    const whale = document.getElementById('whale')
-    gsap.from(whale, {
+    gsap.from(whaleRef.value, {
       scrollTrigger: {
-        trigger: whale,
+        trigger: whaleRef.value,
         start: 'center bottom',
         toggleActions: 'play reverse play reverse',
       },

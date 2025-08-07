@@ -18,11 +18,11 @@
         </svg>
         <figure slot="first" class="before">
           <img style="width: 100%" :src="coral_reef_1" alt="" />
-          <figcaption>Before</figcaption>
+          <figcaption>白化前</figcaption>
         </figure>
         <figure slot="second" class="after">
           <img style="width: 100%" :src="coral_reef_2" alt="" />
-          <figcaption>After</figcaption>
+          <figcaption>白化後</figcaption>
         </figure>
       </ImgComparisonSlider>
       <h3>-- 全球逾50%珊瑚礁已遭白化危機 --</h3>

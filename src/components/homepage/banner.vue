@@ -3,8 +3,8 @@
   import { useRouter } from 'vue-router'
   const router = useRouter()
   import { gsap } from 'gsap'
+  import { ScrollTrigger } from 'gsap/ScrollTrigger'
   import { SplitText } from 'gsap/SplitText'
-  gsap.registerPlugin(SplitText)
 
   import Loading from '@/components/common/loading.vue'
   import bannerV from '@/assets/images/homepage/banner.mp4'
@@ -12,6 +12,7 @@
   import gwawa from '@/assets/images/homepage/gwawa.png'
   import Button from '@/components/buttons/button.vue'
 
+  gsap.registerPlugin(SplitText, ScrollTrigger)
   let splitTextInstance = null
   const gwawaEl = ref(null)
   let gwawaTimeline = null
@@ -21,6 +22,9 @@
   }
 
   const loadingFinish = () => {
+    setTimeout(() => {
+      ScrollTrigger.refresh()
+    }, 100)
     document.fonts.ready.then(() => {
       const title = document.querySelector('h1')
       const banner = document.getElementById('banner')
