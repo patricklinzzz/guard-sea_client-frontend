@@ -73,11 +73,13 @@
     }
   }
   .productlist_section {
-    padding: 5% 18.75vw;
+    padding: 3.5% 17.7%;
     @include respond(md) {
-      padding: 1rem;
+      padding: 1rem 1.4rem;
     }
-
+    :deep(.new_nav) {
+      white-space: nowrap;
+    }
     .product_sort {
       margin: 3% 0;
       display: flex;
@@ -93,15 +95,16 @@
     }
     .product_grid {
       display: grid;
+      max-width: 1040px;
       grid-template-columns: repeat(4, 1fr);
       justify-content: center;
       align-items: center;
-      column-gap: 1.68rem;
-      row-gap: 2.31rem;
+      margin: 0 auto;
+      gap: 2rem;
 
       @include respond(md) {
         grid-template-columns: repeat(2, 1fr);
-        row-gap: 1rem;
+        gap: 1rem;
       }
     }
     .list-enter-from {
