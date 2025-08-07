@@ -61,8 +61,8 @@
 <style lang="scss" scoped>
   #about_us {
     position: relative;
-    height: 10vh;
-    min-height: 300px;
+    height: 12vh;
+    // min-height: 300px;
     article {
       z-index: 2;
       position: absolute;

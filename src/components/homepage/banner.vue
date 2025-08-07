@@ -4,9 +4,7 @@
   const router = useRouter()
   import { gsap } from 'gsap'
   import { SplitText } from 'gsap/SplitText'
-  import { ScrollTrigger } from 'gsap/ScrollTrigger'
   gsap.registerPlugin(SplitText)
-  gsap.registerPlugin(ScrollTrigger)
 
   import Loading from '@/components/common/loading.vue'
   import bannerV from '@/assets/images/homepage/banner.mp4'
@@ -17,7 +15,6 @@
   let splitTextInstance = null
   const gwawaEl = ref(null)
   let gwawaTimeline = null
-  let scrollTriggers = []
   const isHiVisible = ref(false)
   const toggleHi = () => {
     isHiVisible.value = !isHiVisible.value
@@ -39,21 +36,6 @@
         },
       })
       tl.from(chars, { y: 50, opacity: 0, stagger: 0.1 })
-
-      const st = gsap.to(title, {
-        scrollTrigger: {
-          trigger: banner,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-        scale: 3,
-        opacity: 0,
-        x: 150,
-        y: 200,
-      })
-      scrollTriggers.push(st.scrollTrigger)
-      ScrollTrigger.refresh()
     })
   }
 
@@ -76,8 +58,6 @@
     if (gwawaTimeline) {
       gwawaTimeline.kill()
     }
-    scrollTriggers.forEach((st) => st.kill())
-    scrollTriggers = []
   })
   const gwawaME = () => {
     gwawaTimeline.play()
@@ -96,7 +76,7 @@
         <p id="hi" v-show="isHiVisible">👋Hi</p>
       </div>
       <div id="video_container">
-        <video :src="bannerV" autoplay muted loop height="100%"></video>
+        <video :src="bannerV" muted loop autoplay playsinline height="100%"></video>
       </div>
       <article>
         <h1>守護海洋,從了解開始</h1>

@@ -1,5 +1,5 @@
 <template>
-  <div class="loading_container" v-show="!isCompleted">
+  <div class="loading_container" v-show="!isCompleted"  @click.stop>
     <h2>守護蔚藍大海，揭曉生態脈動</h2>
     <h3>汪洋大海之奧秘，即將解鎖...</h3>
     <div class="dugong_container">
