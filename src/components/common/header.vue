@@ -1,9 +1,24 @@
 <script setup>
-  import { RouterLink } from 'vue-router'
+  import { RouterLink, useRoute,useRouter } from 'vue-router'
   import { useCartStore } from '@/stores/cart_store'
   import { computed, ref, onMounted, onUnmounted } from 'vue'
   import { useAuthStore } from '@/stores/auth'
+  import Button from '@/components/buttons/button.vue'
   const authStore = useAuthStore()
+  const route = useRoute()
+  const router = useRouter()
+  //添加當前路由class
+  const isEdu = computed(() => route.path.startsWith('/edu'))
+  const isProd = computed(() => route.path.startsWith('/productlist'))
+  const isEvent = computed(() => route.path.startsWith('/event'))
+  const isNew = computed(() => route.path.startsWith('/new'))
+  //登出
+  function logout() {
+    if (confirm('您確定要登出嗎？')) {
+      authStore.logout();
+      router.push({ name: 'home' })
+    }
+  }
   //手機menu
   const menu_open = ref(false)
   const toggle_menu = () => {
@@ -92,7 +107,7 @@
       <nav id="desktop_nav">
         <!-- 教育hover下拉選單 -->
         <div id="edu_dropdown" @mouseenter="open_edu_dropdown" @mouseleave="close_edu_dropdown">
-          <router-link to="/edu">教育</router-link>
+          <router-link to="/edu" :class="{ 'router-link-active': isEdu }">教育</router-link>
           <transition name="slide-fade">
             <div v-if="isedu_dropdown" id="edu_dropdown_menu">
               <ul>
@@ -103,9 +118,9 @@
             </div>
           </transition>
         </div>
-        <router-link to="/productlist">商品</router-link>
-        <router-link to="/event">活動</router-link>
-        <router-link to="/new">最新消息</router-link>
+        <router-link to="/productlist" :class="{ 'router-link-active': isProd }">商品</router-link>
+        <router-link to="/event" :class="{ 'router-link-active': isEvent }">活動</router-link>
+        <router-link to="/new" :class="{ 'router-link-active': isNew }">最新消息</router-link>
         <router-link to="/about">關於我們</router-link>
         <router-link v-if="authStore.isLoggedIn" to="/member">
           <i class="fa-solid fa-user"></i>
@@ -117,6 +132,7 @@
           <i class="fa-solid fa-cart-shopping"></i>
           <span class="cart-count" v-if="cartCount > 0">{{ cartCount }}</span>
         </router-link>
+        <Button v-show="authStore.isLoggedIn" @click="logout">登出</Button>
       </nav>
       <!-- 手機導覽列 -->
       <nav id="mobile_nav">
@@ -138,7 +154,9 @@
       <div v-if="menu_open" id="md_menu">
         <ul>
           <div id="md_edu_dropdown">
-            <router-link to="/edu" @click="edu_linkclick">教育</router-link>
+            <router-link to="/edu" @click="edu_linkclick" :class="{ 'router-link-active': isEdu }">
+              教育
+            </router-link>
             <i :class="dropdown_arrow" @click="toggle_dropdown"></i>
           </div>
           <ul v-if="dropdown_open">
@@ -146,9 +164,23 @@
             <li><router-link to="/edu/causes" @click="edu_linkclick">滅絕原因</router-link></li>
             <li><router-link to="/edu/quiz" @click="edu_linkclick">知識測驗</router-link></li>
           </ul>
-          <router-link to="/productlist" @click="edu_linkclick">商品</router-link>
-          <router-link to="/event" @click="edu_linkclick">活動</router-link>
-          <router-link to="/new" @click="edu_linkclick">最新消息</router-link>
+          <router-link
+            to="/productlist"
+            @click="edu_linkclick"
+            :class="{ 'router-link-active': isProd }"
+          >
+            商品
+          </router-link>
+          <router-link
+            to="/event"
+            @click="edu_linkclick"
+            :class="{ 'router-link-active': isEvent }"
+          >
+            活動
+          </router-link>
+          <router-link to="/new" @click="edu_linkclick" :class="{ 'router-link-active': isNew }">
+            最新消息
+          </router-link>
           <router-link to="/about" @click="edu_linkclick">關於我們</router-link>
         </ul>
       </div>
@@ -210,6 +242,9 @@
         a {
           color: #fff;
           text-decoration-line: none;
+          &.router-link-active {
+            color: v.$color-skyblue;
+          }
         }
 
         #edu_dropdown {
@@ -275,14 +310,11 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-
-      ul {
-        li {
-          a {
-            color: #fff;
-            text-decoration-line: none;
-            padding-left: 3em;
-          }
+      li {
+        a {
+          color: #fff;
+          text-decoration-line: none;
+          padding-left: 3em;
         }
       }
 
@@ -314,6 +346,9 @@
         padding: 10px 0;
         border-bottom: 1px solid #fff;
         text-decoration-line: none;
+        &.router-link-active {
+          color: v.$color-skyblue;
+        }
       }
 
       a:last-child,
