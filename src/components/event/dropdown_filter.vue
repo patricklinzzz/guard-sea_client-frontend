@@ -24,7 +24,13 @@
 <template>
   <div class="status_filter">
     <div class="dropdown_wrapper" @click="showDropdown = !showDropdown">
-      <input type="text" readonly :value="modelValue" placeholder="placeholder" />
+      <input
+        type="text"
+        readonly
+        :value="modelValue"
+        placeholder="placeholder"
+        autocomplete="off"
+      />
       <span class="arrow"><i class="fa-solid fa-caret-down"></i></span>
     </div>
     <ul v-if="showDropdown" class="dropdown_list">

@@ -210,12 +210,12 @@
         margin: 0 auto;
         display: flex;
         justify-content: flex-end;
-        margin-bottom: 40px;
+        margin-bottom: 25px;
         h1 {
             color: white;
         }
         @include respond(md) {
-            margin: 40px 20px;
+            margin: 0px 20px;
         }
     }
 
@@ -272,7 +272,7 @@
     .event_card {
         height: 100%;
         background-color: #fff;
-        border: 3px solid v.$color-skyblue; 
+        border: 2px solid v.$color-skyblue; 
         border-radius: v.$border-radius-md;
         overflow: hidden;
         display: flex;
