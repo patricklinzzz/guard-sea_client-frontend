@@ -1,5 +1,5 @@
 <script setup>
-  import { RouterLink, useRoute,useRouter } from 'vue-router'
+  import { RouterLink, useRoute, useRouter } from 'vue-router'
   import { useCartStore } from '@/stores/cart_store'
   import { computed, ref, onMounted, onUnmounted } from 'vue'
   import { useAuthStore } from '@/stores/auth'
@@ -8,14 +8,18 @@
   const route = useRoute()
   const router = useRouter()
   //添加當前路由class
-  const isEdu = computed(() => route.path.startsWith('/edu'))
-  const isProd = computed(() => route.path.startsWith('/productlist'))
-  const isEvent = computed(() => route.path.startsWith('/event'))
-  const isNew = computed(() => route.path.startsWith('/new'))
+  const isActive = (path) => computed(() => route.path.startsWith(path))
+  const isEdu = isActive('/edu')
+  const isProd = isActive('/productlist')
+  const isEvent = isActive('/event')
+  const isNew = isActive('/new')
   //登出
   function logout() {
     if (confirm('您確定要登出嗎？')) {
-      authStore.logout();
+      menu_open.value = false
+      dropdown_open.value = false
+      ismember_dropdown.value = false
+      authStore.logout()
       router.push({ name: 'home' })
     }
   }
@@ -34,17 +38,28 @@
       return 'fa-solid fa-bars'
     }
   })
-  //桌面版教育下拉選單
+  //桌面版教育、會員下拉選單
   const isedu_dropdown = ref(false)
+  const ismember_dropdown = ref(false)
   const open_edu_dropdown = () => {
     if (window.innerWidth >= 768) {
       isedu_dropdown.value = true
+    }
+  }
+  const open_member_dropdown = () => {
+    if (window.innerWidth >= 768) {
+      ismember_dropdown.value = true
     }
   }
   // 滑鼠離開時關閉下拉菜單
   const close_edu_dropdown = () => {
     if (window.innerWidth >= 768) {
       isedu_dropdown.value = false
+    }
+  }
+  const close_member_dropdown = () => {
+    if (window.innerWidth >= 768) {
+      ismember_dropdown.value = false
     }
   }
   // 點擊連結後關閉下拉選單以及選單內教育的>
@@ -122,22 +137,38 @@
         <router-link to="/event" :class="{ 'router-link-active': isEvent }">活動</router-link>
         <router-link to="/new" :class="{ 'router-link-active': isNew }">最新消息</router-link>
         <router-link to="/about">關於我們</router-link>
-        <router-link v-if="authStore.isLoggedIn" to="/member">
-          <i class="fa-solid fa-user"></i>
-        </router-link>
-        <router-link v-else to="/login">
-          <i class="fa-solid fa-user"></i>
-        </router-link>
         <router-link to="/cart" class="cart-icon">
           <i class="fa-solid fa-cart-shopping"></i>
           <span class="cart-count" v-if="cartCount > 0">{{ cartCount }}</span>
         </router-link>
-        <Button v-show="authStore.isLoggedIn" @click="logout">登出</Button>
+        <!-- 登入狀態 -->
+        <a
+          v-if="authStore.isLoggedIn"
+          id="member"
+          @mouseenter="open_member_dropdown"
+          @mouseleave="close_member_dropdown"
+        >
+          <img src="@/assets/images/member-system/head.png" alt="User Avatar" id="user_avatar" />
+          <transition name="slide-fade">
+            <div v-if="ismember_dropdown" id="member_dropdown_menu">
+              <ul>
+                <li>
+                  <router-link v-if="authStore.isLoggedIn" to="/member">會員專區</router-link>
+                </li>
+                <li><a @click="logout" style="cursor: pointer">登出</a></li>
+              </ul>
+            </div>
+          </transition>
+        </a>
+        <!-- 未登入 -->
+        <router-link v-else to="/login">
+          <Button variant="transparent">會員登入</Button>
+        </router-link>
       </nav>
       <!-- 手機導覽列 -->
       <nav id="mobile_nav">
         <router-link v-if="authStore.isLoggedIn" to="/member" @click="edu_linkclick">
-          <i class="fa-solid fa-user"></i>
+          <img src="@/assets/images/member-system/head.png" alt="User Avatar" id="user_avatar" />
         </router-link>
         <router-link v-else to="/login" @click="edu_linkclick">
           <i class="fa-solid fa-user"></i>
@@ -182,6 +213,13 @@
             最新消息
           </router-link>
           <router-link to="/about" @click="edu_linkclick">關於我們</router-link>
+          <router-link to="/member" v-show="authStore.isLoggedIn" @click="edu_linkclick">
+            會員中心
+          </router-link>
+          <a @click="logout" v-show="authStore.isLoggedIn" style="border: 0px;">登出</a>
+          <router-link to="/login" v-show="!authStore.isLoggedIn" @click="edu_linkclick">
+            登入會員
+          </router-link>
         </ul>
       </div>
     </transition>
@@ -190,6 +228,16 @@
 </template>
 
 <style scoped lang="scss">
+  #user_avatar {
+    width: 40px;
+    vertical-align: middle;
+    @include respond(md) {
+      width: 30px;
+    }
+  }
+  Button {
+    color: v.$color-orange !important;
+  }
   #navbar_placeholder {
     height: 85px;
     background-color: v.$color-blue-dark;
@@ -246,7 +294,24 @@
             color: v.$color-skyblue;
           }
         }
-
+        #member {
+          display: flex;
+          align-items: center;
+          position: relative;
+          height: 100%;
+          #member_dropdown_menu {
+            position: absolute;
+            right: 0;
+            top: 70px;
+            z-index: 1001;
+            background-color: v.$color-blue;
+            li {
+              min-width: 100%;
+              padding: 5px 20px;
+              white-space: nowrap;
+            }
+          }
+        }
         #edu_dropdown {
           height: 100%;
           position: relative;
@@ -261,12 +326,11 @@
             position: absolute;
             top: 70px;
             z-index: 1001;
-
+            background-color: v.$color-blue;
             a {
               width: 100%;
               padding: 5px 20px;
               white-space: nowrap;
-              background-color: v.$color-blue;
             }
           }
         }
@@ -302,7 +366,7 @@
     top: 84px;
     background-color: v.$color-blue-dark;
     width: 100vw;
-    height: calc(100vh - 85px);
+    height: calc(100vh - 84px);
     z-index: 1000;
 
     & > ul {

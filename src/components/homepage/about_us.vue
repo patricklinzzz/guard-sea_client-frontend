@@ -62,6 +62,7 @@
   #about_us {
     position: relative;
     height: 12vh;
+    transform: translateY(-1px);
     // min-height: 300px;
     article {
       z-index: 2;
@@ -72,7 +73,7 @@
       gap: 50px;
       bottom: 0;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) ;
       img {
         max-width: 30vw;
         object-fit: contain;

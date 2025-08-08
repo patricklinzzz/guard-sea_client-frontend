@@ -7,7 +7,7 @@
   import { SplitText } from 'gsap/SplitText'
 
   import Loading from '@/components/common/loading.vue'
-  import bannerV from '@/assets/images/homepage/banner.mp4'
+  import bannerV from '@/assets/images/homepage/banner.gif'
   import bg1 from '@/assets/images/homepage/bg1.png'
   import gwawa from '@/assets/images/homepage/gwawa.png'
   import Button from '@/components/buttons/button.vue'
@@ -80,7 +80,8 @@
         <p id="hi" v-show="isHiVisible">👋Hi</p>
       </div>
       <div id="video_container">
-        <video :src="bannerV" muted loop autoplay playsinline height="100%"></video>
+        <!-- <video :src="bannerV" muted loop autoplay playsinline height="100%"></video> -->
+        <img :src="bannerV" alt="" height="100%"/>
       </div>
       <article>
         <h1>守護海洋,從了解開始</h1>
@@ -103,7 +104,7 @@
       height: 500px;
       position: relative;
       overflow: hidden;
-      video {
+      img {
         position: absolute;
         top: -90px;
         width: 100%;

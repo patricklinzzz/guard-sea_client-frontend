@@ -47,13 +47,13 @@
     position: relative;
     h2 {
       background: url(@/assets/images/homepage/bg2.png) no-repeat center top / 100vw;
-      padding: 0 18.75vw;
+      padding: 15px 18.75vw;
       @include respond(md) {
         padding: 0 5vw;
       }
     }
     #pollute_data {
-      padding: 50px 18.75vw 20px 18.75vw;
+      padding: 35px 18.75vw 20px 18.75vw;
       background-color: v.$color-blue-extra-dark;
       display: flex;
       justify-content: space-around;
