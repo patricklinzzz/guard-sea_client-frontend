@@ -265,9 +265,10 @@
   }
   .bw {
     position: absolute;
-    width: 95%;
+    // width: 95%;
     pointer-events: none;
     overflow: visible;
+    right: 50%;
   }
   .bw1 {
     position: absolute;
