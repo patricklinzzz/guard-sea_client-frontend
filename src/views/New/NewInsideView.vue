@@ -1,53 +1,83 @@
 <script setup>
-  import { ref, onMounted, reactive } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
-  import { newdata } from '@/assets/data/newdata.js'
+  import { newdata } from '@/assets/data/newdata.js' // 假資料
+  import axios from 'axios'
 
-  const props = defineProps(['id'])
+  const props = defineProps(['id']) // 從路由接收 ID 參數
   const router = useRouter()
 
-  // api_data_start
+  // 定義需要的 ref 變數
+  const allnews = ref([]) // 依然是 allnews，保持為一個陣列
+  const errorMsg = ref(null) // 錯誤訊息
+  const loading = ref(true) // 讀取狀態
 
-  const errorMsg = ref(null)
-  const loading = ref(true)
-  const allnews = ref([])
-  const newsDetail = ref(null)
-
+  // 在 mounted 時處理假資料
   onMounted(async () => {
     try {
-      console.log('目前的 props.id 是：', props.id)
-      allnews.value = newdata
-      newsDetail.value = allnews.value.find((item) => item.id === Number(props.id)) || null
+      const currentId = Number(props.id)
+      // 使用 filter，讓 allnews 成為一個只包含目標文章的「陣列」
+
+      //假資料邏輯start (到時候要切換真假資料只需要註解掉這一行)
+      // const foundNews = newdata.filter((item) => item.news_id === currentId)
+      //假資料邏輯end
+
+      //真實 API 邏輯start
+
+      const response = await axios.get('http://localhost:8888/guard-sea-api/get_news.php')
+
+      const allApiNews = response.data.news
+
+      const foundNews = allApiNews.filter((item) => Number(item.news_id) === currentId)
+
+      //真實 API 邏輯end
+
+      //後續判斷是否找的到文章
+      if (foundNews.length > 0) {
+        allnews.value = foundNews
+      } else {
+        // 如果找不到對應 id 的文章
+        errorMsg.value = '找不到指定的文章內容'
+      }
     } catch (error) {
-      console.error('讀取失敗', err)
+      console.error('讀取失敗', error)
       errorMsg.value = '資料載入失敗，請稍後再試'
     } finally {
-      loading.value = false
+      loading.value = false // 載入完成，設置為 false
     }
   })
-  // api_data_end
 
+  // 返回上一頁的功能
   const goBack = () => {
     router.back()
   }
 </script>
-
 <template>
-  <main v-if="!loading && newsDetail">
-    <p v-if="errorMsg" class="error-msg">{{ errorMsg }}</p>
+  <!-- 狀態一：載入中 -->
+  <p v-if="loading">載入中...</p>
 
-    <h1>{{ newsDetail.title }}</h1>
-    <div>
-      <div class="category_date_wrap">
-        <p class="category">{{ newsDetail.category }}</p>
-        <p class="date">{{ newsDetail.date }}</p>
-      </div>
-      <div v-html="newsDetail.content" class="content"></div>
-    </div>
-
+  <!-- 狀態二：發生錯誤或找不到文章 -->
+  <main v-else-if="errorMsg || allnews.length === 0">
+    <p class="error-msg">{{ errorMsg || '找不到文章' }}</p>
     <button @click="goBack">上一頁</button>
   </main>
-  <p v-else>載入中...</p>
+
+  <!-- 狀態三：成功載入，顯示文章 -->
+  <main v-else>
+    <!-- 
+      因為 allnews 陣列現在只有一筆資料，v-for 只會跑一次。
+      我們移除了有問題的 v-if，因為過濾的動作已經在 script 中完成了。
+    -->
+    <div v-for="item in allnews" :key="item.news_id">
+      <h1>{{ item.title }}</h1>
+      <div class="category_date_wrap">
+        <p class="category">{{ item.category_name }}</p>
+        <p class="date">{{ item.publish_date }}</p>
+      </div>
+      <div v-html="item.content" class="content"></div>
+    </div>
+    <button @click="goBack">上一頁</button>
+  </main>
 </template>
 
 <style lang="scss" scoped>

@@ -5,6 +5,7 @@
   import CategoryButtons from '@/components/buttons/category_button.vue'
 
   import { newdata } from '@/assets/data/newdata.js'
+  import axios from 'axios'
 
   //page_start
 
@@ -32,7 +33,22 @@
   onMounted(async () => {
     try {
       loading.value = true
-      allnews.value = newdata
+
+      //以下是假資料要寫的 allnews.value = newdata 是為了搭配上面的import { newdata } from '@/assets/data/newdata.js'
+
+      //假資料_開始
+
+      // allnews.value = newdata
+
+      //假資料_結束
+
+      //以下是真正串api要寫的 開始
+
+      const response = await axios.get('http://localhost:8888/guard-sea-api/get_news.php')
+      const data = response.data
+      allnews.value = data.news
+
+      //以下是真正串api要寫的 結束
     } catch (err) {
       console.error('讀取失敗', err)
       errorMsg.value = '資料載入失敗，請稍後再試'
@@ -66,7 +82,7 @@
   const filter_items = computed(() => {
     return all_categories.value === '全部消息'
       ? allnews.value
-      : allnews.value.filter((item) => item.category === all_categories.value)
+      : allnews.value.filter((item) => item.category_name === all_categories.value)
   })
 
   const handleCategoryChange = (val) => {
@@ -102,24 +118,27 @@
     <section class="new_list">
       <article
         v-for="(item, index) in show_per_page_items"
-        :key="item.id"
+        :key="item.news_id"
         :class="{
           reverse: index % 2 === 1,
         }"
       >
         <div class="new_img">
-          <img :src="item.coverimage" :alt="item.title" />
+          <img :src="item.image_url" :alt="item.title" />
         </div>
         <div class="new_info">
           <div class="category_date_wrap">
-            <p class="category">{{ item.category }}</p>
-            <p class="date">{{ item.date }}</p>
+            <p class="category">{{ item.category_name }}</p>
+            <p class="date">{{ item.publish_date }}</p>
           </div>
 
           <h3 class="title">{{ item.title }}</h3>
           <p class="desc">{{ extract_summary(item.content) }}</p>
 
-          <RouterLink :to="{ name: 'newinside', params: { id: item.id } }" class="read_more_link">
+          <RouterLink
+            :to="{ name: 'newinside', params: { id: item.news_id } }"
+            class="read_more_link"
+          >
             閱讀全文+
           </RouterLink>
         </div>
