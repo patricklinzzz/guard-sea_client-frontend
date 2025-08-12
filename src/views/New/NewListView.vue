@@ -44,7 +44,14 @@
 
       //以下是真正串api要寫的 開始
 
-      const response = await axios.get('http://localhost:8888/guard-sea-api/get_news.php')
+      // 1. 從環境變數讀取 API 的基礎路徑
+      const baseUrl = import.meta.env.VITE_API_BASE
+
+      // 2. 拼接出完整的 API 端點 URL
+      const apiUrl = `${baseUrl}/get_news.php`
+      // const response = await axios.get('http://localhost:8888/guard-sea-api/get_news.php')
+      const response = await axios.get(apiUrl)
+
       const data = response.data
       allnews.value = data.news
 
@@ -74,15 +81,24 @@
 
   //contentHtml_extract_end
 
+  // 專門用來過濾出狀態為 1 (顯示) 的消息start
+  const published_news = computed(() => {
+    // 使用 Array.prototype.filter 方法
+    // 只返回 item.status 等於 1 的項目
+    return allnews.value.filter((item) => item.status === 1)
+  })
+  // 專門用來過濾出狀態為 1 (顯示) 的消息end
+
   // categories_array_start
 
   const categories = ['全部消息', '品牌動態', '優惠情報', '活動花絮']
   const all_categories = ref('全部消息')
 
+  // 將 filter_items 的資料來源是要發佈的資料 published_news.value
   const filter_items = computed(() => {
     return all_categories.value === '全部消息'
-      ? allnews.value
-      : allnews.value.filter((item) => item.category_name === all_categories.value)
+      ? published_news.value // <-- 使用過濾後的資料
+      : published_news.value.filter((item) => item.category_name === all_categories.value) // <-- 使用過濾後的資料
   })
 
   const handleCategoryChange = (val) => {

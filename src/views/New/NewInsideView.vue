@@ -24,7 +24,13 @@
 
       //真實 API 邏輯start
 
-      const response = await axios.get('http://localhost:8888/guard-sea-api/get_news.php')
+      // 1. 從環境變數讀取 API 的基礎路徑
+      const baseUrl = import.meta.env.VITE_API_BASE
+
+      // 2. 拼接出完整的 API 端點 URL
+      const apiUrl = `${baseUrl}/get_news.php`
+      // const response = await axios.get('http://localhost:8888/guard-sea-api/get_news.php')
+      const response = await axios.get(apiUrl)
 
       const allApiNews = response.data.news
 
