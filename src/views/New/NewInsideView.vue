@@ -28,7 +28,7 @@
       const baseUrl = import.meta.env.VITE_API_BASE
 
       // 2. 拼接出完整的 API 端點 URL
-      const apiUrl = `${baseUrl}/get_news.php`
+      const apiUrl = `${baseUrl}/news/get_news.php`
       // const response = await axios.get('http://localhost:8888/guard-sea-api/get_news.php')
       const response = await axios.get(apiUrl)
 
@@ -144,6 +144,21 @@
       flex-direction: column;
       justify-content: center;
       gap: 20px;
+
+      :deep(img) {
+        // 1. 最大寬度為 100% -> 圖片最寬只能跟它的容器一樣寬 (900px)
+        max-width: 100%;
+
+        // 2. 高度自動 -> 確保圖片等比例縮放，不會變形
+        height: auto;
+
+        // 3.  讓圖片像區塊一樣顯示，並自動居中
+        display: block;
+        margin: 1.5rem auto; // 上下留白，左右自動居中
+
+        // 4. (可選但推薦) 給圖片加個圓角，更好看
+        border-radius: 5px;
+      }
     }
 
     > div {
