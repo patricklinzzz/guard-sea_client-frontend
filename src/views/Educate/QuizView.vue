@@ -1,5 +1,4 @@
 <script setup>
-  import { quizData } from '@/assets/data/quiz.js'
   import Button from '@/components/buttons/button.vue'
   import ScoreBubble from '@/components/edu/score_bubble.vue'
   import BubbleCircle from '@/components/edu/BubbleCircle.vue'
@@ -11,6 +10,7 @@
   import turtle from '@/assets/images/dec/seaturtle.svg'
   import doge from '@/assets/images/Educate/quiz/doge.png'
   import dolphin from '@/assets/images/dec/dolphin.svg'
+  import axios from 'axios'
 
   const quiz_cur = ref(null)
   const question_block_ref = ref(null)
@@ -122,11 +122,10 @@
 
   const bubble_pick = (index) => {
     quiz_type_selected.value = quiz_type_selected.value === index ? null : index
-    console.log(quiz_type_selected.value)
   }
   const start_quiz = () => {
     if (quiz_type_selected.value != null) {
-      quiz_chosen.value = quizData[quiz_type_selected.value]
+      quiz_chosen.value = questions.value.filter((q) => q.quiz_id == quiz_type_selected.value + 1)
       quiz_start.value = true
       quiz_cur.value = quiz_chosen.value[q_order[q_index.value]]
     } else {
@@ -188,23 +187,35 @@
     q_index.value = 9
     answered(4)
   }
-  const quiz_slogan = computed(() => {
-    let res = ''
-    switch (quiz_type_selected.value) {
-      case 0:
-        res = '探索深藍奧秘，守護海洋生物！'
-        break
-      case 1:
-        res = '揭開海洋污染真相，行動從我開始！'
-        break
-      case 2:
-        res = '測試你對過度捕撈的了解，守護海洋資源！'
-        break
-      case 3:
-        res = '直面棲地危機，拯救海洋家園！'
-        break
+
+  const questions = ref([])
+  const quizzes = ref([])
+  const quiz_map = {}
+  const loading = ref(true)
+  const fetchQuiz = async () => {
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE
+      const question_api = `${baseUrl}/questions/get_questions.php`
+      const quiz_api = `${baseUrl}/quiz/get_quiz.php`
+
+      const question_r = await axios.get(question_api)
+      questions.value = question_r.data
+
+      const quiz = await axios.get(quiz_api)
+      quizzes.value = quiz.data
+      quizzes.value.reduce((map, quiz_cur) => {
+        map[quiz_cur.quiz_id] = quiz_cur.title
+        return map
+      }, quiz_map)
+      console.log(questions.value)
+    } catch (err) {
+      console.error('Fetch 錯誤：', err)
     }
-    return res
+  }
+  const quiz_slogan = computed(() => {
+    return quiz_type_selected.value === null
+      ? ''
+      : quizzes.value[quiz_type_selected.value].quiz_description
   })
   const answer = computed(() => {
     return 'option_' + quiz_cur.value.answer
@@ -245,7 +256,13 @@
     r.value = isMobile.value ? 120 : 80
   }
 
-  onMounted(() => {
+  onMounted(async () => {
+    try {
+      await fetchQuiz()
+    } finally {
+      loading.value = false
+    }
+
     checkBreakpoints()
     window.addEventListener('resize', checkBreakpoints)
   })
@@ -257,6 +274,7 @@
 
 <template>
   <LightRays />
+
   <main class="wrapper">
     <img
       :src="doge"
