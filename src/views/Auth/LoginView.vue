@@ -40,7 +40,7 @@
 
       <div class="form-section">
         <transition name="fade" mode="out-in">
-          <!-- Login Form -->
+          <!-- 登入表單 -->
           <div v-if="currentMode === 'login'" key="login">
             <h2>登入</h2>
             <form @submit.prevent="handleLogin">
@@ -98,7 +98,7 @@
             </div>
           </div>
 
-          <!-- Register Form -->
+          <!-- 註冊表單 -->
           <div v-else-if="currentMode === 'register'" key="register">
             <h2>註冊</h2>
             <form @submit.prevent="handleRegister">
@@ -115,33 +115,32 @@
               </div>
               <div class="form-group">
                 <label for="gender">性別</label>
-                <input
-                  type="text"
+                <select
                   id="gender"
                   v-model="gender"
                   :class="{ 'has-error': genderError }"
-                  @input="clearError('gender')"
-                />
+                  @change="clearError('gender')"
+                >
+                  <option value="" disabled>請選擇性別</option>
+                  <option value="male">男性</option>
+                  <option value="female">女性</option>
+                  <option value="other">不透露</option>
+                </select>
                 <div v-if="genderError" class="error-message">{{ genderError }}</div>
               </div>
               <div class="form-group">
                 <label for="register-email">電子郵件</label>
-                <div class="input-with-button">
-                  <input
-                    type="email"
-                    id="register-email"
-                    v-model="email"
-                    :class="{ 'has-error': emailError }"
-                    @input="clearError('email')"
-                  />
-                  <button type="button" class="btn-verify" @click="sendVerificationCode">
-                    發送驗證碼
-                  </button>
-                </div>
+                <input
+                  type="email"
+                  id="register-email"
+                  v-model="email"
+                  :class="{ 'has-error': emailError }"
+                  @input="clearError('email')"
+                />
                 <div v-if="emailError" class="error-message">{{ emailError }}</div>
               </div>
               <div class="form-group">
-                <label for="register-password">密碼</label>
+                <label for="register-password">密碼 (至少6個字元)</label>
                 <div class="password-wrapper">
                   <input
                     :type="passwordFieldType"
@@ -157,6 +156,21 @@
                   </span>
                 </div>
                 <div v-if="passwordError" class="error-message">{{ passwordError }}</div>
+              </div>
+              <div class="form-group">
+                <label for="register-password-confirm">確認密碼</label>
+                <div class="password-wrapper">
+                  <input
+                    :type="passwordFieldType"
+                    id="register-password-confirm"
+                    v-model="passwordConfirm"
+                    :class="{ 'has-error': passwordConfirmError }"
+                    @input="clearError('passwordConfirm')"
+                  />
+                </div>
+                <div v-if="passwordConfirmError" class="error-message">
+                  {{ passwordConfirmError }}
+                </div>
               </div>
               <div class="terms-agreement">
                 <label class="remember-me">
@@ -180,7 +194,7 @@
             </div>
           </div>
 
-          <!-- Forgot Password Form -->
+          <!-- 忘記密碼表單 -->
           <div v-else key="forgotPassword">
             <h2>忘記密碼</h2>
             <p class="form-subtitle">密碼重設信將寄至您的信箱</p>
@@ -207,7 +221,6 @@
 </template>
 
 <script setup>
-  // --- 修改：從 'vue' 引入 onMounted ---
   import { ref, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
   import { useAuthStore } from '@/stores/auth'
@@ -215,14 +228,13 @@
   const router = useRouter()
   const authStore = useAuthStore()
 
-  const defaultUser = {
-    email: 'test@example.com',
-    password: 'password123',
-  }
+  // !!! 請務必修改成您自己的後端 API 路徑 !!!
+  const API_BASE_URL = 'http://localhost/guardsea/api'
 
   const currentMode = ref('login')
   const email = ref('')
   const password = ref('')
+  const passwordConfirm = ref('')
   const passwordFieldType = ref('password')
   const name = ref('')
   const gender = ref('')
@@ -233,16 +245,13 @@
   const genderError = ref('')
   const emailError = ref('')
   const passwordError = ref('')
+  const passwordConfirmError = ref('')
 
-  // --- 新增：組件掛載時，檢查是否有儲存的登入資訊 ---
   onMounted(() => {
     const storedEmail = localStorage.getItem('rememberedEmail')
-    const storedPassword = localStorage.getItem('rememberedPassword')
-
-    if (storedEmail && storedPassword) {
+    if (storedEmail) {
       email.value = storedEmail
-      password.value = storedPassword
-      rememberMe.value = true // 如果有儲存的資料，也將核取方塊打勾
+      rememberMe.value = true
     }
   })
 
@@ -251,6 +260,7 @@
     genderError.value = ''
     emailError.value = ''
     passwordError.value = ''
+    passwordConfirmError.value = ''
   }
 
   const clearError = (field) => {
@@ -258,12 +268,14 @@
     if (field === 'gender') genderError.value = ''
     if (field === 'email') emailError.value = ''
     if (field === 'password') passwordError.value = ''
+    if (field === 'passwordConfirm') passwordConfirmError.value = ''
   }
 
   const changeMode = (mode) => {
     currentMode.value = mode
     email.value = ''
     password.value = ''
+    passwordConfirm.value = ''
     name.value = ''
     gender.value = ''
     termsAccepted.value = false
@@ -275,59 +287,42 @@
     passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password'
   }
 
-  const validateEmail = () => {
-    if (!email.value) {
-      emailError.value = '請輸入電子郵件'
-      return false
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email.value)) {
-      emailError.value = '請輸入有效的電子郵件格式'
-      return false
-    }
-    emailError.value = ''
-    return true
-  }
-
-  const validatePassword = () => {
-    if (!password.value) {
-      passwordError.value = '請輸入密碼'
-      return false
-    }
-    passwordError.value = ''
-    return true
-  }
-
-  const handleLogin = () => {
-    const isEmailValid = validateEmail()
-    const isPasswordValid = validatePassword()
-
-    if (!isEmailValid || !isPasswordValid) {
+  const handleLogin = async () => {
+    clearAllErrors()
+    if (!email.value || !password.value) {
+      if (!email.value) emailError.value = '請輸入電子郵件'
+      if (!password.value) passwordError.value = '請輸入密碼'
       return
     }
 
-    if (email.value === defaultUser.email && password.value === defaultUser.password) {
-      // --- 修改：在登入成功時，根據 rememberMe 的狀態儲存或移除資料 ---
-      if (rememberMe.value) {
-        // 如果「記住我」被勾選，就儲存帳號密碼
-        localStorage.setItem('rememberedEmail', email.value)
-        localStorage.setItem('rememberedPassword', password.value)
-      } else {
-        // 如果沒有被勾選，就移除之前可能儲存的資料
-        localStorage.removeItem('rememberedEmail')
-        localStorage.removeItem('rememberedPassword')
-      }
+    try {
+      const response = await fetch(`${API_BASE_URL}/member/login.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.value, password: password.value }),
+      })
 
-      const fakeToken = 'fake-user-token-for-guardsea'
-      localStorage.setItem('user-token', fakeToken)
-      authStore.login(fakeToken)
-      router.push({ path: '/member' })
-    } else {
-      alert('帳號或密碼錯誤！')
+      const result = await response.json()
+
+      if (response.ok) {
+        alert(result.message)
+        if (rememberMe.value) {
+          localStorage.setItem('rememberedEmail', email.value)
+        } else {
+          localStorage.removeItem('rememberedEmail')
+        }
+        authStore.login(result.member_id, result.fullname)
+        router.push({ path: '/member' })
+      } else {
+        alert(result.error)
+      }
+    } catch (error) {
+      console.error('登入時發生網路錯誤:', error)
+      alert('登入失敗，請檢查網路連線。')
     }
   }
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     clearAllErrors()
     let isValid = true
 
@@ -336,13 +331,24 @@
       isValid = false
     }
     if (!gender.value) {
-      genderError.value = '請輸入性別'
+      genderError.value = '請選擇性別'
       isValid = false
     }
-    if (!validateEmail()) {
+    if (!email.value) {
+      emailError.value = '請輸入電子郵件'
       isValid = false
     }
-    if (!validatePassword()) {
+
+    if (!password.value) {
+      passwordError.value = '請輸入密碼'
+      isValid = false
+    } else if (password.value.length < 6) {
+      passwordError.value = '密碼長度不能少於6個字元'
+      isValid = false
+    }
+
+    if (password.value !== passwordConfirm.value) {
+      passwordConfirmError.value = '兩次輸入的密碼不一致'
       isValid = false
     }
 
@@ -352,12 +358,38 @@
       alert('請先閱讀並同意服務條款與隱私政策')
       return
     }
-    console.log('Registering with:', name.value, gender.value, email.value, password.value)
-    alert('註冊功能僅為展示')
+
+    const payload = {
+      name: name.value,
+      gender: gender.value,
+      email: email.value,
+      password: password.value,
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/member/register.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        alert(result.message)
+        changeMode('login')
+      } else {
+        alert(result.error)
+      }
+    } catch (error) {
+      console.error('註冊時發生網路錯誤:', error)
+      alert('註冊失敗，請檢查網路連線。')
+    }
   }
 
   const handleForgotPassword = () => {
-    if (!validateEmail()) {
+    if (!email.value) {
+      emailError.value = '請輸入電子郵件'
       return
     }
     console.log('Password reset requested for:', email.value)
@@ -365,15 +397,16 @@
   }
 
   const sendVerificationCode = () => {
-    if (validateEmail()) {
+    if (email.value) {
       console.log('Sending verification code to:', email.value)
-      alert('哈哈不給你')
+      alert('驗證碼功能尚未開放')
+    } else {
+      emailError.value = '請先輸入電子郵件'
     }
   }
 </script>
 
 <style scoped lang="scss">
-  /* 您的 SCSS 樣式維持不變 */
   @use '@/assets/style/variables' as *;
   @use '@/assets/style/mixins' as *;
   @use 'sass:color';
@@ -529,7 +562,8 @@
           font-size: $p-mobile;
         }
       }
-      input:not([type='checkbox']) {
+      input:not([type='checkbox']),
+      select {
         width: 100%;
         padding: 12px 15px;
         background-color: $color-white;
@@ -540,6 +574,9 @@
         &.has-error {
           border-color: $color-yellow;
         }
+      }
+      select {
+        appearance: none;
       }
       .error-message {
         color: $color-yellow;
