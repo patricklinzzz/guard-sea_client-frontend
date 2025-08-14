@@ -49,11 +49,30 @@
 
       // 2. 拼接出完整的 API 端點 URL
       const apiUrl = `${baseUrl}/news/get_news.php`
-      // const response = await axios.get('http://localhost:8888/guard-sea-api/get_news.php')
       const response = await axios.get(apiUrl)
-
       const data = response.data
-      allnews.value = data.news
+
+      // 3. 【核心修正】在將資料存入 ref 之前，處理所有圖片路徑
+      const processedNews = data.news.map((item) => {
+        let processedItem = { ...item }
+
+        // 3a. 處理封面圖 (image_url)
+        if (processedItem.image_url && processedItem.image_url.startsWith('/')) {
+          processedItem.image_url = baseUrl + processedItem.image_url
+        }
+
+        // 3b. 處理 CKEditor 內容 (content) 中的圖片
+        if (processedItem.content) {
+          // 使用正規表示式，查找所有 src="/uploads/..." 的圖片標籤
+          // 並將它們替換為 src="http://.../api/uploads/..."
+          const regex = /src="(\/uploads\/.*?)"/g
+          processedItem.content = processedItem.content.replace(regex, `src="${baseUrl}$1"`)
+        }
+
+        return processedItem
+      })
+
+      allnews.value = processedNews // <-- 使用最終處理過的資料
 
       //以下是真正串api要寫的 結束
     } catch (err) {

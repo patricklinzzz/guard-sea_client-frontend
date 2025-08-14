@@ -29,12 +29,28 @@
 
       // 2. 拼接出完整的 API 端點 URL
       const apiUrl = `${baseUrl}/news/get_news.php`
-      // const response = await axios.get('http://localhost:8888/guard-sea-api/get_news.php')
       const response = await axios.get(apiUrl)
-
       const allApiNews = response.data.news
 
-      const foundNews = allApiNews.filter((item) => Number(item.news_id) === currentId)
+      // 3. 【核心修正】從所有新聞中，找到我們需要的那一筆
+      let targetNews = allApiNews.find((item) => Number(item.news_id) === currentId)
+
+      // 4. 如果找到了目標新聞，就對它進行路徑處理
+      if (targetNews) {
+        // 4a. 處理封面圖 (雖然內頁可能沒用到，但處理一下更完整)
+        if (targetNews.image_url && targetNews.image_url.startsWith('/')) {
+          targetNews.image_url = baseUrl + targetNews.image_url
+        }
+
+        // 4b. 處理 CKEditor 內容 (content) 中的圖片
+        if (targetNews.content) {
+          const regex = /src="(\/uploads\/.*?)"/g
+          targetNews.content = targetNews.content.replace(regex, `src="${baseUrl}$1"`)
+        }
+      }
+
+      // 5. 將處理過的資料（如果找到了）放進一個陣列中，以匹配 v-for 的需求
+      const foundNews = targetNews ? [targetNews] : []
 
       //真實 API 邏輯end
 
