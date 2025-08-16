@@ -1,26 +1,50 @@
 <script setup>
-  import { ref, computed } from 'vue'
-  import { fakeProducts } from '@/assets/data/product'
+  import { ref, computed, onMounted, watch } from 'vue'
   import ProductCard from '@/components/product/product_card.vue'
   import CategoryButtons from '@/components/buttons/category_button.vue'
   import DropdownFilter from '@/components/event/dropdown_filter.vue'
+  import { useProductStore } from '@/stores/product_store.js'
+  import { useProductCategoryStore } from '@/stores/product_category_store.js'
+
+  const productStore = useProductStore()
+  const categoryStore = useProductCategoryStore()
+
   const selectCategory = ref('全部商品')
-  const categories = ['全部商品', '機能服飾', '各類包款', '周邊小物']
+  const categories = ref([]) 
+  const selectSortText = ref('價格低到高')
 
   const sortOptionMap = {
     價格低到高: 'price_asc',
     價格高到低: 'price_desc',
   }
   const displayOptions = Object.keys(sortOptionMap)
-  const selectSortText = ref('價格低到高')
-
   const sortOrder = computed(() => sortOptionMap[selectSortText.value])
+  onMounted(() => {
+    productStore.fetchProducts({ status: 1 }) 
+    categoryStore.fetchCategories()
+  })
 
+  watch(
+    () => categoryStore.categories,
+    (newCategories) => {
+      if (newCategories.length > 0) {
+        categories.value = ['全部商品', ...newCategories.map((c) => c.category_name)]
+      }
+    },
+    { immediate: true }
+  )
   const filterAndSort = computed(() => {
-    let result = [...fakeProducts]
+    let result = [...productStore.products]
+
     if (selectCategory.value !== '全部商品') {
-      result = result.filter((p) => p.category === selectCategory.value)
+      result = result.filter((p) => {
+        const category = categoryStore.categories.find(
+          (c) => Number(c.category_id) === Number(p.category_id)
+        )
+        return category?.category_name === selectCategory.value
+      })
     }
+
     if (sortOrder.value === 'price_asc') {
       result.sort((a, b) => a.price - b.price)
     } else if (sortOrder.value === 'price_desc') {
@@ -28,22 +52,39 @@
     }
     return result
   })
+
+  const getImageUrl = (path) => {
+    if (!path) return ''
+    return `http://localhost:8888/guard-sea_api${path}`
+  }
 </script>
 
 <template>
   <div class="productlist">
     <div class="product_hero">
-      <h1>周邊商品</h1>
+      <h1>商品列表</h1>
     </div>
 
     <section class="productlist_section">
-      <CategoryButtons :categories="categories" v-model:currentCategory="selectCategory" />
-      <div class="product_sort">
-        <DropdownFilter v-model="selectSortText" :options="displayOptions"></DropdownFilter>
+      <div v-if="productStore.isLoading" class="loading-state">
+        <p>商品載入中...</p>
       </div>
-      <TransitionGroup appear tag="div" name="list" class="product_grid">
-        <ProductCard v-for="product in filterAndSort" :key="product.id" :product="product" />
-      </TransitionGroup>
+      <div v-else-if="productStore.error" class="error-state">
+        <p>讀取商品失敗：{{ productStore.error }}</p>
+      </div>
+      <div v-else>
+        <CategoryButtons :categories="categories" v-model:currentCategory="selectCategory" />
+        <div class="product_sort">
+          <DropdownFilter v-model="selectSortText" :options="displayOptions"></DropdownFilter>
+        </div>
+        <TransitionGroup appear tag="div" name="list" class="product_grid">
+          <ProductCard
+            v-for="product in filterAndSort"
+            :key="product.product_id"
+            :product="product"
+          />
+        </TransitionGroup>
+      </div>
     </section>
   </div>
 </template>

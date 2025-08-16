@@ -1,10 +1,12 @@
-<!-- <script setup>
-  import { ref, computed } from 'vue'
+<script setup>
+  import { ref, computed, onMounted, watch } from 'vue'
+  import { useRoute, useRouter, RouterLink } from 'vue-router'
   import { useProductStore } from '@/stores/product_store'
   import { useCartStore } from '@/stores/cart_store'
   import Button from '@/components/buttons/button.vue'
   import ProductCard from '@/components/product/product_card.vue'
   import QuantityControl from '@/components/product/quantity_button.vue'
+
   const props = defineProps({
     id: {
       type: [String, Number],
@@ -12,74 +14,42 @@
     },
   })
 
+  const route = useRoute()
+  const router = useRouter()
   const productStore = useProductStore()
   const cartStore = useCartStore()
 
-  const info = computed(() => productStore.getProductById(props.id))
+  const info = computed(() => productStore.getProductById(Number(route.params.id)))
 
-  const currentImageIndex = ref(0)
-  const currentImage = computed(() => info.value.images[currentImageIndex.value])
-  const setMainImage = (index) => {
-    currentImageIndex.value = index
-  }
-
+  const selectedImageIndex = ref(0)
   const selectedColor = ref('')
   const selectedSize = ref('')
   const quantity = ref(1)
 
-  const addToCart = () => {
-    if (!selectedColor.value || !selectedSize.value) {
-      alert('請選擇顏色與尺寸')
-      return
+  const getImageUrl = (path) => {
+    if (!path) return ''
+    if (path.startsWith('http')) {
+      return path
     }
-
-    cartStore.addItem({
-      id: info.value.id,
-      name: info.value.name,
-      price: info.value.price,
-      image: info.value.images[0],
-      color: selectedColor.value,
-      size: selectedSize.value,
-      quantity: quantity.value,
-    })
-
-    alert('已加入購物車！')
+    return `http://localhost:8888/guard-sea_api${path}`
   }
-</script> -->
-<script setup>
-  import { ref, computed } from 'vue'
-  import { useProductStore } from '@/stores/product_store'
-  import { useCartStore } from '@/stores/cart_store'
-  import Button from '@/components/buttons/button.vue'
-  import ProductCard from '@/components/product/product_card.vue'
-  import QuantityControl from '@/components/product/quantity_button.vue'
-
-  const props = defineProps({
-    id: {
-      type: [String, Number],
-      required: true,
-    },
+  const images = computed(() => {
+    if (!info.value) return []
+    const imageArray = []
+    if (info.value.sub_image_1) imageArray.push(info.value.sub_image_1)
+    if (info.value.sub_image_2) imageArray.push(info.value.sub_image_2)
+    if (info.value.sub_image_3) imageArray.push(info.value.sub_image_3)
+    return imageArray.map(getImageUrl)
   })
 
-  const productStore = useProductStore()
-  const cartStore = useCartStore()
-
-  const info = computed(() => productStore.getProductById(props.id))
-
-  const selectedImageIndex = ref(0)
-
   const currentImage = computed(() => {
-    return info.value.images[selectedImageIndex.value]
+    return images.value[selectedImageIndex.value]
   })
 
   const selectImage = (index) => {
     selectedImageIndex.value = index
   }
 
-  const selectedColor = ref('')
-  const selectedSize = ref('')
-  const quantity = ref(1)
-
   const addToCart = () => {
     if (!selectedColor.value || !selectedSize.value) {
       alert('請選擇顏色與尺寸')
@@ -90,7 +60,7 @@
       id: info.value.id,
       name: info.value.name,
       price: info.value.price,
-      image: info.value.imageUrl,
+      image: getImageUrl(info.value.main_image_url),
       color: selectedColor.value,
       size: selectedSize.value,
       quantity: quantity.value,
@@ -98,21 +68,42 @@
 
     alert('已加入購物車！')
   }
+
+  const goBack = () => {
+    router.back()
+  }
+
+  onMounted(() => {
+    productStore.fetchProducts({ status: 1 })
+  })
+
+  watch(
+    () => route.params.id,
+    (newId) => {
+      if (newId) {
+        productStore.fetchProducts({ status: 1 })
+      }
+    }
+  )
 </script>
+
 <template>
   <div class="product_section">
-    <div class="product_info">
+    <div v-if="!info" class="loading-state">
+      <h2>⏳ 正在載入商品資訊...</h2>
+    </div>
+    <div v-else class="product_info">
       <div class="info_img">
         <div class="info_img_main">
-          <img :src="currentImage" :alt="info?.name || '商品圖片'" />
+          <img :src="currentImage" :alt="info.name || '商品圖片'" />
         </div>
         <div class="info_img_thumbnails">
           <img
-            v-for="(img, index) in info.images"
+            v-for="(img, index) in images"
             :key="index"
             :src="img"
             class="thumbnail"
-            :class="{ active: currentImageIndex === index }"
+            :class="{ active: selectedImageIndex === index }"
             @click="selectImage(index)"
             alt=""
           />
@@ -123,15 +114,17 @@
         <h3>{{ info.description }}</h3>
         <h3 class="price">${{ info.price }}</h3>
         <div class="options">
-          <div class="option_group color_selection">
+          <div v-if="info.color_code" class="option_group color_selection">
             <h4>顏色:</h4>
             <div class="color_buttons">
               <button
-                v-for="color in info.colors"
-                :key="color"
-                :style="{ backgroundColor: color }"
-                @click="selectedColor = color"
-                :class="{ selected: selectedColor === color }"
+                v-for="(color, index) in (info.color_code ? info.color_code.split(',') : []).filter(
+                  (c) => c.trim() !== ''
+                )"
+                :key="index"
+                :style="{ backgroundColor: color.trim() }"
+                @click="selectedColor = color.trim()"
+                :class="{ selected: selectedColor === color.trim() }"
                 class="color_dot"
               ></button>
             </div>
@@ -140,7 +133,7 @@
             <h4>尺寸:</h4>
             <div class="size_buttons">
               <button
-                v-for="size in info.sizes"
+                v-for="size in info.size"
                 :key="size"
                 @click="selectedSize = size"
                 :class="{ selected: selectedSize === size }"
@@ -161,64 +154,23 @@
       </div>
     </div>
 
-    <div class="info_main">
-      <div class="product_features">
-        <div class="feature_item">環保</div>
-        <div class="feature_item">透氣</div>
-        <div class="feature_item">減塑</div>
+    <div v-if="info" class="info_main">
+      <div v-if="info.content" v-html="info.content"></div>
+      <div v-else class="no_content_text">
+        <p>此商品暫無詳細內容</p>
       </div>
-      <div class="info_main_img">
-        <img v-for="(img, index) in info.images" :key="index" :src="img" :alt="img.name" />
-      </div>
-      <table class="size_table">
-        <thead>
-          <tr>
-            <th>尺寸</th>
-            <th>胸圍(cm)</th>
-            <th>衣長(cm)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>S</td>
-            <td>48</td>
-            <td>65</td>
-          </tr>
-          <tr>
-            <td>M</td>
-            <td>51</td>
-            <td>68</td>
-          </tr>
-          <tr>
-            <td>L</td>
-            <td>54</td>
-            <td>71</td>
-          </tr>
-          <tr>
-            <td>XL</td>
-            <td>57</td>
-            <td>74</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="support_banner">
-        <div class="slogan">
-          <img src="/src/assets/images/product/slogan.jpg" alt="" />
-        </div>
-        <p>
-          您購買的每一件商品，我們將捐助「綠蠵龜野放計畫」，支持追蹤器、照護飼料與環境復育珊瑚重生，讓愛海的你成為改變的一部分。
-        </p>
-      </div>
+
       <div class="related_products">
         <h3>相關商品</h3>
         <div class="product_list">
           <ProductCard
-            v-for="item in productStore.relatedProducts(info.id)"
-            :key="item.id"
+            v-for="item in productStore.relatedProducts(info.product_id)"
+            :key="item.product_id"
             :product="item"
           />
         </div>
       </div>
+
       <RouterLink to="/productlist" class="go_back">
         <button @click="goBack">上一頁</button>
       </RouterLink>
@@ -354,80 +306,6 @@
       }
       @include respond(md) {
         max-width: 320px;
-      }
-
-      .product_features {
-        display: flex;
-        justify-content: center;
-        align-content: center;
-        gap: 2rem;
-        margin-top: 2rem;
-
-        .feature_item {
-          border: 1px solid v.$color-orange;
-          border-radius: 50%;
-          width: 7.5vw;
-          height: 7.5vw;
-          aspect-ratio: 1 / 1;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          @include respond(md) {
-            width: 25vw;
-            height: 25vw;
-            aspect-ratio: 1 / 1;
-          }
-        }
-      }
-      .info_main_img {
-        display: flex;
-        width: 20.15vw;
-        justify-content: center;
-        column-gap: 1rem;
-        @include respond(md) {
-          flex-wrap: wrap;
-          row-gap: 1rem;
-          width: 87.5vw;
-        }
-        img {
-          width: 100%;
-        }
-      }
-      .size_table {
-        margin-top: 2rem;
-        width: 100%;
-        border-collapse: collapse;
-
-        th,
-        td {
-          border: 1px solid v.$color-orange;
-          padding: 0.5rem 1rem;
-          text-align: center;
-        }
-      }
-      .slogan {
-        width: 30.72vw;
-        justify-self: center;
-        margin: 1rem 0;
-        img {
-          width: 100%;
-        }
-        @include respond(md) {
-          width: 80vw;
-        }
-      }
-      .product_list {
-        display: flex;
-        column-gap: 1rem;
-        @include respond(md) {
-          padding: 1rem 0;
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 1rem;
-        }
-        img {
-          width: 100%;
-        }
       }
       .go_back {
         text-decoration: none;
