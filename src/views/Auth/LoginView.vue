@@ -228,8 +228,9 @@
   const router = useRouter()
   const authStore = useAuthStore()
 
-  // !!! 請務必修改成您自己的後端 API 路徑 !!!
-  const API_BASE_URL = 'http://localhost/guardsea/api'
+  // --- ★★★ 第一個修改點 ★★★ ---
+  // API 路徑已修改為您線上的主機路徑
+  const API_BASE_URL = 'http://localhost:8888/main-project-php/api'
 
   const currentMode = ref('login')
   const email = ref('')
@@ -387,13 +388,30 @@
     }
   }
 
-  const handleForgotPassword = () => {
+  const handleForgotPassword = async () => {
+    clearAllErrors()
     if (!email.value) {
       emailError.value = '請輸入電子郵件'
       return
     }
-    console.log('Password reset requested for:', email.value)
-    alert('密碼重設信已寄出（此為展示訊息）')
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/member/request.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.value }),
+      })
+
+      const result = await response.json()
+      alert(result.message || result.error)
+
+      if (response.ok) {
+        changeMode('login')
+      }
+    } catch (error) {
+      console.error('密碼重設請求時發生網路錯誤:', error)
+      alert('請求失敗，請檢查網路連線或稍後再試。')
+    }
   }
 
   const sendVerificationCode = () => {
@@ -407,6 +425,7 @@
 </script>
 
 <style scoped lang="scss">
+  /* 您的 SCSS 樣式碼維持不變，此處省略 */
   @use '@/assets/style/variables' as *;
   @use '@/assets/style/mixins' as *;
   @use 'sass:color';
