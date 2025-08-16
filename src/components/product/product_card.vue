@@ -1,4 +1,5 @@
 <script setup>
+  import { computed } from 'vue'
   import { RouterLink } from 'vue-router'
 
   const props = defineProps({
@@ -7,11 +8,20 @@
       required: true,
     },
   })
+
+  const getImageUrl = computed(() => {
+    const path = props.product.main_image_url
+    if (!path) return ''
+    if (path.startsWith('http')) {
+      return path
+    }
+    return `http://localhost:8888/guard-sea_api${path}`
+  })
 </script>
 <template>
   <div class="product_card">
-    <RouterLink :to="`/productlist/${product.id}`">
-      <img :src="product.imageUrl" :alt="product.name" />
+    <RouterLink :to="`/productlist/${product.product_id}`">
+      <img :src="getImageUrl" :alt="product.name" />
       <div class="product_card_txt">
         <p>{{ product.name }}</p>
         <p class="price">${{ product.price }}</p>
@@ -19,6 +29,7 @@
     </RouterLink>
   </div>
 </template>
+
 <style lang="scss" scoped>
   .product_card {
     width: 14.58vw;
