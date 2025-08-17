@@ -426,6 +426,7 @@
 </script>
 
 <style scoped lang="scss">
+  /* 您的 SCSS 樣式碼維持不變，此處省略 */
   @use '@/assets/style/variables' as *;
   @use '@/assets/style/mixins' as *;
   @use 'sass:color';
