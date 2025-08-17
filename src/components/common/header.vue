@@ -4,6 +4,8 @@
   import { computed, ref, onMounted, onUnmounted } from 'vue'
   import { useAuthStore } from '@/stores/auth'
   import Button from '@/components/buttons/button.vue'
+  import defaultAvatar from '@/assets/images/member-system/avatar.svg'
+
   const authStore = useAuthStore()
   const route = useRoute()
   const router = useRouter()
@@ -102,6 +104,8 @@
     }
   }
 
+  const avatar = authStore.user.avatar_url ?? defaultAvatar
+
   onMounted(() => {
     window.addEventListener('scroll', handleScroll)
   })
@@ -148,7 +152,7 @@
           @mouseenter="open_member_dropdown"
           @mouseleave="close_member_dropdown"
         >
-          <img src="@/assets/images/member-system/head.png" alt="User Avatar" id="user_avatar" />
+          <img :src="avatar" alt="User Avatar" id="user_avatar" />
           <transition name="slide-fade">
             <div v-if="ismember_dropdown" id="member_dropdown_menu">
               <ul>
@@ -168,7 +172,7 @@
       <!-- 手機導覽列 -->
       <nav id="mobile_nav">
         <router-link v-if="authStore.isLoggedIn" to="/member" @click="edu_linkclick">
-          <img src="@/assets/images/member-system/head.png" alt="User Avatar" id="user_avatar" />
+          <img :src="avatar" alt="User Avatar" id="user_avatar" />
         </router-link>
         <router-link v-else to="/login" @click="edu_linkclick">
           <i class="fa-solid fa-user"></i>

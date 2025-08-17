@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   function login(memberData) {
     user.value = memberData
-    localStorage.setItem('user', JSON.stringify(memberData))
+    localStorage.setItem('user', JSON.stringify(memberData.member_id))
   }
 
   async function logout() {

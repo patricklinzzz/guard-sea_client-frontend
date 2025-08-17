@@ -7,11 +7,7 @@
       <h3>編輯會員資料</h3>
       <form @submit.prevent="handleProfileUpdate">
         <div class="avatar_editor">
-          <img
-            src="@/assets/images/member-system/head.png"
-            alt="Avatar"
-            class="avatar_placeholder"
-          />
+          <img :src="formData.avatar_url" alt="Avatar" class="avatar_placeholder" />
           <button type="button" class="edit_avatar_btn">
             <i class="fas fa-pencil-alt"></i>
           </button>
@@ -34,9 +30,9 @@
             <label for="gender">性別</label>
             <div class="select_wrapper">
               <select id="gender" v-model="formData.gender">
-                <option value="男">男</option>
-                <option value="女">女</option>
-                <option value="不指定">不指定</option>
+                <option value="male">男</option>
+                <option value="female">女</option>
+                <option value="other">不透露</option>
               </select>
             </div>
           </div>
@@ -62,17 +58,6 @@
             </label>
           </div>
 
-          <div class="form_group">
-            <label for="password">密碼</label>
-            <input
-              type="password"
-              id="password"
-              v-model="formData.password"
-              placeholder="********"
-              disabled
-            />
-          </div>
-
           <div class="form_actions">
             <button type="submit" class="btn btn_save">儲存變更</button>
             <button type="button" class="btn btn_cancel" @click="cancelChanges">取消變更</button>
@@ -87,18 +72,23 @@
   import { ref, onMounted } from 'vue'
   import VueDatePicker from '@vuepic/vue-datepicker'
   import '@vuepic/vue-datepicker/dist/main.css'
+  import defaultAvatar from '@/assets/images/member-system/avatar.svg'
+  import { useAuthStore } from '@/stores/auth'
+
+  const authStore = useAuthStore()
+
+  const user = authStore.user
+  const formData = ref({
+    avatar_url: user.avatar_url || defaultAvatar,
+    name: user.fullname || '',
+    email: user.email || '',
+    phone: user.phone_number || '',
+    gender: user.gender || '',
+    address: user.address || '',
+    birthdate: user.birthday || '',
+  })
 
   let originalData = {}
-
-  const formData = ref({
-    name: 'Jay',
-    email: 'jay123243@gmail.com',
-    phone: '0900000000',
-    gender: '男',
-    address: '',
-    birthdate: '',
-    password: '********',
-  })
 
   onMounted(() => {
     originalData = JSON.parse(JSON.stringify(formData.value))
