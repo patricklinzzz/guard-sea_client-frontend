@@ -45,15 +45,15 @@
             <h2>登入</h2>
             <form @submit.prevent="handleLogin">
               <div class="form-group">
-                <label for="login-email">電子郵件</label>
+                <label for="login-username">帳號</label>
                 <input
-                  type="email"
-                  id="login-email"
-                  v-model="email"
-                  :class="{ 'has-error': emailError }"
-                  @input="clearError('email')"
+                  type="text"
+                  id="login-username"
+                  v-model="username"
+                  :class="{ 'has-error': usernameError }"
+                  @input="clearError('username')"
                 />
-                <div v-if="emailError" class="error-message">{{ emailError }}</div>
+                <div v-if="usernameError" class="error-message">{{ usernameError }}</div>
               </div>
               <div class="form-group">
                 <label for="login-password">密碼</label>
@@ -140,6 +140,17 @@
                 <div v-if="emailError" class="error-message">{{ emailError }}</div>
               </div>
               <div class="form-group">
+                <label for="register-username">帳號</label>
+                <input
+                  type="text"
+                  id="register-username"
+                  v-model="username"
+                  :class="{ 'has-error': usernameError }"
+                  @input="clearError('username')"
+                />
+                <div v-if="usernameError" class="error-message">{{ usernameError }}</div>
+              </div>
+              <div class="form-group">
                 <label for="register-password">密碼 (至少6個字元)</label>
                 <div class="password-wrapper">
                   <input
@@ -224,14 +235,15 @@
   import { ref, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
   import { useAuthStore } from '@/stores/auth'
-
+  import axios from 'axios'
+  
   const router = useRouter()
   const authStore = useAuthStore()
 
-  // !!! 請務必修改成您自己的後端 API 路徑 !!!
-  const API_BASE_URL = 'http://localhost/guardsea/api'
+  const API_BASE_URL = import.meta.env.VITE_API_BASE
 
   const currentMode = ref('login')
+  const username = ref('')
   const email = ref('')
   const password = ref('')
   const passwordConfirm = ref('')
@@ -241,6 +253,7 @@
   const termsAccepted = ref(false)
   const rememberMe = ref(false)
 
+  const usernameError = ref('')
   const nameError = ref('')
   const genderError = ref('')
   const emailError = ref('')
@@ -248,14 +261,15 @@
   const passwordConfirmError = ref('')
 
   onMounted(() => {
-    const storedEmail = localStorage.getItem('rememberedEmail')
-    if (storedEmail) {
-      email.value = storedEmail
+    const storedUsername = localStorage.getItem('rememberedUsername')
+    if (storedUsername) {
+      username.value = storedUsername
       rememberMe.value = true
     }
   })
 
   const clearAllErrors = () => {
+    usernameError.value = ''
     nameError.value = ''
     genderError.value = ''
     emailError.value = ''
@@ -264,6 +278,7 @@
   }
 
   const clearError = (field) => {
+    if (field === 'username') usernameError.value = ''
     if (field === 'name') nameError.value = ''
     if (field === 'gender') genderError.value = ''
     if (field === 'email') emailError.value = ''
@@ -273,6 +288,7 @@
 
   const changeMode = (mode) => {
     currentMode.value = mode
+    username.value = ''
     email.value = ''
     password.value = ''
     passwordConfirm.value = ''
@@ -289,17 +305,17 @@
 
   const handleLogin = async () => {
     clearAllErrors()
-    if (!email.value || !password.value) {
-      if (!email.value) emailError.value = '請輸入電子郵件'
+    if (!username.value || !password.value) {
+      if (!username.value) usernameError.value = '請輸入帳號'
       if (!password.value) passwordError.value = '請輸入密碼'
       return
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/member/login.php`, {
+      const response = await fetch(`${API_BASE_URL}/members/login.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.value, password: password.value }),
+        body: JSON.stringify({ username: username.value, password: password.value }),
       })
 
       const result = await response.json()
@@ -307,9 +323,9 @@
       if (response.ok) {
         alert(result.message)
         if (rememberMe.value) {
-          localStorage.setItem('rememberedEmail', email.value)
+          localStorage.setItem('rememberedUsername', username.value)
         } else {
-          localStorage.removeItem('rememberedEmail')
+          localStorage.removeItem('rememberedUsername')
         }
         authStore.login(result.member_id, result.fullname)
         router.push({ path: '/member' })
@@ -325,6 +341,11 @@
   const handleRegister = async () => {
     clearAllErrors()
     let isValid = true
+
+    if (!username.value) {
+      usernameError.value = '請輸入帳號'
+      isValid = false
+    }
 
     if (!name.value) {
       nameError.value = '請輸入姓名'
@@ -360,6 +381,7 @@
     }
 
     const payload = {
+      username: username.value,
       name: name.value,
       gender: gender.value,
       email: email.value,
@@ -367,23 +389,20 @@
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/member/register.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-
-      const result = await response.json()
-
-      if (response.ok) {
-        alert(result.message)
-        changeMode('login')
-      } else {
-        alert(result.error)
-      }
+      const response = await axios.post(`${API_BASE_URL}/members/register.php`, payload)
+      alert(response.data.message)
+      changeMode('login')
     } catch (error) {
-      console.error('註冊時發生網路錯誤:', error)
-      alert('註冊失敗，請檢查網路連線。')
+      if (error.response) {
+        console.error('後端回應錯誤:', error.response.data.error)
+        alert(error.response.data.error)
+      } else if (error.request) {
+        console.error('請求錯誤:', error.request)
+        alert('註冊失敗，伺服器無回應。')
+      } else {
+        console.error('前端設定錯誤:', error.message)
+        alert('註冊失敗，請檢查前端設定。')
+      }
     }
   }
 
