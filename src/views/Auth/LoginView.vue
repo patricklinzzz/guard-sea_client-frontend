@@ -52,6 +52,7 @@
                   v-model="username"
                   :class="{ 'has-error': usernameError }"
                   @input="clearError('username')"
+                  autocomplete="username"
                 />
                 <div v-if="usernameError" class="error-message">{{ usernameError }}</div>
               </div>
@@ -64,6 +65,7 @@
                     v-model="password"
                     :class="{ 'has-error': passwordError }"
                     @input="clearError('password')"
+                    autocomplete="current-password"
                   />
                   <span class="toggle-password" @click="togglePasswordVisibility">
                     <i
@@ -236,7 +238,7 @@
   import { useRouter } from 'vue-router'
   import { useAuthStore } from '@/stores/auth'
   import axios from 'axios'
-  
+
   const router = useRouter()
   const authStore = useAuthStore()
 
@@ -311,30 +313,32 @@
       return
     }
 
+    const payload = {
+      username: username.value,
+      password: password.value,
+    }
+
     try {
-      const response = await fetch(`${API_BASE_URL}/members/login.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username.value, password: password.value }),
-      })
+      const response = await axios.post(`${API_BASE_URL}/members/login.php`, payload)
 
-      const result = await response.json()
-
-      if (response.ok) {
-        alert(result.message)
-        if (rememberMe.value) {
-          localStorage.setItem('rememberedUsername', username.value)
-        } else {
-          localStorage.removeItem('rememberedUsername')
-        }
-        authStore.login(result.member_id, result.fullname)
-        router.push({ path: '/member' })
+      if (rememberMe.value) {
+        localStorage.setItem('rememberedUsername', username.value)
       } else {
-        alert(result.error)
+        localStorage.removeItem('rememberedUsername')
       }
+      authStore.login(response.data.member)
+      router.push({ path: '/member' })
     } catch (error) {
-      console.error('登入時發生網路錯誤:', error)
-      alert('登入失敗，請檢查網路連線。')
+      if (error.response) {
+        console.error('後端回應錯誤:', error.response.data.error)
+        alert(error.response.data.error)
+      } else if (error.request) {
+        console.error('請求錯誤:', error.request)
+        alert('登入失敗，伺服器無回應。')
+      } else {
+        console.error('前端設定錯誤:', error.message)
+        alert('登入失敗，請檢查前端設定。')
+      }
     }
   }
 
@@ -412,17 +416,10 @@
       return
     }
     console.log('Password reset requested for:', email.value)
-    alert('密碼重設信已寄出（此為展示訊息）')
+    // alert('密碼重設信已寄出（此為展示訊息）')
+    alert('密碼重設功能尚未開放')
   }
 
-  const sendVerificationCode = () => {
-    if (email.value) {
-      console.log('Sending verification code to:', email.value)
-      alert('驗證碼功能尚未開放')
-    } else {
-      emailError.value = '請先輸入電子郵件'
-    }
-  }
 </script>
 
 <style scoped lang="scss">
