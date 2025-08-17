@@ -14,13 +14,13 @@
   const isEvent = isActive('/event')
   const isNew = isActive('/new')
   //登出
-  function logout() {
-    if (confirm('您確定要登出嗎？')) {
+  const logout = async () => {
+    const ok = await authStore.logout()
+    if (ok) {
       menu_open.value = false
-      dropdown_open.value = false
-      ismember_dropdown.value = false
-      authStore.logout()
-      router.push({ name: 'home' })
+      router.push({ name: 'login' })
+    } else {
+      alert('登出失敗')
     }
   }
   //手機menu
