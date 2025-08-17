@@ -6,42 +6,44 @@ const baseUrl = import.meta.env.VITE_API_BASE
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
-  const storedUser = localStorage.getItem('user')
-  if (storedUser) {
-    try {
-      user.value = JSON.parse(storedUser)
-    } catch (e) {
-      console.error(e)
-      localStorage.removeItem('user')
-    }
-  }
 
   const isLoggedIn = computed(() => user.value !== null)
 
-  function login(memberData) {
-    user.value = memberData
-    localStorage.setItem('user', JSON.stringify(memberData.member_id))
-  }
-
-  async function logout() {
-    if (confirm('您確定要登出嗎？')) {
-      try {
-        const apiUrl = `${baseUrl}/auth/logout.php`
-        const response = await axios.get(apiUrl)
-
-        if (response.data.success) {
-          user.value = null
-          localStorage.removeItem('user')
-          return true
-        } else {
-          throw new Error('登出失敗')
-        }
-      } catch (error) {
-        console.error(error.message)
-        return false
+  async function fetchUser() {
+    try {
+      const response = await axios.get(`${baseUrl}/auth/get_user_info.php`, {
+        withCredentials: true,
+      })
+      if (response.data.success) {
+        user.value = response.data.member
+        return true
       }
+    } catch (error) {
+      user.value = null
+      return false
     }
   }
 
-  return { user, isLoggedIn, login, logout }
+  function login(memberData) {
+    user.value = memberData
+  }
+
+  async function logout() {
+    try {
+      const apiUrl = `${baseUrl}/auth/logout.php`
+      const response = await axios.get(apiUrl)
+
+      if (response.data.success) {
+        user.value = null
+        return true
+      } else {
+        throw new Error('登出失敗')
+      }
+    } catch (error) {
+      console.error(error.message)
+      return false
+    }
+  }
+
+  return { user, isLoggedIn, login, logout, fetchUser }
 })

@@ -3,7 +3,7 @@
     <div class="member_container">
       <aside class="member_sidebar">
         <div class="user_profile_card">
-          <h3 class="greeting">Hi {{user_name}}~</h3>
+          <h3 class="greeting">Hi {{ user_name }}~</h3>
           <div class="avatar">
             <img :src="avatar" alt="User Avatar" />
           </div>
@@ -48,16 +48,18 @@
   const router = useRouter()
 
   const logout = async () => {
-    const ok = await authStore.logout()
-    if (ok) {
-      router.push({ name: 'login' })
-    } else {
-      alert('登出失敗')
+    if (confirm('您確定要登出嗎？')) {
+      const ok = await authStore.logout()
+      if (ok) {
+        router.push({ name: 'login' })
+      } else {
+        alert('登出失敗')
+      }
     }
   }
 
   const user_name = authStore.user.fullname
-  const avatar = authStore.user.avatar_url ?? defaultAvatar
+  const avatar = authStore.user?.avatar_url ?? defaultAvatar
 </script>
 
 <style scoped lang="scss">

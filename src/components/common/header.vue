@@ -17,12 +17,14 @@
   const isNew = isActive('/new')
   //登出
   const logout = async () => {
-    const ok = await authStore.logout()
-    if (ok) {
-      menu_open.value = false
-      router.push({ name: 'login' })
-    } else {
-      alert('登出失敗')
+    if (confirm('您確定要登出嗎？')) {
+      const ok = await authStore.logout()
+      if (ok) {
+        menu_open.value = false
+        router.push({ name: 'login' })
+      } else {
+        alert('登出失敗')
+      }
     }
   }
   //手機menu
@@ -104,7 +106,7 @@
     }
   }
 
-  const avatar = authStore.user.avatar_url ?? defaultAvatar
+  const avatar = authStore.user?.avatar_url ?? defaultAvatar
 
   onMounted(() => {
     window.addEventListener('scroll', handleScroll)
@@ -220,7 +222,7 @@
           <router-link to="/member" v-show="authStore.isLoggedIn" @click="edu_linkclick">
             會員中心
           </router-link>
-          <a @click="logout" v-show="authStore.isLoggedIn" style="border: 0px;">登出</a>
+          <a @click="logout" v-show="authStore.isLoggedIn" style="border: 0px">登出</a>
           <router-link to="/login" v-show="!authStore.isLoggedIn" @click="edu_linkclick">
             登入會員
           </router-link>

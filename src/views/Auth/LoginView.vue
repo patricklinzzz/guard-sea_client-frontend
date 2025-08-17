@@ -149,6 +149,7 @@
                   v-model="username"
                   :class="{ 'has-error': usernameError }"
                   @input="clearError('username')"
+                  autocomplete="username"
                 />
                 <div v-if="usernameError" class="error-message">{{ usernameError }}</div>
               </div>
@@ -161,6 +162,7 @@
                     v-model="password"
                     :class="{ 'has-error': passwordError }"
                     @input="clearError('password')"
+                    autocomplete="new-password"
                   />
                   <span class="toggle-password" @click="togglePasswordVisibility">
                     <i
@@ -179,6 +181,7 @@
                     v-model="passwordConfirm"
                     :class="{ 'has-error': passwordConfirmError }"
                     @input="clearError('passwordConfirm')"
+                    autocomplete="new-password"
                   />
                 </div>
                 <div v-if="passwordConfirmError" class="error-message">
