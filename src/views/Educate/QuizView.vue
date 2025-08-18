@@ -3,7 +3,7 @@
   import ScoreBubble from '@/components/edu/score_bubble.vue'
   import BubbleCircle from '@/components/edu/BubbleCircle.vue'
   import LightRays from '@/components/edu/LightRays.vue'
-  import { RouterLink } from 'vue-router'
+  import { RouterLink, onBeforeRouteLeave } from 'vue-router'
   import { gsap } from 'gsap'
   import { ref, computed, inject, onMounted, onUnmounted } from 'vue'
   import AnimatedAnimal from '@/components/event/AnimatedAnimal.vue'
@@ -11,6 +11,7 @@
   import doge from '@/assets/images/Educate/quiz/doge.png'
   import dolphin from '@/assets/images/dec/dolphin.svg'
   import axios from 'axios'
+  import { useQuizStore } from '@/stores/quiz_state'
 
   const quiz_cur = ref(null)
   const question_block_ref = ref(null)
@@ -18,14 +19,21 @@
   const quiz_type_selected = ref(null)
   const quiz_chosen = ref(null)
   const r = ref(80)
+  const quizStore = useQuizStore()
 
-  const quiz_start = ref(false)
-  const start_anime_end = ref(false)
-  const option_shown = ref(true)
-  const show_result = ref(false)
-  const score = ref(0)
+  // const quiz_start = ref(false)
+  // const start_anime_end = ref(false)
+  // const option_shown = ref(true)
+  // const show_result = ref(false)
+  // const score = ref(0)
   const result_next_clicked = ref(false)
   const redeem_coupon_clicked = ref(false)
+
+  const questions = ref([])
+  const quizzes = ref([])
+  const quiz_map = {}
+  const loading = ref(true)
+  const baseUrl = import.meta.env.VITE_API_BASE
 
   const pass_grade = 60
   const q_index = ref(0)
@@ -40,10 +48,12 @@
   const triggerSelfRefresh = () => {
     if (forceQuizRefresh) {
       forceQuizRefresh()
+      quizStore.quizReset()
     } else {
       console.warn('forceQuizRefresh not injected!')
     }
   }
+
   const onLeave = (el, done) => {
     gsap.to(el, {
       opacity: 0,
@@ -58,7 +68,7 @@
       duration: 0.5,
       ease: 'power2.in',
       onComplete: () => {
-        start_anime_end.value = true
+        quizStore.start_anime_end = true
         done()
       },
     })
@@ -106,12 +116,12 @@
         opacity: 0,
         ease: 'power2.out',
         onComplete: () => {
-          option_shown.value = false
+          quizStore.option_shown = false
         },
       })
       if (option == quiz_cur.value.answer) {
         question_num.value = 'O'
-        score.value += 10
+        quizStore.score += 10
       } else {
         question_num.value = 'X'
       }
@@ -126,7 +136,7 @@
   const start_quiz = () => {
     if (quiz_type_selected.value != null) {
       quiz_chosen.value = questions.value.filter((q) => q.quiz_id == quiz_type_selected.value + 1)
-      quiz_start.value = true
+      quizStore.quiz_start = true
       quiz_cur.value = quiz_chosen.value[q_order[q_index.value]]
     } else {
       window.alert('pick a topic')
@@ -143,7 +153,7 @@
           ease: 'power2.out',
           onComplete: () => {
             quiz_cur.value = quiz_chosen.value[q_order[++q_index.value]]
-            option_shown.value = true
+            quizStore.option_shown = true
           },
         })
         .to(question_block_ref.value, {
@@ -157,24 +167,41 @@
         opacity: 0,
         ease: 'power2.out',
         onComplete: () => {
-          show_result.value = true
+          quizStore.show_result = true
         },
       })
     }
   }
 
-  const result_next = (navigate) => {
-    result_next_clicked.value = true
-    if (score.value >= pass_grade) {
-      //if not logged in: alert login
-      if (coupon_redeemable) {
-        //generate coupon code, record score, coupon code to backend
+  const check_login = async () => {
+    try {
+      const login_api = `${baseUrl}/member/check_login.php`
 
-        //activate coupon view
-        score.value = -1
+      const login_r = await axios.get(login_api)
+      const login_status = login_r.data
+      return login_status.isLoggedIn
+    } catch (err) {
+      console.error('Fetch 錯誤：', err)
+      return false
+    }
+  }
+
+  const result_next = async (navigate) => {
+    if (quizStore.score >= pass_grade) {
+      if (!(await check_login())) {
+        quizStore.log_in_prompted = true
+        return
       } else {
-        //coupon redeemed, no score recorded
-        score.value = -1
+        if (coupon_redeemable) {
+          result_next_clicked.value = true
+          //generate coupon code, record score, coupon code to backend
+
+          //activate coupon view
+          quizStore.score = -1
+        } else {
+          //coupon redeemed, no score recorded
+          quizStore.score = -1
+        }
       }
     } else {
       triggerSelfRefresh()
@@ -183,18 +210,13 @@
   }
 
   const skipResult = () => {
-    score.value = Math.floor(Math.random() * 10) * 10
+    quizStore.score = Math.floor(Math.random() * 10) * 10
     q_index.value = 9
     answered(4)
   }
 
-  const questions = ref([])
-  const quizzes = ref([])
-  const quiz_map = {}
-  const loading = ref(true)
   const fetchQuiz = async () => {
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE
       const question_api = `${baseUrl}/questions/get_questions.php`
       const quiz_api = `${baseUrl}/quiz/get_quiz.php`
 
@@ -230,17 +252,17 @@
         ? '已領取專屬優惠卷快來去商店選購吧！'
         : '30天內已領取過優惠卷!'
     }
-    return score.value >= pass_grade
+    return quizStore.score >= pass_grade
       ? '您已具備維護海洋的基礎知識。 您對海洋污染的認知， 是邁向解決問題的重要一步！'
       : '您已經邁出關心海洋的一步。別灰心！再試一次挑戰成功就能獲得專屬折價券！'
   })
   const result_text_bot = computed(() => {
-    return score.value >= pass_grade
+    return quizStore.score >= pass_grade
       ? '恭喜獲得商品折價券！ 您的每一次消費， 都將支持我們的海洋保育工作。'
       : '每一次嘗試，都是守護海洋的開始'
   })
   const result_btn_next_text = computed(() => {
-    return score.value >= pass_grade ? '領取折價券' : '重新測驗'
+    return quizStore.score >= pass_grade ? '領取折價券' : '重新測驗'
   })
 
   const ct = computed(() => {
@@ -297,11 +319,11 @@
       >
         {{ ct }}
       </Button>
-      <h2 style="color: white">score: {{ score }}</h2>
+      <h2 style="color: white">score: {{ quizStore.score }}</h2>
     </div>
     <div class="content_block">
       <Transition @leave="onLeaveStart">
-        <div v-if="!quiz_start" class="quiz_main">
+        <div v-if="!quizStore.quiz_start" class="quiz_main">
           <ScoreBubble v-if="!isMobile" class="quiz_title" score="110" size="160"></ScoreBubble>
           <div v-if="isMobile" class="mobile_title">
             <h1>守護者挑戰</h1>
@@ -325,7 +347,11 @@
         </div>
       </Transition>
       <Transition @before-enter="onBeforeEnter" @enter="onEnter">
-        <div v-if="start_anime_end && !show_result" class="question_block" ref="question_block_ref">
+        <div
+          v-if="quizStore.start_anime_end && !quizStore.show_result"
+          class="question_block"
+          ref="question_block_ref"
+        >
           <div class="question_num">
             <Transition
               mode="out-in"
@@ -338,7 +364,7 @@
           </div>
           <div class="text">
             <h3>{{ quiz_cur.question_description }}</h3>
-            <ul v-if="option_shown" ref="options_ref">
+            <ul v-if="quizStore.option_shown" ref="options_ref">
               <li @click="answered(1)">
                 <div>1</div>
                 <p>{{ quiz_cur.option_1 }}</p>
@@ -353,7 +379,7 @@
               </li>
             </ul>
             <Transition @before-enter="onBeforeEnter" @enter="onEnter" :css="false">
-              <div v-if="!option_shown">
+              <div v-if="!quizStore.option_shown">
                 <p class="sub-text">正確答案:</p>
                 <div class="answer">
                   <div>{{ quiz_cur.answer }}</div>
@@ -368,9 +394,9 @@
         </div>
       </Transition>
       <Transition @before-enter="onBeforeEnter" @enter="onEnter" @leave="onLeave" :css="false">
-        <div v-if="show_result" class="final_result">
+        <div v-if="quizStore.show_result" class="final_result">
           <div class="bubble_score">
-            <ScoreBubble size="80" :score="score"></ScoreBubble>
+            <ScoreBubble size="80" :score="quizStore.score"></ScoreBubble>
           </div>
           <div class="text">
             <Transition

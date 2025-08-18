@@ -1,3 +1,36 @@
+<script setup>
+  import { ref, onMounted } from 'vue'
+  import VueDatePicker from '@vuepic/vue-datepicker'
+  import '@vuepic/vue-datepicker/dist/main.css'
+
+  let originalData = {}
+
+  const formData = ref({
+    name: 'Jay',
+    email: 'jay123243@gmail.com',
+    phone: '0900000000',
+    gender: '男',
+    address: '',
+    birthdate: '',
+    password: '********',
+  })
+
+  onMounted(() => {
+    originalData = JSON.parse(JSON.stringify(formData.value))
+  })
+
+  const handleProfileUpdate = () => {
+    console.log('Updating profile:', formData.value)
+    originalData = JSON.parse(JSON.stringify(formData.value))
+    alert('會員資料已儲存')
+  }
+
+  const cancelChanges = () => {
+    formData.value = JSON.parse(JSON.stringify(originalData))
+    console.log('Changes cancelled and form has been reset.')
+  }
+</script>
+
 <template>
   <main class="member_content">
     <div class="content_header">
@@ -82,39 +115,6 @@
     </div>
   </main>
 </template>
-
-<script setup>
-  import { ref, onMounted } from 'vue'
-  import VueDatePicker from '@vuepic/vue-datepicker'
-  import '@vuepic/vue-datepicker/dist/main.css'
-
-  let originalData = {}
-
-  const formData = ref({
-    name: 'Jay',
-    email: 'jay123243@gmail.com',
-    phone: '0900000000',
-    gender: '男',
-    address: '',
-    birthdate: '',
-    password: '********',
-  })
-
-  onMounted(() => {
-    originalData = JSON.parse(JSON.stringify(formData.value))
-  })
-
-  const handleProfileUpdate = () => {
-    console.log('Updating profile:', formData.value)
-    originalData = JSON.parse(JSON.stringify(formData.value))
-    alert('會員資料已儲存')
-  }
-
-  const cancelChanges = () => {
-    formData.value = JSON.parse(JSON.stringify(originalData))
-    console.log('Changes cancelled and form has been reset.')
-  }
-</script>
 
 <style scoped lang="scss">
   @use '@/assets/style/variables' as *;
