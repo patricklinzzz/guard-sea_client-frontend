@@ -3,7 +3,7 @@
   import ScoreBubble from '@/components/edu/score_bubble.vue'
   import BubbleCircle from '@/components/edu/BubbleCircle.vue'
   import LightRays from '@/components/edu/LightRays.vue'
-  import { RouterLink, onBeforeRouteLeave } from 'vue-router'
+  import { RouterLink, useRouter } from 'vue-router'
   import { gsap } from 'gsap'
   import { ref, computed, inject, onMounted, onUnmounted } from 'vue'
   import AnimatedAnimal from '@/components/event/AnimatedAnimal.vue'
@@ -20,12 +20,8 @@
   const quiz_chosen = ref(null)
   const r = ref(80)
   const quizStore = useQuizStore()
+  const router = useRouter()
 
-  // const quiz_start = ref(false)
-  // const start_anime_end = ref(false)
-  // const option_shown = ref(true)
-  // const show_result = ref(false)
-  // const score = ref(0)
   const result_next_clicked = ref(false)
   const redeem_coupon_clicked = ref(false)
 
@@ -35,14 +31,14 @@
   const loading = ref(true)
   const baseUrl = import.meta.env.VITE_API_BASE
 
-  const pass_grade = 60
+  const pass_grade = ref(0)
   const q_index = ref(0)
   const bubble_text = ['海洋生物', '海洋汙染', '過度捕撈', '生境破壞']
   let q_order = [...Array(10).keys()]
   const question_num = ref('Q' + (q_index.value + 1))
 
-  // date.now - last_date_redeemed >= 0
   const coupon_redeemable = ref(true)
+  const redeemable_date = ref('')
 
   const forceQuizRefresh = inject('forceQuizRefresh')
   const triggerSelfRefresh = () => {
@@ -138,6 +134,7 @@
       quiz_chosen.value = questions.value.filter((q) => q.quiz_id == quiz_type_selected.value + 1)
       quizStore.quiz_start = true
       quiz_cur.value = quiz_chosen.value[q_order[q_index.value]]
+      pass_grade.value = quizzes.value[quiz_type_selected.value]['pass_grade']
     } else {
       window.alert('pick a topic')
     }
@@ -175,7 +172,7 @@
 
   const check_login = async () => {
     try {
-      const login_api = `${baseUrl}/member/check_login.php`
+      const login_api = `${baseUrl}/members/check_login.php`
 
       const login_r = await axios.get(login_api)
       const login_status = login_r.data
@@ -187,21 +184,26 @@
   }
 
   const result_next = async (navigate) => {
-    if (quizStore.score >= pass_grade) {
+    if (quizStore.score >= pass_grade.value) {
       if (!(await check_login())) {
         quizStore.log_in_prompted = true
+        alert('登入領取優惠卷!')
+        router.push({ path: '/login' })
         return
       } else {
-        if (coupon_redeemable) {
-          result_next_clicked.value = true
-          //generate coupon code, record score, coupon code to backend
-
-          //activate coupon view
+        quizStore.log_in_prompted = false
+        result_next_clicked.value = true
+          try {
+            const coupon_post = `${baseUrl}/coupon/post_quiz_coupon.php`
+            const coupon_r = await axios.post(coupon_post, {quiz_id: quiz_type_selected.value + 1})
+            coupon_redeemable.value = coupon_r.data.redeemable
+            if(!coupon_redeemable.value){
+              redeemable_date.value = coupon_r.data.redeemable_date
+            }
+          } catch (err) {
+            console.error('Fetch 錯誤：', err)
+          }
           quizStore.score = -1
-        } else {
-          //coupon redeemed, no score recorded
-          quizStore.score = -1
-        }
       }
     } else {
       triggerSelfRefresh()
@@ -250,19 +252,19 @@
     if (result_next_clicked.value) {
       return coupon_redeemable.value
         ? '已領取專屬優惠卷快來去商店選購吧！'
-        : '30天內已領取過優惠卷!'
+        : `近期已領取過優惠卷，下次可領取日期:${redeemable_date.value}`
     }
-    return quizStore.score >= pass_grade
+    return quizStore.score >= pass_grade.value
       ? '您已具備維護海洋的基礎知識。 您對海洋污染的認知， 是邁向解決問題的重要一步！'
       : '您已經邁出關心海洋的一步。別灰心！再試一次挑戰成功就能獲得專屬折價券！'
   })
   const result_text_bot = computed(() => {
-    return quizStore.score >= pass_grade
+    return quizStore.score >= pass_grade.value
       ? '恭喜獲得商品折價券！ 您的每一次消費， 都將支持我們的海洋保育工作。'
       : '每一次嘗試，都是守護海洋的開始'
   })
   const result_btn_next_text = computed(() => {
-    return quizStore.score >= pass_grade ? '領取折價券' : '重新測驗'
+    return quizStore.score >= pass_grade.value ? '領取折價券' : '重新測驗'
   })
 
   const ct = computed(() => {
