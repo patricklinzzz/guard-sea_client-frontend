@@ -5,6 +5,13 @@
   import protect from '@/assets/images/about/advantage/protect.jpg'
   import diver from '@/assets/images/about/diver.png'
   import seaturtle from '@/assets/images/about/seaturtle.png'
+  import dolphinAll from '@/assets/images/about/dolphin/dolphinAll.png'
+  import whaleAll from '@/assets/images/about/whale/whaleAll.png'
+  import coralorange from '@/assets/images/about/ourteam/coralorange.png'
+  import coralyellow from '@/assets/images/about/ourteam/coralyellow.png'
+  import team1 from '@/assets/images/about/ourteam/team1.jpg'
+  import team2 from '@/assets/images/about/ourteam/team2.jpg'
+  import team3 from '@/assets/images/about/ourteam/team3.jpg'
 </script>
 
 <template>
@@ -59,9 +66,65 @@
         </div>
       </div>
 
-      <div class="dolphin"></div>
-      <div class="whale"></div>
+      <div class="protect">
+        <div class="dolphin"><img :src="dolphinAll" alt="" /></div>
+        <p>讓更多人了解海洋的生命，願意一起守護牠們的家</p>
+        <div class="whale"><img :src="whaleAll" alt="" /></div>
+      </div>
+
+      <div class="ourTeam">
+        <div class="team_left">
+          <div class="corals">
+            <img :src="coralyellow" alt="" />
+            <img :src="coralorange" alt="" />
+          </div>
+
+          <div class="team_pic">
+            <div>
+              <img :src="team1" alt="" />
+            </div>
+            <div>
+              <img :src="team2" alt="" />
+            </div>
+            <div>
+              <img :src="team3" alt="" />
+            </div>
+          </div>
+        </div>
+
+        <div class="team_right">
+          <h3>GuardSea團隊夥伴</h3>
+          <p>我們來自不同的領域</p>
+          <p>設計師、生態學家、教育者、工程師，但都有一個共同點</p>
+          <p>“ 我們都愛這片海 ”</p>
+        </div>
+      </div>
     </section>
+
+    <secition id="cooperate">
+      <figure>
+        <div><img src="" alt="" /></div>
+        <figcaption>多所大學研究團隊</figcaption>
+      </figure>
+
+      <figure>
+        <div><img src="" alt="" /></div>
+        <figcaption>國內外海洋保育單位</figcaption>
+      </figure>
+
+      <figure>
+        <div><img src="" alt="" /></div>
+        <figcaption>社群媒體創作者</figcaption>
+      </figure>
+
+      <figure>
+        <div><img src="" alt="" /></div>
+        <figcaption>熱心有愛的志工們</figcaption>
+      </figure>
+    </secition>
+
+    <section id="">輪播圖</section>
+    <section id="">小魚穿梭</section>
   </main>
 </template>
 
