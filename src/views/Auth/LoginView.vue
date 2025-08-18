@@ -45,15 +45,16 @@
             <h2>登入</h2>
             <form @submit.prevent="handleLogin">
               <div class="form-group">
-                <label for="login-email">電子郵件</label>
+                <label for="login-username">帳號</label>
                 <input
-                  type="email"
-                  id="login-email"
-                  v-model="email"
-                  :class="{ 'has-error': emailError }"
-                  @input="clearError('email')"
+                  type="text"
+                  id="login-username"
+                  v-model="username"
+                  :class="{ 'has-error': usernameError }"
+                  @input="clearError('username')"
+                  autocomplete="username"
                 />
-                <div v-if="emailError" class="error-message">{{ emailError }}</div>
+                <div v-if="usernameError" class="error-message">{{ usernameError }}</div>
               </div>
               <div class="form-group">
                 <label for="login-password">密碼</label>
@@ -64,6 +65,7 @@
                     v-model="password"
                     :class="{ 'has-error': passwordError }"
                     @input="clearError('password')"
+                    autocomplete="current-password"
                   />
                   <span class="toggle-password" @click="togglePasswordVisibility">
                     <i
@@ -140,6 +142,18 @@
                 <div v-if="emailError" class="error-message">{{ emailError }}</div>
               </div>
               <div class="form-group">
+                <label for="register-username">帳號</label>
+                <input
+                  type="text"
+                  id="register-username"
+                  v-model="username"
+                  :class="{ 'has-error': usernameError }"
+                  @input="clearError('username')"
+                  autocomplete="username"
+                />
+                <div v-if="usernameError" class="error-message">{{ usernameError }}</div>
+              </div>
+              <div class="form-group">
                 <label for="register-password">密碼 (至少6個字元)</label>
                 <div class="password-wrapper">
                   <input
@@ -148,6 +162,7 @@
                     v-model="password"
                     :class="{ 'has-error': passwordError }"
                     @input="clearError('password')"
+                    autocomplete="new-password"
                   />
                   <span class="toggle-password" @click="togglePasswordVisibility">
                     <i
@@ -166,6 +181,7 @@
                     v-model="passwordConfirm"
                     :class="{ 'has-error': passwordConfirmError }"
                     @input="clearError('passwordConfirm')"
+                    autocomplete="new-password"
                   />
                 </div>
                 <div v-if="passwordConfirmError" class="error-message">
@@ -224,15 +240,15 @@
   import { ref, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
   import { useAuthStore } from '@/stores/auth'
+  import axios from 'axios'
 
   const router = useRouter()
   const authStore = useAuthStore()
 
-  // --- ★★★ 第一個修改點 ★★★ ---
-  // API 路徑已修改為您線上的主機路徑
-  const API_BASE_URL = 'http://localhost:8888/main-project-php/api'
+  const API_BASE_URL = import.meta.env.VITE_API_BASE
 
   const currentMode = ref('login')
+  const username = ref('')
   const email = ref('')
   const password = ref('')
   const passwordConfirm = ref('')
@@ -242,6 +258,7 @@
   const termsAccepted = ref(false)
   const rememberMe = ref(false)
 
+  const usernameError = ref('')
   const nameError = ref('')
   const genderError = ref('')
   const emailError = ref('')
@@ -249,14 +266,15 @@
   const passwordConfirmError = ref('')
 
   onMounted(() => {
-    const storedEmail = localStorage.getItem('rememberedEmail')
-    if (storedEmail) {
-      email.value = storedEmail
+    const storedUsername = localStorage.getItem('rememberedUsername')
+    if (storedUsername) {
+      username.value = storedUsername
       rememberMe.value = true
     }
   })
 
   const clearAllErrors = () => {
+    usernameError.value = ''
     nameError.value = ''
     genderError.value = ''
     emailError.value = ''
@@ -265,6 +283,7 @@
   }
 
   const clearError = (field) => {
+    if (field === 'username') usernameError.value = ''
     if (field === 'name') nameError.value = ''
     if (field === 'gender') genderError.value = ''
     if (field === 'email') emailError.value = ''
@@ -274,6 +293,7 @@
 
   const changeMode = (mode) => {
     currentMode.value = mode
+    username.value = ''
     email.value = ''
     password.value = ''
     passwordConfirm.value = ''
@@ -290,42 +310,49 @@
 
   const handleLogin = async () => {
     clearAllErrors()
-    if (!email.value || !password.value) {
-      if (!email.value) emailError.value = '請輸入電子郵件'
+    if (!username.value || !password.value) {
+      if (!username.value) usernameError.value = '請輸入帳號'
       if (!password.value) passwordError.value = '請輸入密碼'
       return
     }
 
+    const payload = {
+      username: username.value,
+      password: password.value,
+    }
+
     try {
-      const response = await fetch(`${API_BASE_URL}/member/login.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.value, password: password.value }),
-      })
+      const response = await axios.post(`${API_BASE_URL}/members/login.php`, payload)
 
-      const result = await response.json()
-
-      if (response.ok) {
-        alert(result.message)
-        if (rememberMe.value) {
-          localStorage.setItem('rememberedEmail', email.value)
-        } else {
-          localStorage.removeItem('rememberedEmail')
-        }
-        authStore.login(result.member_id, result.fullname)
-        router.push({ path: '/member' })
+      if (rememberMe.value) {
+        localStorage.setItem('rememberedUsername', username.value)
       } else {
-        alert(result.error)
+        localStorage.removeItem('rememberedUsername')
       }
+      authStore.login(response.data.member)
+      router.push({ path: '/member' })
     } catch (error) {
-      console.error('登入時發生網路錯誤:', error)
-      alert('登入失敗，請檢查網路連線。')
+      if (error.response) {
+        console.error('後端回應錯誤:', error.response.data.error)
+        alert(error.response.data.error)
+      } else if (error.request) {
+        console.error('請求錯誤:', error.request)
+        alert('登入失敗，伺服器無回應。')
+      } else {
+        console.error('前端設定錯誤:', error.message)
+        alert('登入失敗，請檢查前端設定。')
+      }
     }
   }
 
   const handleRegister = async () => {
     clearAllErrors()
     let isValid = true
+
+    if (!username.value) {
+      usernameError.value = '請輸入帳號'
+      isValid = false
+    }
 
     if (!name.value) {
       nameError.value = '請輸入姓名'
@@ -361,6 +388,7 @@
     }
 
     const payload = {
+      username: username.value,
       name: name.value,
       gender: gender.value,
       email: email.value,
@@ -368,60 +396,33 @@
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/member/register.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-
-      const result = await response.json()
-
-      if (response.ok) {
-        alert(result.message)
-        changeMode('login')
-      } else {
-        alert(result.error)
-      }
+      const response = await axios.post(`${API_BASE_URL}/members/register.php`, payload)
+      alert(response.data.message)
+      changeMode('login')
     } catch (error) {
-      console.error('註冊時發生網路錯誤:', error)
-      alert('註冊失敗，請檢查網路連線。')
+      if (error.response) {
+        console.error('後端回應錯誤:', error.response.data.error)
+        alert(error.response.data.error)
+      } else if (error.request) {
+        console.error('請求錯誤:', error.request)
+        alert('註冊失敗，伺服器無回應。')
+      } else {
+        console.error('前端設定錯誤:', error.message)
+        alert('註冊失敗，請檢查前端設定。')
+      }
     }
   }
 
-  const handleForgotPassword = async () => {
-    clearAllErrors()
+  const handleForgotPassword = () => {
     if (!email.value) {
       emailError.value = '請輸入電子郵件'
       return
     }
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/member/request.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.value }),
-      })
-
-      const result = await response.json()
-      alert(result.message || result.error)
-
-      if (response.ok) {
-        changeMode('login')
-      }
-    } catch (error) {
-      console.error('密碼重設請求時發生網路錯誤:', error)
-      alert('請求失敗，請檢查網路連線或稍後再試。')
-    }
+    console.log('Password reset requested for:', email.value)
+    // alert('密碼重設信已寄出（此為展示訊息）')
+    alert('密碼重設功能尚未開放')
   }
 
-  const sendVerificationCode = () => {
-    if (email.value) {
-      console.log('Sending verification code to:', email.value)
-      alert('驗證碼功能尚未開放')
-    } else {
-      emailError.value = '請先輸入電子郵件'
-    }
-  }
 </script>
 
 <style scoped lang="scss">

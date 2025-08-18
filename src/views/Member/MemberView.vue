@@ -3,9 +3,9 @@
     <div class="member_container">
       <aside class="member_sidebar">
         <div class="user_profile_card">
-          <h3 class="greeting">Hi Jay~</h3>
+          <h3 class="greeting">Hi {{ user_name }}~</h3>
           <div class="avatar">
-            <img src="@/assets/images/member-system/head.png" alt="User Avatar" />
+            <img :src="avatar" alt="User Avatar" />
           </div>
         </div>
         <nav class="member_nav">
@@ -40,17 +40,26 @@
 </template>
 
 <script setup>
+  import { useAuthStore } from '@/stores/auth'
   import { useRouter } from 'vue-router'
+  import defaultAvatar from '@/assets/images/member-system/avatar.svg'
 
+  const authStore = useAuthStore()
   const router = useRouter()
 
-  function logout() {
+  const logout = async () => {
     if (confirm('您確定要登出嗎？')) {
-      localStorage.removeItem('user-token')
-
-      router.push({ name: 'login' })
+      const ok = await authStore.logout()
+      if (ok) {
+        router.push({ name: 'login' })
+      } else {
+        alert('登出失敗')
+      }
     }
   }
+
+  const user_name = authStore.user.fullname
+  const avatar = authStore.user?.avatar_url ?? defaultAvatar
 </script>
 
 <style scoped lang="scss">

@@ -4,6 +4,8 @@
   import { computed, ref, onMounted, onUnmounted } from 'vue'
   import { useAuthStore } from '@/stores/auth'
   import Button from '@/components/buttons/button.vue'
+  import defaultAvatar from '@/assets/images/member-system/avatar.svg'
+
   const authStore = useAuthStore()
   const route = useRoute()
   const router = useRouter()
@@ -14,13 +16,15 @@
   const isEvent = isActive('/event')
   const isNew = isActive('/new')
   //登出
-  function logout() {
+  const logout = async () => {
     if (confirm('您確定要登出嗎？')) {
-      menu_open.value = false
-      dropdown_open.value = false
-      ismember_dropdown.value = false
-      authStore.logout()
-      router.push({ name: 'home' })
+      const ok = await authStore.logout()
+      if (ok) {
+        menu_open.value = false
+        router.push({ name: 'login' })
+      } else {
+        alert('登出失敗')
+      }
     }
   }
   //手機menu
@@ -102,6 +106,8 @@
     }
   }
 
+  const avatar = authStore.user?.avatar_url ?? defaultAvatar
+
   onMounted(() => {
     window.addEventListener('scroll', handleScroll)
   })
@@ -148,7 +154,7 @@
           @mouseenter="open_member_dropdown"
           @mouseleave="close_member_dropdown"
         >
-          <img src="@/assets/images/member-system/head.png" alt="User Avatar" id="user_avatar" />
+          <img :src="avatar" alt="User Avatar" id="user_avatar" />
           <transition name="slide-fade">
             <div v-if="ismember_dropdown" id="member_dropdown_menu">
               <ul>
@@ -168,7 +174,7 @@
       <!-- 手機導覽列 -->
       <nav id="mobile_nav">
         <router-link v-if="authStore.isLoggedIn" to="/member" @click="edu_linkclick">
-          <img src="@/assets/images/member-system/head.png" alt="User Avatar" id="user_avatar" />
+          <img :src="avatar" alt="User Avatar" id="user_avatar" />
         </router-link>
         <router-link v-else to="/login" @click="edu_linkclick">
           <i class="fa-solid fa-user"></i>
@@ -216,7 +222,7 @@
           <router-link to="/member" v-show="authStore.isLoggedIn" @click="edu_linkclick">
             會員中心
           </router-link>
-          <a @click="logout" v-show="authStore.isLoggedIn" style="border: 0px;">登出</a>
+          <a @click="logout" v-show="authStore.isLoggedIn" style="border: 0px">登出</a>
           <router-link to="/login" v-show="!authStore.isLoggedIn" @click="edu_linkclick">
             登入會員
           </router-link>
