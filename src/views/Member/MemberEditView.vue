@@ -1,3 +1,51 @@
+<script setup>
+  import { ref, onMounted } from 'vue'
+  import VueDatePicker from '@vuepic/vue-datepicker'
+  import '@vuepic/vue-datepicker/dist/main.css'
+  import defaultAvatar from '@/assets/images/member-system/avatar.svg'
+  import { useAuthStore } from '@/stores/auth'
+  import axios from 'axios'
+
+  const authStore = useAuthStore()
+  const baseUrl = import.meta.env.VITE_API_BASE
+
+  const user = authStore.user
+  const formData = ref({
+    avatar_url: user.avatar_url || defaultAvatar,
+    name: user.fullname || '',
+    email: user.email || '',
+    phone: user.phone_number || '',
+    gender: user.gender || '',
+    address: user.address || '',
+    birthdate: user.birthday || null,
+  })
+
+  let originalData = {}
+
+  onMounted(() => {
+    originalData = JSON.parse(JSON.stringify(formData.value))
+  })
+
+  const handleProfileUpdate = async () => {
+    console.log('Updating profile:', formData.value)
+    try {
+      const apiUrl = `${baseUrl}/members/patch_member.php`
+      const response = await axios.patch(apiUrl, formData.value)
+      console.log('edit successfully:', response.data)
+    } catch (err) {
+      console.error('Post Error:', err)
+    }
+    originalData = JSON.parse(JSON.stringify(formData.value))
+
+    alert('會員資料已儲存')
+  }
+
+  const cancelChanges = () => {
+    formData.value = JSON.parse(JSON.stringify(originalData))
+    console.log('Changes cancelled and form has been reset.')
+  }
+</script>
+
 <template>
   <main class="member_content">
     <div class="content_header">
@@ -49,6 +97,7 @@
                 v-model="formData.birthdate"
                 placeholder="年 / 月 / 日"
                 format="yyyy/MM/dd"
+                model-type="yyyy-mm-dd"
                 :max-date="new Date()"
                 :enable-time-picker="false"
                 auto-apply
@@ -67,44 +116,6 @@
     </div>
   </main>
 </template>
-
-<script setup>
-  import { ref, onMounted } from 'vue'
-  import VueDatePicker from '@vuepic/vue-datepicker'
-  import '@vuepic/vue-datepicker/dist/main.css'
-  import defaultAvatar from '@/assets/images/member-system/avatar.svg'
-  import { useAuthStore } from '@/stores/auth'
-
-  const authStore = useAuthStore()
-
-  const user = authStore.user
-  const formData = ref({
-    avatar_url: user.avatar_url || defaultAvatar,
-    name: user.fullname || '',
-    email: user.email || '',
-    phone: user.phone_number || '',
-    gender: user.gender || '',
-    address: user.address || '',
-    birthdate: user.birthday || '',
-  })
-
-  let originalData = {}
-
-  onMounted(() => {
-    originalData = JSON.parse(JSON.stringify(formData.value))
-  })
-
-  const handleProfileUpdate = () => {
-    console.log('Updating profile:', formData.value)
-    originalData = JSON.parse(JSON.stringify(formData.value))
-    alert('會員資料已儲存')
-  }
-
-  const cancelChanges = () => {
-    formData.value = JSON.parse(JSON.stringify(originalData))
-    console.log('Changes cancelled and form has been reset.')
-  }
-</script>
 
 <style scoped lang="scss">
   @use '@/assets/style/variables' as *;

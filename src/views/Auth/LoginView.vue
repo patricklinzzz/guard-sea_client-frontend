@@ -240,6 +240,7 @@
   import { ref, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
   import { useAuthStore } from '@/stores/auth'
+  import { useQuizStore } from '@/stores/quiz_state'
   import axios from 'axios'
 
   const router = useRouter()
@@ -264,6 +265,8 @@
   const emailError = ref('')
   const passwordError = ref('')
   const passwordConfirmError = ref('')
+
+  const quizStore = useQuizStore()
 
   onMounted(() => {
     const storedUsername = localStorage.getItem('rememberedUsername')
@@ -330,7 +333,8 @@
         localStorage.removeItem('rememberedUsername')
       }
       authStore.login(response.data.member)
-      router.push({ path: '/member' })
+      quizStore.log_in_prompted ? router.push({ path: '/edu/quiz' }) : router.push({ path: '/member' })
+      
     } catch (error) {
       if (error.response) {
         console.error('後端回應錯誤:', error.response.data.error)

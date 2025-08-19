@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useQuizStore } from '@/stores/quiz_state'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -182,5 +183,12 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
+router.afterEach((to, from) => {
+  const quiz_state = useQuizStore()
+  if(from.name === 'quiz' && !quiz_state.log_in_prompted) quiz_state.quizReset()
+    
+  
+});
 
 export default router

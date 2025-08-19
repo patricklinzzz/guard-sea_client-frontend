@@ -1,3 +1,48 @@
+<script setup>
+  import { ref } from 'vue'
+  import axios from 'axios'
+  const passwordData = ref({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  })
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const handlePasswordUpdate = async () => {
+    if (
+      !passwordData.value.oldPassword ||
+      !passwordData.value.newPassword ||
+      !passwordData.value.confirmPassword
+    ) {
+      alert('請填寫所有欄位！')
+      return
+    }
+    if (passwordData.value.newPassword !== passwordData.value.confirmPassword) {
+      alert('新密碼與確認密碼不相符！')
+      return
+    }
+    if (passwordData.value.newPassword.length < 6) {
+      alert('密碼長度不能少於6個字元')
+      return
+    }
+    console.log('正在更新密碼:', passwordData.value)
+    try {
+      const apiUrl = `${baseUrl}/members/patch_password.php`
+      const response = await axios.patch(apiUrl, passwordData.value)
+      console.log('edit successfully:', response.data)
+      resetForm()
+    } catch (err) {
+      console.error('Post Error:', err)
+      alert('修改失敗！')
+    }
+  }
+
+  const resetForm = () => {
+    passwordData.value.oldPassword = ''
+    passwordData.value.newPassword = ''
+    passwordData.value.confirmPassword = ''
+  }
+</script>
+
 <template>
   <main class="member_content">
     <div class="content_header">
@@ -26,36 +71,6 @@
     </div>
   </main>
 </template>
-
-<script setup>
-  import { ref } from 'vue'
-
-  const passwordData = ref({
-    oldPassword: '',
-    newPassword: '',
-    confirmPassword: '',
-  })
-
-  const handlePasswordUpdate = () => {
-    if (!passwordData.value.oldPassword || !passwordData.value.newPassword) {
-      alert('請填寫所有欄位！')
-      return
-    }
-    if (passwordData.value.newPassword !== passwordData.value.confirmPassword) {
-      alert('新密碼與確認密碼不相符！')
-      return
-    }
-    console.log('正在更新密碼:', passwordData.value)
-    alert('密碼已成功修改！')
-    resetForm()
-  }
-
-  const resetForm = () => {
-    passwordData.value.oldPassword = ''
-    passwordData.value.newPassword = ''
-    passwordData.value.confirmPassword = ''
-  }
-</script>
 
 <style scoped lang="scss">
   @use '@/assets/style/variables' as *;
