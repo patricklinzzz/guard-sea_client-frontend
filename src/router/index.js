@@ -168,8 +168,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+
   if (to.meta.requiresAuth) {
-    const token = localStorage.getItem('user')
+    const token = authStore.fetchUser()
 
     if (token) {
       next()
