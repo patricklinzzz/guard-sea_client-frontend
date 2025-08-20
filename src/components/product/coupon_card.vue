@@ -27,7 +27,7 @@
     display: flex;
     padding: 0.5rem;
     border: 2px solid #ccc;
-    width: 30vw;
+    width: 35vw;
     cursor: pointer;
     align-items: center;
     border-radius: v.$border-radius-sm;
@@ -40,14 +40,15 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      width: 8vw;
-      height: 8vw;
+      width: 10vw;
+      height: 10vw;
       aspect-ratio: 1 / 1;
       background-color: #999999;
       color: #fff;
       font-weight: 500;
       transition: all 0.2s ease-in-out;
       padding: 0.5rem 1rem;
+      line-height: v.$line-height-normal;
 
       @include respond(md) {
         width: 28vw;
@@ -61,10 +62,19 @@
     .coupon_txt {
       h3 {
         margin-bottom: 0.5rem;
+        line-height: v.$line-height-normal;
+        color: v.$color-text-main;
       }
       .coupon_title {
         font-weight: bold;
-        line-height: 1rem;
+        line-height: v.$line-height-normal;
+        color: v.$color-text-main;
+      }
+      .coupon_date {
+        color: v.$color-text-main;
+      }
+      .coupon_code {
+        color: v.$color-text-main;
       }
     }
   }
