@@ -28,48 +28,166 @@
   gsap.registerPlugin(ScrollTrigger)
 
   const main = ref()
+  // 為 banner 元素創建 ref
+  const bannerRef = ref(null)
 
   onMounted(() => {
-    const gtx = gsap.context(() => {
-      const gtl = gsap.timeline({
-        scrollTrigger: {
-          trigger: main.value,
-          start: 'top center',
-          toggleActions: 'restart none none none',
-        },
-      })
-
-      gtl
-        .from('h2', {
-          opacity: 0,
-          y: 30,
-          duration: 0.6,
-        })
-        .from(
-          '.cooperate_figure',
-          {
-            opacity: 0,
-            x: -500,
-            y: 20,
-            rotationZ: -40,
-            duration: 1.6,
-            stagger: {
-              each: 0.8,
-              from: 'end', // 指定從結尾的元素開始 stagger
-            },
+    //合作夥伴一個個進場
+    const gtx = gsap.context(
+      () => {
+        const gtl = gsap.timeline({
+          scrollTrigger: {
+            trigger: main.value,
+            start: 'top center',
+            toggleActions: 'restart none none none',
           },
-          '+=0.1'
-        )
-    }, main.value)
+        })
+
+        gtl
+          .from('h2', {
+            opacity: 0,
+            y: 30,
+            duration: 0.6,
+          })
+          .from(
+            '.cooperate_figure',
+            {
+              opacity: 0,
+              x: -500,
+              y: 20,
+              rotationZ: -40,
+              duration: 1.6,
+              stagger: {
+                each: 0.8,
+                from: 'end', // 指定從結尾的元素開始 stagger
+              },
+            },
+            '+=0.1'
+          )
+      },
+
+      main.value
+    )
+
+    const bannerCtx = gsap.context(() => {
+      // [修改點] 使用全新的、無縫循環的動畫邏輯
+      gsap.to(bannerRef.value, {
+        '--light-x': '100%', // 動畫結束點：光束完全移出畫面右側
+        '--light-y': '10%', // 在掃動過程中，Y軸也稍微變化
+        '--light-rotation': '10deg', // 掃動時也帶一點旋轉
+
+        duration: 7, // 一次完整的掃動需要 15 秒
+        repeat: -1, // 無限重複
+        ease: 'none', // <--- 關鍵！線性速度，確保每次循環無縫銜接
+      })
+    }, bannerRef.value)
+
+    const sloganCtx = gsap.context(() => {
+      // 選取 slogan 裡面的所有 span
+      gsap.from('.main_slogan span', {
+        y: '100%', // 從下方 100% 的位置開始
+        opacity: 0, // 完全透明
+        duration: 0.8, // 動畫持續時間
+        ease: 'power2.out', // 動畫緩動效果
+        stagger: 0.08, // 每個字之間的延遲
+      })
+    })
+
+    // subSlogan文字的動畫
+    const subSloganCtx = gsap.context(() => {
+      // 副標語段落，一行一行浮現
+      gsap.from('.sub_slogan p', {
+        opacity: 0, // 從完全透明開始
+        y: 20, // 從下方 20px 的位置開始
+        duration: 2.5, // 每一行動畫的持續時間
+        ease: 'power2.out',
+        stagger: 1, // 每一行之間延遲 0.5 秒
+        delay: 0.2, // 整體動畫延遲 1.8 秒，等待主標語動畫跑完
+      })
+    })
+
+    // 潛水員的動畫
+    const diverTl = gsap.timeline({ delay: -0.3 })
+    diverTl
+      // 1. 潛水員從左上角滑入 (原本的 from 動畫)
+      .from('.diver', {
+        xPercent: -300,
+        yPercent: -300,
+        rotation: 30,
+        scale: 0.8,
+        opacity: 0,
+        duration: 6,
+        ease: 'power3.out',
+      })
+      // 2. 進場後，開始上下左右微微漂浮
+      .to(
+        '.diver',
+        {
+          y: '+=10', // 相對目前位置，往下移動 15px
+          x: '-=5', // 相對目前位置，往左移動 10px
+          rotation: '+=5', // 順時針旋轉 5 度
+          duration: 1.5, // 一次漂浮週期為 1 秒
+          repeat: -1, // 無限次重複
+          yoyo: true, // 動畫會來回播放，製造漂浮感
+          ease: 'sine.inOut', // 使用平滑的緩動效果
+        },
+        '-=4'
+      )
+
+    // 海龜從右上角滑入
+    const turtleTl = gsap.timeline({ delay: 0.5 })
+    turtleTl
+      // 1. 海龜從右上角滑入 (原本的 from 動畫)
+      .from('.seaturtle', {
+        xPercent: 300,
+        yPercent: -200,
+        rotation: -60,
+        scale: 0.8,
+        opacity: 0,
+        duration: 6,
+        ease: 'power3.out',
+      })
+      // 2. 進場後，開始上下左右微微漂浮
+      .to(
+        '.seaturtle',
+        {
+          y: '-=15', // 往上移動 15px
+          x: '+=5', // 往右移動 5px
+          rotation: '+=5', // 順時針旋轉 4 度
+          duration: 1.5, // 使用不同的時長，避免和潛水員動作同步
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+        },
+        '-=4'
+      )
   })
 </script>
 
 <template>
   <main class="wrapper">
-    <section id="banner">
+    <section id="banner" ref="bannerRef">
       <h1 class="main_slogan">
-        我們看見傷痕，
-        <span class="main_slogan_bottom">於是決定成為希望的起點</span>
+        <span>我</span>
+        <span>們</span>
+        <span>看</span>
+        <span>見</span>
+        <span>傷</span>
+        <span>痕</span>
+        <span>，</span>
+        <span class="main_slogan_bottom">
+          <span>於</span>
+          <span>是</span>
+          <span>決</span>
+          <span>定</span>
+          <span>成</span>
+          <span>為</span>
+          <span>希</span>
+          <span>望</span>
+          <span>的</span>
+          <span>起</span>
+          <span>點</span>
+        </span>
       </h1>
       <div class="sub_slogan_wrap">
         <div class="aboutwhiteblock">
@@ -203,11 +321,39 @@
   #banner {
     position: relative;
     width: 100%;
-
     background-image: url('@/assets/images/about/aboutbanner.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     padding-bottom: 8.5vw;
+    overflow: hidden;
+
+    // [修改點] 在這裡定義 CSS 變量的初始值
+    --light-x: -100%; // <--- 修改點：讓光束從左邊畫面外開始
+    --light-y: -20%;
+    --light-rotation: -15deg;
+    --light-scale: 1;
+    // ... 您原有的 banner 背景圖、padding 等樣式 ...
+    &::before {
+      content: '';
+      position: absolute;
+      top: var(--light-y);
+      left: var(--light-x);
+      width: 120%;
+      padding-top: 150%;
+      z-index: 0;
+      pointer-events: none;
+
+      background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 230, 0.55) 0%,
+        rgba(255, 255, 255, 0) 70%
+      );
+
+      mix-blend-mode: plus-lighter;
+      filter: blur(30px); // <--- 修改點：增加模糊半徑，讓光暈更廣
+
+      transform: rotate(var(--light-rotation)) scale(var(--light-scale));
+    }
 
     @media screen and (max-width: 1800px) {
       padding-bottom: 10vw;
@@ -237,6 +383,7 @@
       text-align: center;
       padding: 5.8333333% 20px 0px 20px;
       margin-bottom: 6%;
+      text-shadow: 1px 2px 8px rgba(0, 0, 0, 0.9);
 
       @include respond(md) {
         padding-top: 40px;
@@ -345,6 +492,23 @@
     }
     // diver_end
   }
+
+  h1.main_slogan,
+  .sub_slogan_wrap {
+    position: relative;
+    z-index: 3;
+  }
+
+  //h1的文字特效start樣式
+
+  h1.main_slogan > span,
+  h1.main_slogan .main_slogan_bottom > span {
+    display: inline-block; // 讓 transform 生效
+    overflow: hidden; // 確保文字不會在動畫開始前露出來
+    vertical-align: top;
+  }
+
+  //h1的文字特效end樣式
 
   // banner_end
 
