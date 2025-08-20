@@ -27,6 +27,8 @@
 
   const questions = ref([])
   const quizzes = ref([])
+  const q_order = ref([])
+  const q_num = ref(0)
   const quiz_map = {}
   const loading = ref(true)
   const baseUrl = import.meta.env.VITE_API_BASE
@@ -34,7 +36,6 @@
   const pass_grade = ref(0)
   const q_index = ref(0)
   const bubble_text = ['海洋生物', '海洋汙染', '過度捕撈', '生境破壞']
-  let q_order = [...Array(10).keys()]
   const question_num = ref('Q' + (q_index.value + 1))
 
   const coupon_redeemable = ref(true)
@@ -124,8 +125,6 @@
     }
   }
 
-  shuffleArray(q_order)
-
   const bubble_pick = (index) => {
     quiz_type_selected.value = quiz_type_selected.value === index ? null : index
   }
@@ -133,14 +132,19 @@
     if (quiz_type_selected.value != null) {
       quiz_chosen.value = questions.value.filter((q) => q.quiz_id == quiz_type_selected.value + 1)
       quizStore.quiz_start = true
-      quiz_cur.value = quiz_chosen.value[q_order[q_index.value]]
-      pass_grade.value = quizzes.value[quiz_type_selected.value]['pass_grade']
+      q_num.value = quizzes.value[quiz_type_selected.value].question_num
+      q_order.value = [...Array(+q_num.value).keys()]
+      shuffleArray(q_order.value)
+      quiz_cur.value = quiz_chosen.value[q_order.value[q_index.value]]
+      pass_grade.value = (q_num.value * quizzes.value[quiz_type_selected.value]['pass_grade']) / 10
+      console.log(pass_grade.value)
     } else {
       window.alert('pick a topic')
     }
   }
   const nextQ = () => {
-    if (q_index.value < 9) {
+    console.log(q_index.value)
+    if (q_index.value < q_num.value - 1) {
       question_num.value = 'Q' + (q_index.value + 2)
       const tl = gsap
         .timeline()
@@ -149,7 +153,7 @@
           opacity: 0,
           ease: 'power2.out',
           onComplete: () => {
-            quiz_cur.value = quiz_chosen.value[q_order[++q_index.value]]
+            quiz_cur.value = quiz_chosen.value[q_order.value[++q_index.value]]
             quizStore.option_shown = true
           },
         })
@@ -193,17 +197,17 @@
       } else {
         quizStore.log_in_prompted = false
         result_next_clicked.value = true
-          try {
-            const coupon_post = `${baseUrl}/coupon/post_quiz_coupon.php`
-            const coupon_r = await axios.post(coupon_post, {quiz_id: quiz_type_selected.value + 1})
-            coupon_redeemable.value = coupon_r.data.redeemable
-            if(!coupon_redeemable.value){
-              redeemable_date.value = coupon_r.data.redeemable_date
-            }
-          } catch (err) {
-            console.error('Fetch 錯誤：', err)
+        try {
+          const coupon_post = `${baseUrl}/coupon/post_quiz_coupon.php`
+          const coupon_r = await axios.post(coupon_post, { quiz_id: quiz_type_selected.value + 1 })
+          coupon_redeemable.value = coupon_r.data.redeemable
+          if (!coupon_redeemable.value) {
+            redeemable_date.value = coupon_r.data.redeemable_date
           }
-          quizStore.score = -1
+        } catch (err) {
+          console.error('Fetch 錯誤：', err)
+        }
+        quizStore.score = -1
       }
     } else {
       triggerSelfRefresh()
@@ -212,7 +216,8 @@
   }
 
   const skipResult = () => {
-    quizStore.score = Math.floor(Math.random() * 10) * 10
+    quizStore.score = 150
+    // Math.floor(Math.random() * 10) * 10
     q_index.value = 9
     answered(4)
   }
@@ -241,12 +246,18 @@
       ? ''
       : quizzes.value[quiz_type_selected.value].quiz_description
   })
+  const pass_grade_quote = computed(() => {
+    q_num.value = quizzes.value[quiz_type_selected.value]?.question_num ?? 0
+    return quiz_type_selected.value === null
+      ? ''
+      : `共${q_num.value}題，答對${Math.ceil((q_num.value * quizzes.value[quiz_type_selected.value]['pass_grade']) / 100)}題即可領取優惠卷！`
+  })
   const answer = computed(() => {
     return 'option_' + quiz_cur.value.answer
   })
 
   const btn_next_text = computed(() => {
-    return q_index.value == 9 ? '公布結果' : '下一題'
+    return q_index.value == q_num.value - 1 ? '公布結果' : '下一題'
   })
   const result_text_top = computed(() => {
     if (result_next_clicked.value) {
@@ -326,7 +337,7 @@
     <div class="content_block">
       <Transition @leave="onLeaveStart">
         <div v-if="!quizStore.quiz_start" class="quiz_main">
-          <ScoreBubble v-if="!isMobile" class="quiz_title" score="110" size="160"></ScoreBubble>
+          <ScoreBubble v-if="!isMobile" class="quiz_title" score="210" size="160"></ScoreBubble>
           <div v-if="isMobile" class="mobile_title">
             <h1>守護者挑戰</h1>
             <p>選擇主題，挑戰高分解鎖折扣</p>
@@ -343,7 +354,10 @@
             ></BubbleCircle>
           </div>
           <Transition @before-enter="onBeforeEnter" @enter="onEnter" @leave="onLeave" mode="out-in">
-            <p :key="quiz_type_selected">{{ quiz_slogan }}</p>
+            <div :key="quiz_type_selected">
+              <p>{{ quiz_slogan }}</p>
+              <p>{{ pass_grade_quote }}</p>
+            </div>
           </Transition>
           <Button class="start_btn" @click="start_quiz">START</Button>
         </div>
@@ -398,7 +412,7 @@
       <Transition @before-enter="onBeforeEnter" @enter="onEnter" @leave="onLeave" :css="false">
         <div v-if="quizStore.show_result" class="final_result">
           <div class="bubble_score">
-            <ScoreBubble size="80" :score="quizStore.score"></ScoreBubble>
+            <ScoreBubble size="80" :score="quizStore.score" :max_score="q_num * 10"></ScoreBubble>
           </div>
           <div class="text">
             <Transition
@@ -483,7 +497,7 @@
 
 <style lang="scss" scoped>
   .wrapper {
-    height: 450px;
+    height: 650px;
     .content_block {
       width: fit-content;
       margin: auto;

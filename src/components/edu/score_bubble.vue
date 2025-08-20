@@ -1,7 +1,7 @@
 <script setup>
   import { ref, computed, onMounted } from 'vue'
   import { gsap } from 'gsap'
-  const props = defineProps(['size', 'score'])
+  const props = defineProps(['size', 'score', 'max_score'])
   const baseline = 16 / 3
   const coupon_ref = ref(null)
   const trans = ref({ x: 0, y: 0 })
@@ -54,7 +54,7 @@
       </radialGradient>
     </defs>
     <Transition>
-      <g v-if="score == 110">
+      <g v-if="score == 210">
         <text
           class="title"
           :x="+size"
@@ -87,13 +87,22 @@
     </Transition>
 
     <Transition @leave="onLeave">
-      <g v-if="score >= 0 && score <= 100">
-        <text
+      <g v-if="score < 210  && score >= 0">
+        <text v-if="score < 100"
           :x="+size * 0.65"
           :y="+size * 0.9 + baseline"
           fill="white"
           text-anchor="middle"
           font-size="2.5rem"
+        >
+          {{ score }}
+        </text>
+        <text v-else
+          :x="+size * 0.6"
+          :y="+size * 0.9 + baseline"
+          fill="white"
+          text-anchor="middle"
+          font-size="2.1rem"
         >
           {{ score }}
         </text>
@@ -106,14 +115,23 @@
           stroke-width="2"
           :transform="`translate(${diag_trans.x} ${diag_trans.y})`"
         ></line>
-        <text
+        <text v-if="max_score >= 100"
           :x="+size * 1.35"
           :y="+size * 1.3 + baseline"
           fill="white"
           text-anchor="middle"
           font-size="1.5rem"
         >
-          100
+          {{ max_score }}
+        </text>
+        <text v-else
+          :x="+size * 1.27"
+          :y="+size * 1.3 + baseline"
+          fill="white"
+          text-anchor="middle"
+          font-size="1.5rem"
+        >
+          {{ max_score }}
         </text>
       </g>
     </Transition>
