@@ -1,3 +1,42 @@
+<script setup>
+  import { ref, computed, onMounted } from 'vue'
+  import PageNumber from '@/components/buttons/page_number.vue'
+
+  import CouponCard from '@/components/product/coupon_card.vue'
+  import axios from 'axios'
+
+  const currentPage = ref(1)
+  const itemsPerPage = ref(5)
+  const baseUrl = import.meta.env.VITE_API_BASE
+  const allCoupons = ref([])
+  const fetch_coupon = async() => {
+    try {
+      const api = `${baseUrl}/coupon/member_coupon_front.php`
+
+      const r = await axios.get(api)
+      allCoupons.value = r.data.map((coupon) => ({
+        ...coupon,
+        validityPeriod: `使用期限: ${coupon.validityPeriod ? coupon.validityPeriod : '沒有限制'}`
+      }))
+    } catch (err) {
+      console.error('Fetch 錯誤：', err)
+    }
+  }
+
+  const paginatedCoupons = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage.value
+    const end = start + itemsPerPage.value
+    return allCoupons.value.slice(start, end)
+  })
+
+  onMounted(async () => {
+    try {
+      await fetch_coupon()
+    } finally {
+    }
+  })
+</script>
+
 <template>
   <main class="coupon_content_area">
     <div class="coupon_content_header">
@@ -20,81 +59,6 @@
     />
   </main>
 </template>
-
-<script setup>
-  import { ref, computed } from 'vue'
-  import PageNumber from '@/components/buttons/page_number.vue'
-
-  import CouponCard from '@/components/product/coupon_card.vue'
-
-  const currentPage = ref(1)
-  const itemsPerPage = ref(5)
-
-  const allCoupons = ref([
-    {
-      id: 'c001',
-      value: 50,
-      title: '首次購物限定',
-      code: 'SAVE50',
-      validityPeriod: '使用期限: 沒有限制',
-    },
-    {
-      id: 'c002',
-      value: 30,
-      title: '歡迎見面禮',
-      code: 'WELCOME30',
-      validityPeriod: '使用期限: 沒有限制',
-    },
-    {
-      id: 'c003',
-      value: 50,
-      title: '漁業永續問答闖關禮',
-      code: 'FISHSAFE50',
-      validityPeriod: '使用期限: 2025-08-18',
-    },
-    {
-      id: 'c004',
-      value: 50,
-      title: '海洋知識家闖關禮',
-      code: 'OCEANBIO50',
-      validityPeriod: '使用期限: 2025-09-01',
-    },
-    {
-      id: 'c005',
-      value: 30,
-      title: '環保海洋守護者闖關禮',
-      code: 'CLEANSEA30',
-      validityPeriod: '使用期限: 2025-09-15',
-    },
-    {
-      id: 'c006',
-      value: 60,
-      title: '生態平衡維護者闖關禮',
-      code: 'ECOGUARD50',
-      validityPeriod: '使用期限: 2025-10-01',
-    },
-    {
-      id: 'c007',
-      value: 60,
-      title: '活動感謝禮',
-      code: 'THANKYOU60',
-      validityPeriod: '使用期限: 2025-10-10',
-    },
-    {
-      id: 'c008',
-      value: 20,
-      title: '好友分享禮',
-      code: 'SHARE20',
-      validityPeriod: '使用期限: 2025-11-20',
-    },
-  ])
-
-  const paginatedCoupons = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage.value
-    const end = start + itemsPerPage.value
-    return allCoupons.value.slice(start, end)
-  })
-</script>
 
 <style scoped lang="scss">
   @use '@/assets/style/variables' as *;
