@@ -20,150 +20,243 @@
   // 引入 FishShoal 組件
   import FishShoal from '../../components/about/FishShoal.vue'
 
-  // 寫gsap關於cooperate區
-
   import { onMounted, onUnmounted, ref } from 'vue'
   import { gsap } from 'gsap'
   import { ScrollTrigger } from 'gsap/ScrollTrigger'
   gsap.registerPlugin(ScrollTrigger)
 
   const main = ref()
-  // 為 banner 元素創建 ref
   const bannerRef = ref(null)
 
+  // 【重要】將所有 context 變數移到 onMounted 外層，以便 onUnmounted 也能存取
+  let gtx, bannerCtx, sloganCtx, subSloganCtx, responsiveAnimsCtx
+
   onMounted(() => {
-    //合作夥伴一個個進場
-    const gtx = gsap.context(
-      () => {
-        const gtl = gsap.timeline({
-          scrollTrigger: {
-            trigger: main.value,
-            start: 'top center',
-            toggleActions: 'restart none none none',
-          },
-        })
-
-        gtl
-          .from('h2', {
-            opacity: 0,
-            y: 30,
-            duration: 0.6,
-          })
-          .from(
-            '.cooperate_figure',
-            {
-              opacity: 0,
-              x: -500,
-              y: 20,
-              rotationZ: -40,
-              duration: 1.6,
-              stagger: {
-                each: 0.8,
-                from: 'end', // 指定從結尾的元素開始 stagger
-              },
+    // 【修改】使用 ScrollTrigger.matchMedia 區分電腦與手機動畫
+    gtx = gsap.context(() => {
+      ScrollTrigger.matchMedia({
+        // --- 電腦版動畫 (min-width: 906px) ---
+        '(min-width: 906px)': function () {
+          const gtl = gsap.timeline({
+            scrollTrigger: {
+              trigger: main.value,
+              start: 'top center',
+              toggleActions: 'restart none none none',
             },
-            '+=0.1'
-          )
-      },
+          })
 
-      main.value
-    )
+          gtl
+            .from('h2', {
+              opacity: 0,
+              y: 30,
+              duration: 0.6,
+            })
+            .from(
+              '.cooperate_figure',
+              {
+                opacity: 0,
+                x: -500,
+                y: 20,
+                rotationZ: -40,
+                duration: 1.6,
+                stagger: {
+                  each: 0.8,
+                  from: 'end', // 電腦版：從結尾開始，即第四張先出現
+                },
+              },
+              '+=0.1'
+            )
+        },
 
-    const bannerCtx = gsap.context(() => {
-      // [修改點] 使用全新的、無縫循環的動畫邏輯
+        // --- 手機版動畫 (max-width: 905px) ---
+        '(max-width: 905px)': function () {
+          const gtl = gsap.timeline({
+            scrollTrigger: {
+              trigger: main.value,
+              start: 'top 80%', // 在手機上可以早一點觸發
+              toggleActions: 'restart none none none',
+            },
+          })
+
+          gtl
+            .from('h2', {
+              opacity: 0,
+              y: 30,
+              duration: 0.6,
+            })
+            .from(
+              '.cooperate_figure',
+              {
+                opacity: 0,
+                y: 50, // 簡化動畫，改成由下往上
+                duration: 0.8,
+                stagger: {
+                  each: 0.3, // 加快每個項目的間隔
+                  // 【關鍵】此處不設定 'from' 屬性，GSAP 會預設 'from: "start"'
+                  // 也就是從頭開始，第一張先出現
+                },
+              },
+              '+=0.1'
+            )
+        },
+      })
+    }, main.value)
+
+    bannerCtx = gsap.context(() => {
       gsap.to(bannerRef.value, {
-        '--light-x': '100%', // 動畫結束點：光束完全移出畫面右側
-        '--light-y': '10%', // 在掃動過程中，Y軸也稍微變化
-        '--light-rotation': '10deg', // 掃動時也帶一點旋轉
-
-        duration: 7, // 一次完整的掃動需要 15 秒
-        repeat: -1, // 無限重複
-        ease: 'none', // <--- 關鍵！線性速度，確保每次循環無縫銜接
+        '--light-x': '100%',
+        '--light-y': '10%',
+        '--light-rotation': '10deg',
+        duration: 7,
+        repeat: -1,
+        ease: 'none',
       })
     }, bannerRef.value)
 
-    const sloganCtx = gsap.context(() => {
-      // 選取 slogan 裡面的所有 span
+    sloganCtx = gsap.context(() => {
       gsap.from('.main_slogan span', {
-        y: '100%', // 從下方 100% 的位置開始
-        opacity: 0, // 完全透明
-        duration: 0.8, // 動畫持續時間
-        ease: 'power2.out', // 動畫緩動效果
-        stagger: 0.08, // 每個字之間的延遲
-      })
-    })
-
-    // subSlogan文字的動畫
-    const subSloganCtx = gsap.context(() => {
-      // 副標語段落，一行一行浮現
-      gsap.from('.sub_slogan p', {
-        opacity: 0, // 從完全透明開始
-        y: 20, // 從下方 20px 的位置開始
-        duration: 2.5, // 每一行動畫的持續時間
+        y: '100%',
+        opacity: 0,
+        duration: 0.8,
         ease: 'power2.out',
-        stagger: 1, // 每一行之間延遲 0.5 秒
-        delay: 0.2, // 整體動畫延遲 1.8 秒，等待主標語動畫跑完
+        stagger: 0.08,
       })
     })
 
-    // 潛水員的動畫
-    const diverTl = gsap.timeline({ delay: -0.3 })
-    diverTl
-      // 1. 潛水員從左上角滑入 (原本的 from 動畫)
-      .from('.diver', {
-        xPercent: -300,
-        yPercent: -300,
-        rotation: 30,
-        scale: 0.8,
+    subSloganCtx = gsap.context(() => {
+      gsap.from('.sub_slogan p', {
         opacity: 0,
-        duration: 6,
-        ease: 'power3.out',
+        y: 20,
+        duration: 2.5,
+        ease: 'power2.out',
+        stagger: 1,
+        delay: 0.2,
       })
-      // 2. 進場後，開始上下左右微微漂浮
-      .to(
-        '.diver',
-        {
-          y: '+=10', // 相對目前位置，往下移動 15px
-          x: '-=5', // 相對目前位置，往左移動 10px
-          rotation: '+=5', // 順時針旋轉 5 度
-          duration: 1.5, // 一次漂浮週期為 1 秒
-          repeat: -1, // 無限次重複
-          yoyo: true, // 動畫會來回播放，製造漂浮感
-          ease: 'sine.inOut', // 使用平滑的緩動效果
-        },
-        '-=4'
-      )
+    })
 
-    // 海龜從右上角滑入
-    const turtleTl = gsap.timeline({ delay: 0.5 })
-    turtleTl
-      // 1. 海龜從右上角滑入 (原本的 from 動畫)
-      .from('.seaturtle', {
-        xPercent: 300,
-        yPercent: -200,
-        rotation: -60,
-        scale: 0.8,
-        opacity: 0,
-        duration: 6,
-        ease: 'power3.out',
-      })
-      // 2. 進場後，開始上下左右微微漂浮
-      .to(
-        '.seaturtle',
-        {
-          y: '-=15', // 往上移動 15px
-          x: '+=5', // 往右移動 5px
-          rotation: '+=5', // 順時針旋轉 4 度
-          duration: 1.5, // 使用不同的時長，避免和潛水員動作同步
-          repeat: -1,
-          yoyo: true,
-          ease: 'sine.inOut',
+    // 潛水員與海龜的響應式動畫
+    responsiveAnimsCtx = gsap.context(() => {
+      ScrollTrigger.matchMedia({
+        // --- 桌面版 (大於 768px) ---
+        '(min-width: 769px)': function () {
+          const diverTl = gsap.timeline({ delay: -0.3 })
+          diverTl
+            .from('.diver', {
+              xPercent: -300,
+              yPercent: -300,
+              rotation: -60,
+              scale: 0.8,
+              opacity: 0,
+              duration: 6,
+              ease: 'power3.out',
+            })
+            .to(
+              '.diver',
+              {
+                y: '+=10',
+                x: '-=5',
+                rotation: '+=5',
+                duration: 1.5,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+              },
+              '-=4'
+            )
+
+          const turtleTl = gsap.timeline({ delay: 0.5 })
+          turtleTl
+            .from('.seaturtle', {
+              xPercent: 300,
+              yPercent: -200,
+              rotation: -10,
+              scale: 0.8,
+              opacity: 0,
+              duration: 6,
+              ease: 'power3.out',
+            })
+            .to(
+              '.seaturtle',
+              {
+                y: '-=15',
+                x: '+=5',
+                rotation: '+=5',
+                duration: 1.5,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+              },
+              '-=4'
+            )
         },
-        '-=4'
-      )
+
+        // --- 平板與手機版 (小於等於 768px) ---
+        '(max-width: 768px)': function () {
+          const diverTl = gsap.timeline({ delay: -0.3 })
+          diverTl
+            .from('.diver', {
+              xPercent: -300,
+              yPercent: -300,
+              rotation: -30,
+              scale: 0.75,
+              opacity: 0,
+              duration: 4,
+              ease: 'power3.out',
+            })
+            .to(
+              '.diver',
+              {
+                y: '+=10',
+                x: '-=5',
+                rotation: '+=2',
+                duration: 2,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+              },
+              '-=2.5'
+            ) // 【優化】修改銜接時間點，讓過渡更自然
+
+          // 【修正】將 delay 改為正數
+          const turtleTl = gsap.timeline({ delay: 0.5 })
+          turtleTl
+            .from('.seaturtle', {
+              xPercent: 300,
+              yPercent: -200,
+              rotation: -30,
+              scale: 0.75,
+              opacity: 0,
+              duration: 4,
+              ease: 'power3.out',
+            })
+            .to(
+              '.seaturtle',
+              {
+                y: '-=15',
+                x: '+=5',
+                rotation: '+=5',
+                duration: 1.5,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut',
+              },
+              '-=2.5'
+            ) // 【優化】修改銜接時間點，讓過渡更自然
+        },
+      })
+    })
+  })
+
+  // 添加 onUnmounted 鉤子來清理所有 GSAP 動畫和觸發器
+  // 因為我們仍然使用 gtx 這個變數，所以清理函式不需變動
+  onUnmounted(() => {
+    gtx.revert()
+    bannerCtx.revert()
+    sloganCtx.revert()
+    subSloganCtx.revert()
+    responsiveAnimsCtx.revert()
   })
 </script>
-
 <template>
   <main class="wrapper">
     <section id="banner" ref="bannerRef">
@@ -450,32 +543,52 @@
 
     .diver {
       position: absolute;
-      z-index: 1;
+      padding-left: 10px;
+      z-index: 5;
       left: -10%;
       top: 65%;
+
+      @media screen and (max-width: 1200px) {
+        padding-left: 7vw;
+        top: 59%;
+        transform: scale(0.8);
+      }
+
       @include respond(md) {
         transform: scale(0.75);
         left: -15%;
-        top: 78%;
+        top: 68%;
+        padding-left: 5.5vw;
+      }
+
+      @media screen and (max-width: 500px) {
+        padding-left: 2vw;
       }
 
       @media screen and (max-width: 480px) {
-        left: -29%;
+        left: -25%;
 
-        top: 70%;
-        transform: scale(0.7) rotate(-40deg);
+        top: 61%;
+        transform: scale(0.7) rotate(-20deg);
       }
 
-      @media screen and (max-width: 380px) {
-        left: -10%;
-        top: 78%;
-        transform: scale(0.6);
+      @media screen and (max-width: 410px) {
+        left: -8%;
+        top: 70%;
+        transform: scale(0.6) rotate(20deg);
       }
     }
     .seaturtle {
       position: absolute;
-      z-index: 1;
+      z-index: 5;
       right: 3%;
+
+      @media screen and (max-width: 1200px) {
+        right: 2%;
+        top: 95%;
+        transform: scale(0.9);
+      }
+
       @include respond(md) {
         transform: scale(0.75);
       }
@@ -484,7 +597,7 @@
         top: 78%;
       }
 
-      @media screen and (max-width: 380px) {
+      @media screen and (max-width: 410px) {
         right: 50%;
         top: 65%;
         transform: scale(0.6);
@@ -621,8 +734,11 @@
     //protect_start
 
     .protect {
+      position: relative;
       display: flex;
-      max-width: 1250px;
+
+      max-width: 1280px;
+      padding: 10px;
       margin: 0 auto;
       justify-content: space-between;
 
@@ -630,11 +746,54 @@
 
       .dolphin {
         transform: translateY(50px);
+        @media screen and (max-width: 1200px) {
+          transform: scale(0.95);
+        }
       }
       h3 {
         max-width: 340px;
         text-align: center;
         transform: translate(100px, 80px);
+        @media screen and (max-width: 1200px) {
+          max-width: 320px;
+          position: absolute;
+          left: 23.5vw;
+          text-align: left;
+
+          @media screen and (max-width: 910px) {
+            max-width: 250px;
+            left: 27.5vw;
+          }
+
+          @media screen and (max-width: 850px) {
+            position: static; /* 1. 恢復靜態定位，回歸文件流 */
+            left: auto; /* 2. 清除 left 屬性 */
+            max-width: 370px;
+            text-align: center;
+            margin: 0 auto;
+            transform: none;
+            font-size: 22px;
+            line-height: 1.5;
+          }
+        }
+      }
+
+      .whale {
+        @media screen and (max-width: 1200px) {
+          transform: scale(0.9);
+        }
+
+        img {
+          @media screen and (max-width: 850px) {
+            width: 96%;
+          }
+        }
+      }
+
+      @media screen and (max-width: 850px) {
+        // flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
       }
     }
     //protect_end
@@ -642,21 +801,36 @@
     //ourTeam_start
 
     .ourTeam {
-      max-width: 1050px;
+      max-width: 1100px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 20px;
       margin-bottom: 100px;
+      padding: 0 20px;
+
+      @media screen and (max-width: 850px) {
+        flex-direction: row-reverse;
+        margin-top: -120px;
+      }
+
+      @media screen and (max-width: 767px) {
+        flex-direction: column;
+        margin-top: -70px;
+        margin-bottom: 60px;
+      }
 
       .team_left {
         position: relative;
         width: 45.714285%;
         height: auto;
+        @media screen and (max-width: 767px) {
+          width: 100%;
+        }
         .coralyellow {
           position: absolute;
-          bottom: 94%;
+          bottom: 90%;
           right: 9%;
           aspect-ratio: 108 / 236;
           width: 27%;
@@ -666,6 +840,19 @@
           img {
             width: 100%;
             height: 100%;
+          }
+
+          @media screen and (max-width: 850px) {
+            right: 32%;
+            aspect-ratio: 200 / 600;
+            width: 38%;
+          }
+
+          @media screen and (max-width: 767px) {
+            aspect-ratio: 80 / 150;
+            width: 16%;
+            right: 18%;
+            bottom: 94%;
           }
         }
         .coralorange {
@@ -680,6 +867,19 @@
 
           img {
             width: 100%;
+            height: 100%;
+          }
+
+          @media screen and (max-width: 850px) {
+            right: 3%;
+            aspect-ratio: 1 / 1.5;
+            width: 38%;
+          }
+
+          @media screen and (max-width: 767px) {
+            aspect-ratio: 1 / 1.2;
+            width: 18%;
+            bottom: 94%;
           }
         }
 
@@ -726,8 +926,12 @@
         h2 {
           margin-bottom: 5%;
         }
+        p {
+          font-size: 18px;
+        }
         p:last-child {
           margin-top: 4%;
+          font-size: 20px;
         }
       }
     }
@@ -790,17 +994,52 @@
     h2 {
       text-align: center;
       margin-bottom: 55px;
+      @media screen and (max-width: 767px) {
+        font-size: 22px;
+        background-color: #073960;
+        padding: 5px 0;
+      }
     }
     .figure_item {
-      max-width: 940px;
+      max-width: 1200px;
+      padding: 0 15px;
       margin: 0 auto;
       display: flex;
+      gap: 40px;
       justify-content: space-between;
+
+      @media screen and (max-width: 905px) {
+        flex-wrap: wrap;
+        gap: 0;
+      }
 
       figure {
         text-align: center;
         div {
           margin-bottom: 1px;
+          aspect-ratio: 911 / 465;
+
+          img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        @media screen and (max-width: 905px) {
+          width: 48%;
+          margin-bottom: 30px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+          div {
+            width: 92%;
+            img {
+              object-fit: contain;
+            }
+          }
         }
       }
     }
