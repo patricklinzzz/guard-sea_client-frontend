@@ -5,7 +5,25 @@
   import CategoryButtons from '@/components/buttons/category_button.vue'
 
   import { newdata } from '@/assets/data/newdata.js'
-  import axios from 'axios'
+  import { useNewsStore } from '@/stores/new_store.js'
+  import { storeToRefs } from 'pinia' // 引入 storeToRefs 保持響應性
+
+  //響應性pinia的api_start
+
+  // 1. 初始化 Pinia Store
+  const newsStore = useNewsStore()
+
+  // 2. 【核心修改】建立橋樑，讓舊變數名稱直接讀取 Pinia 的狀態
+  // 這樣您下方的所有 computed 都不用改
+  const allnews = computed(() => newsStore.allNews)
+  const errorMsg = computed(() => newsStore.error)
+  const loading = computed(() => newsStore.loading) // 順便也把 loading 接過來
+
+  // 3. 在 onMounted 時呼叫 action 來獲取資料 (這行保持不變)
+  onMounted(() => {
+    newsStore.fetchNews()
+  })
+  //響應性pinia的api_end
 
   //page_start
 
@@ -24,66 +42,66 @@
 
   //page_end
 
-  // api_data_start
+  // 舊的沒有響應pinia的api_data_start
 
-  const loading = ref(true)
-  const errorMsg = ref(null)
-  const allnews = ref([])
+  // const loading = ref(true)
+  // const errorMsg = ref(null)
+  // const allnews = ref([])
 
-  onMounted(async () => {
-    try {
-      loading.value = true
+  // onMounted(async () => {
+  //   try {
+  //     loading.value = true
 
-      //以下是假資料要寫的 allnews.value = newdata 是為了搭配上面的import { newdata } from '@/assets/data/newdata.js'
+  //     //以下是假資料要寫的 allnews.value = newdata 是為了搭配上面的import { newdata } from '@/assets/data/newdata.js'
 
-      //假資料_開始
+  //     //假資料_開始
 
-      // allnews.value = newdata
+  //     // allnews.value = newdata
 
-      //假資料_結束
+  //     //假資料_結束
 
-      //以下是真正串api要寫的 開始
+  //     //以下是真正串api要寫的 開始
 
-      // 1. 從環境變數讀取 API 的基礎路徑
-      const baseUrl = import.meta.env.VITE_API_BASE
+  //     // 1. 從環境變數讀取 API 的基礎路徑
+  //     const baseUrl = import.meta.env.VITE_API_BASE
 
-      // 2. 拼接出完整的 API 端點 URL
-      const apiUrl = `${baseUrl}/news/get_news.php`
-      const response = await axios.get(apiUrl)
-      const data = response.data
+  //     // 2. 拼接出完整的 API 端點 URL
+  //     const apiUrl = `${baseUrl}/news/get_news.php`
+  //     const response = await axios.get(apiUrl)
+  //     const data = response.data
 
-      // 3. 【核心修正】在將資料存入 ref 之前，處理所有圖片路徑
-      const processedNews = data.news.map((item) => {
-        let processedItem = { ...item }
+  //     // 3. 【核心修正】在將資料存入 ref 之前，處理所有圖片路徑
+  //     const processedNews = data.news.map((item) => {
+  //       let processedItem = { ...item }
 
-        // 3a. 處理封面圖 (image_url)
-        if (processedItem.image_url && processedItem.image_url.startsWith('/')) {
-          processedItem.image_url = baseUrl + processedItem.image_url
-        }
+  //       // 3a. 處理封面圖 (image_url)
+  //       if (processedItem.image_url && processedItem.image_url.startsWith('/')) {
+  //         processedItem.image_url = baseUrl + processedItem.image_url
+  //       }
 
-        // 3b. 處理 CKEditor 內容 (content) 中的圖片
-        if (processedItem.content) {
-          // 使用正規表示式，查找所有 src="/uploads/..." 的圖片標籤
-          // 並將它們替換為 src="http://.../api/uploads/..."
-          const regex = /src="(\/uploads\/.*?)"/g
-          processedItem.content = processedItem.content.replace(regex, `src="${baseUrl}$1"`)
-        }
+  //       // 3b. 處理 CKEditor 內容 (content) 中的圖片
+  //       if (processedItem.content) {
+  //         // 使用正規表示式，查找所有 src="/uploads/..." 的圖片標籤
+  //         // 並將它們替換為 src="http://.../api/uploads/..."
+  //         const regex = /src="(\/uploads\/.*?)"/g
+  //         processedItem.content = processedItem.content.replace(regex, `src="${baseUrl}$1"`)
+  //       }
 
-        return processedItem
-      })
+  //       return processedItem
+  //     })
 
-      allnews.value = processedNews // <-- 使用最終處理過的資料
+  //     allnews.value = processedNews // <-- 使用最終處理過的資料
 
-      //以下是真正串api要寫的 結束
-    } catch (err) {
-      console.error('讀取失敗', err)
-      errorMsg.value = '資料載入失敗，請稍後再試'
-    } finally {
-      loading.value = false
-    }
-  })
+  //     //以下是真正串api要寫的 結束
+  //   } catch (err) {
+  //     console.error('讀取失敗', err)
+  //     errorMsg.value = '資料載入失敗，請稍後再試'
+  //   } finally {
+  //     loading.value = false
+  //   }
+  // })
 
-  // api_data_end
+  // 舊的沒有響應pinia的api_data_end
 
   //contentHtml_extract_start
 
@@ -139,6 +157,8 @@
   <!-- new_content_start -->
 
   <main class="wrapper">
+    <!--  Loading 提示 -->
+    <p v-if="loading">資料載入中...</p>
     <p v-if="errorMsg" class="error-msg">{{ errorMsg }}</p>
     <!--new_nav_start  -->
 
