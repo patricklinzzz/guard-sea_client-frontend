@@ -105,8 +105,7 @@
       isNavHidden.value = false
     }
   }
-
-  const avatar = authStore.user?.avatar_url ?? defaultAvatar
+  const avatar = authStore.user?.avatar_url || defaultAvatar
 
   onMounted(() => {
     window.addEventListener('scroll', handleScroll)

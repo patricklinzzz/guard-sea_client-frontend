@@ -59,7 +59,7 @@
   }
 
   const user_name = authStore.user.fullname
-  const avatar = authStore.user?.avatar_url ?? defaultAvatar
+  const avatar = authStore.user?.avatar_url || defaultAvatar
 </script>
 
 <style scoped lang="scss">

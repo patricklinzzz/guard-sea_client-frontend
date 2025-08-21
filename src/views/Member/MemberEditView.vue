@@ -28,9 +28,21 @@
 
   const handleProfileUpdate = async () => {
     console.log('Updating profile:', formData.value)
+    const formD = new FormData()
+    formD.append('name', formData.value.name)
+    formD.append('email', formData.value.email)
+    formD.append('phone', formData.value.phone)
+    formD.append('gender', formData.value.gender)
+    formD.append('address', formData.value.address)
+    formD.append('birthdate', formData.value.birthdate)
+    if(uploaded_avatar.value){
+      formD.append('avatar_url', uploaded_avatar.value)
+    }
+    
+
     try {
-      const apiUrl = `${baseUrl}/members/patch_member.php`
-      const response = await axios.patch(apiUrl, formData.value)
+      const apiUrl = `${baseUrl}/members/edit_member.php`
+      const response = await axios.post(apiUrl, formD)
       console.log('edit successfully:', response.data)
     } catch (err) {
       console.error('Post Error:', err)
@@ -44,6 +56,23 @@
     formData.value = JSON.parse(JSON.stringify(originalData))
     console.log('Changes cancelled and form has been reset.')
   }
+  const avatar_input = ref(null)
+  const uploaded_avatar = ref(null)
+  const avatar_change = () => {
+    avatar_input.value.click()
+  }
+  const file_change = (e) => {
+    const files = e.target.files
+    uploaded_avatar.value = files[0]
+    console.log(uploaded_avatar.value)
+    const reader = new FileReader()
+
+    reader.onload = (e) => {
+      formData.value.avatar_url = e.target.result
+    }
+
+    reader.readAsDataURL(files[0])
+  }
 </script>
 
 <template>
@@ -55,8 +84,15 @@
       <h3>編輯會員資料</h3>
       <form @submit.prevent="handleProfileUpdate">
         <div class="avatar_editor">
+          <input
+            ref="avatar_input"
+            @change="file_change"
+            accept="image/*"
+            type="file"
+            id="p_file"
+          />
           <img :src="formData.avatar_url" alt="Avatar" class="avatar_placeholder" />
-          <button type="button" class="edit_avatar_btn">
+          <button type="button" @click="avatar_change" class="edit_avatar_btn">
             <i class="fas fa-pencil-alt"></i>
           </button>
         </div>
@@ -121,6 +157,10 @@
   @use '@/assets/style/variables' as *;
   @use '@/assets/style/mixins' as *;
   @use '@/assets/style/typography';
+
+  #p_file {
+    display: none;
+  }
 
   // Main Content
   .member_content {
