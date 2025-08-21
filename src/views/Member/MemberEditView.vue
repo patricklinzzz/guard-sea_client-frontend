@@ -37,7 +37,7 @@
     formD.append('birthdate', formData.value.birthdate)
     if(uploaded_avatar.value){
       formD.append('avatar_url', uploaded_avatar.value)
-    }
+    } 
     
 
     try {
@@ -64,7 +64,6 @@
   const file_change = (e) => {
     const files = e.target.files
     uploaded_avatar.value = files[0]
-    console.log(uploaded_avatar.value)
     const reader = new FileReader()
 
     reader.onload = (e) => {
@@ -72,6 +71,10 @@
     }
 
     reader.readAsDataURL(files[0])
+  }
+  const reset = () => {
+    uploaded_avatar.value = 'reset'
+    formData.value.avatar_url = defaultAvatar
   }
 </script>
 
@@ -82,8 +85,10 @@
     </div>
     <div class="content_body">
       <h3>編輯會員資料</h3>
+      <button @click="reset">reset</button>
       <form @submit.prevent="handleProfileUpdate">
         <div class="avatar_editor">
+          
           <input
             ref="avatar_input"
             @change="file_change"
@@ -133,7 +138,7 @@
                 v-model="formData.birthdate"
                 placeholder="年 / 月 / 日"
                 format="yyyy/MM/dd"
-                model-type="yyyy-mm-dd"
+                model-type="yyyy-MM-dd"
                 :max-date="new Date()"
                 :enable-time-picker="false"
                 auto-apply

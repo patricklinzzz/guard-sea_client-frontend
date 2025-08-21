@@ -16,10 +16,9 @@ export const useAuthStore = defineStore('auth', () => {
       })
       if (response.data.success) {
         user.value = response.data.member
-        if (user.value['avatar_url'] && user.value['avatar_url'].startsWith('/')) {
+        if (user.value['avatar_url'] && user.value['avatar_url'].startsWith('/uploads')) {
           user.value['avatar_url'] = baseUrl + user.value['avatar_url']
         }
-        // 如果 image_url 不符合條件 (例如 null 或已經是完整的 http 路徑)，直接返回
         return true
       }
     } catch (error) {
