@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig ,loadEnv} from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
@@ -24,6 +24,11 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
+    },
+    server: {
+      host: true, // 修正：將 host 設為 true
+      // 修正：新增 allowedHosts 欄位
+      allowedHosts: ['41e2b5a0c739.ngrok-free.app', 'fc28ef460f6f.ngrok-free.app'],
     },
   }
 })
