@@ -1,11 +1,13 @@
 <script setup>
-  import { reactive, ref } from 'vue'
+  import { reactive, ref, onMounted, watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { useCartStore } from '@/stores/cart_store'
+  import { useAuthStore } from '@/stores/auth' // 修正: 引入 useAuthStore
   import { validatePhone } from '@/utils/validators.js'
   import Button from '@/components/buttons/button.vue'
 
   const cartStore = useCartStore()
+  const authStore = useAuthStore() // 修正: 實例化 authStore
   const router = useRouter()
 
   const formData = reactive({
@@ -46,26 +48,65 @@
     validateAddressField()
     return !nameError.value && !phoneError.value && !addressError.value
   }
-  const submitOrder = () => {
+
+  // 修正: 整合訂單提交邏輯
+  const submitOrder = async () => {
     const isFormValid = validateForm()
     if (!isFormValid) {
-      console.log('表單資料有誤')
+      alert('表單資料有誤，請檢查填寫內容。')
       return
     }
-    console.log('表單驗證通過')
-    const orderDetails = {
-      recipient: { ...formData },
-      paymentMethod: selectedPayment.value === 'credit_card' ? '信用卡' : '貨到付款',
-      shippingMethod: '宅配',
-      items: cartStore.items,
-      finalTotal: cartStore.finalTotal,
+
+    // 建立完整的 payload
+    const payload = {
+      payment_method: selectedPayment.value,
+      receiver_name: formData.name,
+      receiver_phone: formData.phone,
+      receiver_address: formData.address,
+      // 假設聯絡電話使用會員資料
+      contact_phone: authStore.memberData?.phone_number || formData.phone,
+      coupon_id: cartStore.couponStore?.appliedCoupon.coupon_id || null,
+      notes: '', // 假設有備註欄位
     }
-    cartStore.placeOrder(orderDetails)
-    router.push('/ordercomplete')
+
+    try {
+      // 呼叫 cartStore 中的 placeOrder 動作
+      const result = await cartStore.placeOrder(payload)
+      if (result.success) {
+        alert('訂單建立成功！')
+        router.push('/ordercomplete')
+      } else {
+        alert(result.error)
+      }
+    } catch (error) {
+      console.error('訂單提交失敗:', error)
+      alert('訂單提交失敗，請稍後再試。')
+    }
   }
+
   const goBack = () => {
     router.back()
   }
+
+  // 修正: 頁面載入時獲取會員資料
+  onMounted(async () => {
+    await authStore.fetchMemberData()
+  })
+
+  // 修正: 監聽同會員資料 checkbox 的變化
+  watch(sameAsMember, (newValue) => {
+    if (newValue && authStore.memberData) {
+      // 如果勾選，則填入會員資料
+      formData.name = authStore.memberData.fullname
+      formData.phone = authStore.memberData.phone_number
+      formData.address = authStore.memberData.address
+    } else if (!newValue) {
+      // 如果取消勾選，則清空表單
+      formData.name = ''
+      formData.phone = ''
+      formData.address = ''
+    }
+  })
 </script>
 <template>
   <section class="shipping_section">

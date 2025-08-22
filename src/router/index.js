@@ -68,11 +68,13 @@ const router = createRouter({
       path: '/cart',
       name: 'cart',
       component: () => import('@/views/Product/CartView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/shippinginfo',
       name: 'shippinginfo',
       component: () => import('@/views/Product/ShippingInfoView.vue'),
+      meta: { requiresAuth: true },
     },
     {
       path: '/ordercomplete',
@@ -167,16 +169,11 @@ const router = createRouter({
     }
   },
 })
-
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth) {
-    const token = localStorage.getItem('user')
+  const authStore = useAuthStore()
 
-    if (token) {
-      next()
-    } else {
-      next({ name: 'login' })
-    }
+  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
+    next({ name: 'login', query: { redirect: to.fullPath } })
   } else {
     next()
   }
@@ -184,9 +181,7 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach((to, from) => {
   const quiz_state = useQuizStore()
-  if(from.name === 'quiz' && !quiz_state.log_in_prompted) quiz_state.quizReset()
-    
-  
-});
+  if (from.name === 'quiz' && !quiz_state.log_in_prompted) quiz_state.quizReset()
+})
 
 export default router

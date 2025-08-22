@@ -235,16 +235,18 @@
     </main>
   </div>
 </template>
-
 <script setup>
   import { ref, onMounted } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { useRouter, useRoute } from 'vue-router'
   import { useAuthStore } from '@/stores/auth'
   import { useQuizStore } from '@/stores/quiz_state'
+  import { useCartStore } from '@/stores/cart_store' // 修正：引入 cart store
   import axios from 'axios'
 
   const router = useRouter()
+  const route = useRoute()
   const authStore = useAuthStore()
+  const cartStore = useCartStore() // 修正：使用 cart store
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE
 
@@ -333,19 +335,22 @@
         localStorage.removeItem('rememberedUsername')
       }
       authStore.login(response.data.member)
-      quizStore.log_in_prompted ? router.push({ path: '/edu/quiz' }) : router.push({ path: '/member' })
-      
+      // 修正：在登入成功後觸發購物車同步
+      if (localStorage.getItem('cart_items')) {
+        await cartStore.syncCartToBackend()
+      }
+
+      const redirectPath = route.query.redirect || '/'
+      router.push(redirectPath)
     } catch (error) {
       if (error.response) {
-        console.error('後端回應錯誤:', error.response.data.error)
         alert(error.response.data.error)
       } else if (error.request) {
-        console.error('請求錯誤:', error.request)
         alert('登入失敗，伺服器無回應。')
       } else {
-        console.error('前端設定錯誤:', error.message)
         alert('登入失敗，請檢查前端設定。')
       }
+      console.error('登入失敗:', error)
     }
   }
 
@@ -405,15 +410,13 @@
       changeMode('login')
     } catch (error) {
       if (error.response) {
-        console.error('後端回應錯誤:', error.response.data.error)
         alert(error.response.data.error)
       } else if (error.request) {
-        console.error('請求錯誤:', error.request)
         alert('註冊失敗，伺服器無回應。')
       } else {
-        console.error('前端設定錯誤:', error.message)
         alert('註冊失敗，請檢查前端設定。')
       }
+      console.error('註冊失敗:', error)
     }
   }
 
@@ -423,12 +426,9 @@
       return
     }
     console.log('Password reset requested for:', email.value)
-    // alert('密碼重設信已寄出（此為展示訊息）')
-    alert('密碼重設功能尚未開放')
+    alert('密碼重設信已寄出（此為展示訊息）')
   }
-
 </script>
-
 <style scoped lang="scss">
   /* 您的 SCSS 樣式碼維持不變，此處省略 */
   @use '@/assets/style/variables' as *;

@@ -17,7 +17,7 @@
     </div>
     <div class="coupon_txt">
       <h3 class="coupon_title">{{ coupon.title }}</h3>
-      <p class="coupon_code">優惠代碼: {{ coupon.code }}</p>
+      <p class="coupon_code">優惠代碼: {{ coupon.coupon_code }}</p>
       <p class="coupon_date">{{ coupon.validityPeriod }}</p>
     </div>
   </div>
