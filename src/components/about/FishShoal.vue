@@ -349,7 +349,7 @@
 
         tl.progress(positionMap.get(fish.id))
       })
-    }, fishContainerBg)
+    })
   }
 
   // --- 5. 生命週期函式 (維持不變) ---

@@ -18,7 +18,7 @@
   import volunteer from '@/assets/images/about/cooperate/volunteer.png'
 
   // 引入 FishShoal 組件
-  import FishShoal from '../../components/about/FishShoal.vue'
+  import FishShoal from '@/components/about/FishShoal.vue'
 
   import { onMounted, onUnmounted, ref } from 'vue'
   import { gsap } from 'gsap'
@@ -29,7 +29,7 @@
   const bannerRef = ref(null)
 
   // 【重要】將所有 context 變數移到 onMounted 外層，以便 onUnmounted 也能存取
-  let gtx, bannerCtx, sloganCtx, subSloganCtx, responsiveAnimsCtx
+  let gtx, bannerCtx, sloganCtx, subSloganCtx, responsiveAnimsCtx, advantageCtx, protectCtx
 
   onMounted(() => {
     // 【修改】使用 ScrollTrigger.matchMedia 區分電腦與手機動畫
@@ -48,8 +48,8 @@
           gtl
             .from('h2', {
               opacity: 0,
-              y: 30,
-              duration: 0.6,
+              y: 20,
+              duration: 0.4,
             })
             .from(
               '.cooperate_figure',
@@ -58,9 +58,9 @@
                 x: -500,
                 y: 20,
                 rotationZ: -40,
-                duration: 1.6,
+                duration: 1.3,
                 stagger: {
-                  each: 0.8,
+                  each: 0.6,
                   from: 'end', // 電腦版：從結尾開始，即第四張先出現
                 },
               },
@@ -245,6 +245,125 @@
         },
       })
     })
+
+    // --- 「感受、認識、守護」三球進入動畫 ---
+    advantageCtx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.advantage', // 觸發動畫的元素
+          start: 'top 80%', // 當 .advantage 的頂部滾動到視窗的 80% 時觸發
+          toggleActions: 'restart none none none', // 滾動到就播放一次
+        },
+      })
+
+      // 1. 圓形容器本身：從下方 50px、透明度 0 的狀態開始
+      tl.from('.advantage div', {
+        opacity: 0,
+        y: 50,
+        duration: 0.8,
+        ease: 'power2.out',
+        stagger: 0.2, // 每個元素間隔 0.2 秒出現
+      })
+        // 2. 圓形內的圖片：從放大 1.5 倍的狀態開始
+        //    '<' 符號表示這個動畫與前一個動畫同時開始
+        .from(
+          '.advantage img',
+          {
+            scale: 1.5,
+            duration: 1.2,
+            ease: 'power3.out',
+            stagger: 0.2,
+          },
+          '<'
+        )
+        // 3. 標題文字 H2：在圖片動畫開始後 0.4 秒，從透明度 0 開始
+        //    '-=0.8' 表示這個動畫比前一個動畫的結束點提早 0.8 秒開始
+        .from(
+          '.advantage h2',
+          {
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.2,
+          },
+          '-=0.8'
+        )
+      // --- 持續浮動動畫  ---
+      // 這個動畫會自動接在上面圓球進入動畫的後面播放持續浮動
+
+      tl.to(
+        '.advantage div',
+        {
+          y: -15, // 向上移動 15px
+          duration: 2, // 每次浮動(向上或向下)的時長
+          repeat: -1, // 無限重複
+          yoyo: true, // 播放完會倒帶，產生來回效果
+          ease: 'sine.inOut', // 使用 sine 曲線，模擬平滑的波浪運動
+        },
+        0
+      )
+    })
+
+    // --- 海豚與鯨魚浮動動畫 (更新版：增加搖擺感) ---
+    protectCtx = gsap.context(() => {
+      const tl = gsap.timeline()
+
+      // --- 海豚動畫 ---
+      // 垂直移動
+      tl.to(
+        '.dolphin',
+        {
+          y: -25, // 增加垂直移動幅度
+          duration: 2,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+        },
+        0
+      )
+
+      // 水平移動 + 旋轉
+      tl.to(
+        '.dolphin',
+        {
+          x: 20, // 增加向右的輕微漂移
+          rotation: -5, // 身體向左輕微旋轉
+          duration: 2, // 使用不同時長，避免動作完全同步
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+        },
+        0
+      )
+
+      // --- 鯨魚動畫 ---
+      // 垂直移動
+      tl.to(
+        '.whale',
+        {
+          x: 10,
+          y: 30, // 增加垂直移動幅度
+          duration: 1.5, // 加長動畫時間，讓牠感覺更巨大、更緩慢
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+        },
+        0
+      )
+
+      // 水平移動 + 旋轉
+      tl.to(
+        '.whale',
+        {
+          x: -10, // 增加向左的輕微漂移
+          rotation: 3, // 身體向右輕微旋轉
+          duration: 4.5, // 使用不同時長
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+        },
+        0
+      )
+    })
   })
 
   // 添加 onUnmounted 鉤子來清理所有 GSAP 動畫和觸發器
@@ -255,10 +374,13 @@
     sloganCtx.revert()
     subSloganCtx.revert()
     responsiveAnimsCtx.revert()
+    advantageCtx.revert()
+    protectCtx.revert()
   })
 </script>
 <template>
   <main class="wrapper">
+    <div class="banner-background-effects"></div>
     <section id="banner" ref="bannerRef">
       <h1 class="main_slogan">
         <span>我</span>
@@ -665,7 +787,7 @@
     //wave_end
     .idea {
       padding-top: 6%;
-      margin-bottom: 4vw;
+      margin-bottom: 40px;
 
       @include respond(md) {
         padding-top: 9%;
@@ -692,18 +814,20 @@
     //advantage_start
 
     .advantage {
-      max-width: 980px;
+      max-width: 1000px;
       padding: 0 20px;
       display: flex;
       justify-content: space-between;
-      gap: 5%;
+      gap: 4%;
       margin: 0 auto;
       margin-bottom: 40px;
 
-      @include respond(md) {
+      @media screen and (max-width: 500px) {
         flex-wrap: wrap;
         justify-content: center;
+        gap: 30px;
       }
+
       div {
         position: relative;
         width: 31.25%;
@@ -711,8 +835,8 @@
         border-radius: 50%;
         overflow: hidden;
 
-        @include respond(md) {
-          width: 45%;
+        @media screen and (max-width: 500px) {
+          width: 85%;
         }
         img {
           width: 100%;
@@ -725,6 +849,7 @@
           left: 50%;
           transform: translate(-50%, -50%);
           text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.8);
+          font-size: 24px;
         }
       }
     }
@@ -1027,18 +1152,24 @@
         }
 
         @media screen and (max-width: 905px) {
-          width: 48%;
+          width: 47%;
           margin-bottom: 30px;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 20px;
+          gap: 15px;
           div {
             width: 92%;
             img {
               object-fit: contain;
             }
+          }
+        }
+
+        @media screen and (max-width: 345px) {
+          figcaption {
+            font-size: 15px;
           }
         }
       }
