@@ -1,66 +1,120 @@
 <script setup>
-  import { useRouter } from 'vue-router'
-  import { useCartStore } from '@/stores/cart_store'
+  import { useRouter, useRoute } from 'vue-router'
+  import { ref, onMounted } from 'vue'
+  import axios from 'axios'
   import Button from '@/components/buttons/button.vue'
 
   const router = useRouter()
-  const cartStore = useCartStore()
+  const route = useRoute()
+  const order = ref(null)
+  const isLoading = ref(true)
+  const hasError = ref(false)
 
-  const order = cartStore.finalOrder
-  if (!order) {
+  const orderId = route.query.order_id
+  const API_BASE_URL = import.meta.env.VITE_API_BASE
+
+  const paymentMethodsMap = {
+    credit_card: '信用卡',
+    linepay: 'Line Pay',
+    cash_on_delivery: '貨到付款',
+  }
+  if (!orderId) {
     router.replace('/')
   }
-</script>
+  onMounted(async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/orders/get_member_order.php`, {
+        params: {
+          order_id: orderId,
+        },
+        withCredentials: true,
+      })
 
+      if (response.data.order) {
+        order.value = response.data.order
+      } else {
+        hasError.value = true
+        console.error('API 回傳資料格式錯誤')
+      }
+    } catch (error) {
+      console.error('獲取訂單資料失敗:', error)
+      hasError.value = true
+      if (error.response && error.response.status === 404) {
+        router.replace('/')
+      } else if (error.response && error.response.status === 401) {
+        router.push('/login')
+      }
+    } finally {
+      isLoading.value = false
+    }
+  })
+</script>
 <template>
-  <section class="completion_section" v-if="order">
+  <section class="completion_section">
     <div class="completion_banner">
       <h1>購物車</h1>
     </div>
 
     <div class="container">
-      <div class="completion-title">
-        <h2>訂單完成！感謝您的購買</h2>
+      <div v-if="isLoading" class="loading-state">
+        <h2>正在載入訂單資料...</h2>
       </div>
 
-      <h3>訂單資料</h3>
-      <div class="order-details">
-        <ul>
-          <li>
-            <h3>收件人姓名:</h3>
-            <span>{{ order.recipient.name }}</span>
-          </li>
-          <li>
-            <h3>收件人電話:</h3>
-            <span>{{ order.recipient.phone }}</span>
-          </li>
-          <li>
-            <h3>收件人地址:</h3>
-            <span>{{ order.recipient.address }}</span>
-          </li>
-          <li>
-            <h3>運送方式:</h3>
-            <span>{{ order.shippingMethod }}</span>
-          </li>
-          <li>
-            <h3>付款方式:</h3>
-            <span>{{ order.paymentMethod }}</span>
-          </li>
-          <li class="total">
-            <h3>商品總計:</h3>
-            <span>${{ order.finalTotal }}</span>
-          </li>
-        </ul>
+      <div v-else-if="hasError" class="error-state">
+        <h2>無法取得訂單資料，請稍後再試。</h2>
       </div>
 
-      <div class="actions">
-        <RouterLink to="login">
-          <Button variant="gray" to="/orders">查詢訂單</Button>
-        </RouterLink>
+      <div v-else-if="order">
+        <div class="completion-title">
+          <h2>訂單完成！感謝您的購買</h2>
+        </div>
 
-        <RouterLink to="/productlist">
-          <Button variant="default" to="/products">周邊商品</Button>
-        </RouterLink>
+        <h3>訂單資料</h3>
+        <div class="order-details">
+          <ul>
+            <li>
+              <h3>訂單編號:</h3>
+              <span>{{ order.order_id }}</span>
+            </li>
+            <li>
+              <h3>收件人姓名:</h3>
+              <span>{{ order.receiver_name }}</span>
+            </li>
+            <li>
+              <h3>收件人電話:</h3>
+              <span>{{ order.receiver_phone }}</span>
+            </li>
+            <li>
+              <h3>收件人地址:</h3>
+              <span>{{ order.receiver_address }}</span>
+            </li>
+            <li>
+              <h3>運送方式:</h3>
+              <span>宅配</span>
+            </li>
+            <li>
+              <h3>付款方式:</h3>
+              <span>{{ paymentMethodsMap[order.payment_method] || order.payment_method }}</span>
+            </li>
+            <li>
+              <h3>付款狀態:</h3>
+              <span class="payment-status">{{ order.payment_status }}</span>
+            </li>
+            <li class="total">
+              <h3>商品總計:</h3>
+              <span>${{ order.final_amount }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="actions">
+          <RouterLink to="/member/orders">
+            <Button variant="gray">查詢所有訂單</Button>
+          </RouterLink>
+
+          <RouterLink to="/productlist">
+            <Button variant="default">繼續購物</Button>
+          </RouterLink>
+        </div>
       </div>
     </div>
   </section>

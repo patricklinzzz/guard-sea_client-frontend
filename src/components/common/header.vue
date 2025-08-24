@@ -9,13 +9,32 @@
   const authStore = useAuthStore()
   const route = useRoute()
   const router = useRouter()
-  //添加當前路由class
+
+  const cartStore = useCartStore()
+  const cartCount = computed(() => cartStore.itemCount)
+
   const isActive = (path) => computed(() => route.path.startsWith(path))
   const isEdu = isActive('/edu')
   const isProd = isActive('/productlist')
   const isEvent = isActive('/event')
   const isNew = isActive('/new')
-  //登出
+
+  const avatar = authStore.user?.avatar_url ?? defaultAvatar
+  const menu_open = ref(false)
+  const isedu_dropdown = ref(false)
+  const ismember_dropdown = ref(false)
+  const dropdown_open = ref(false)
+  const isNavHidden = ref(false)
+  let lastScrollY = 0
+
+  const checkAndRedirectToCart = (event) => {
+    if (!authStore.isLoggedIn) {
+      event.preventDefault()
+      alert('請先登入以查看購物車內容！')
+      router.push({ path: '/login', query: { redirect: '/cart' } })
+    }
+  }
+
   const logout = async () => {
     if (confirm('您確定要登出嗎？')) {
       const ok = await authStore.logout()
@@ -27,12 +46,10 @@
       }
     }
   }
-  //手機menu
-  const menu_open = ref(false)
+
   const toggle_menu = () => {
     menu_open.value = !menu_open.value
   }
-  //漢堡與x切換
   const change_ham_icon = computed(() => {
     if (menu_open.value) {
       document.body.style.overflow = 'hidden'
@@ -42,9 +59,6 @@
       return 'fa-solid fa-bars'
     }
   })
-  //桌面版教育、會員下拉選單
-  const isedu_dropdown = ref(false)
-  const ismember_dropdown = ref(false)
   const open_edu_dropdown = () => {
     if (window.innerWidth >= 768) {
       isedu_dropdown.value = true
@@ -55,7 +69,6 @@
       ismember_dropdown.value = true
     }
   }
-  // 滑鼠離開時關閉下拉菜單
   const close_edu_dropdown = () => {
     if (window.innerWidth >= 768) {
       isedu_dropdown.value = false
@@ -66,14 +79,10 @@
       ismember_dropdown.value = false
     }
   }
-  // 點擊連結後關閉下拉選單以及選單內教育的>
   const edu_linkclick = () => {
     menu_open.value = false
     dropdown_open.value = false
   }
-
-  //手機版教育下拉選單
-  const dropdown_open = ref(false)
   const toggle_dropdown = () => {
     dropdown_open.value = !dropdown_open.value
   }
@@ -84,13 +93,6 @@
       return 'fa-solid fa-caret-up fa-flip-vertical'
     }
   })
-  // // 計算購物車總數量
-  const cartStore = useCartStore()
-  const cartCount = computed(() => cartStore.itemCount)
-
-  //下滑時收起 往上滑出現
-  const isNavHidden = ref(false)
-  let lastScrollY = 0
 
   const handleScroll = () => {
     const nowScrollY = window.scrollY
@@ -118,22 +120,22 @@
 
 <template>
   <header :class="{ nav_hidden: isNavHidden }">
-    <!-- 電腦導覽列 -->
     <div id="navbar">
       <router-link to="/" @click="edu_linkclick">
         <img src="../../assets/images/logo.svg" alt="" id="logo" />
       </router-link>
 
       <nav id="desktop_nav">
-        <!-- 教育hover下拉選單 -->
         <div id="edu_dropdown" @mouseenter="open_edu_dropdown" @mouseleave="close_edu_dropdown">
           <router-link to="/edu" :class="{ 'router-link-active': isEdu }">教育</router-link>
           <transition name="slide-fade">
             <div v-if="isedu_dropdown" id="edu_dropdown_menu">
               <ul>
-                <li><router-link to="/edu/species">生物圖鑑</router-link></li>
-                <li><router-link to="/edu/causes">滅絕原因</router-link></li>
-                <li><router-link to="/edu/quiz">知識測驗</router-link></li>
+                <li>
+                  <router-link to="/edu/species" @click="edu_linkclick">生物圖鑑</router-link>
+                </li>
+                <li><router-link to="/edu/causes" @click="edu_linkclick">滅絕原因</router-link></li>
+                <li><router-link to="/edu/quiz" @click="edu_linkclick">知識測驗</router-link></li>
               </ul>
             </div>
           </transition>
@@ -142,11 +144,10 @@
         <router-link to="/event" :class="{ 'router-link-active': isEvent }">活動</router-link>
         <router-link to="/new" :class="{ 'router-link-active': isNew }">最新消息</router-link>
         <router-link to="/about">關於我們</router-link>
-        <router-link to="/cart" class="cart-icon">
+        <router-link to="/cart" class="cart-icon" @click.prevent="checkAndRedirectToCart">
           <i class="fa-solid fa-cart-shopping"></i>
           <span class="cart-count" v-if="cartCount > 0">{{ cartCount }}</span>
         </router-link>
-        <!-- 登入狀態 -->
         <a
           v-if="authStore.isLoggedIn"
           id="member"
@@ -158,19 +159,17 @@
             <div v-if="ismember_dropdown" id="member_dropdown_menu">
               <ul>
                 <li>
-                  <router-link v-if="authStore.isLoggedIn" to="/member">會員專區</router-link>
+                  <router-link to="/member" @click="edu_linkclick">會員專區</router-link>
                 </li>
                 <li><a @click="logout" style="cursor: pointer">登出</a></li>
               </ul>
             </div>
           </transition>
         </a>
-        <!-- 未登入 -->
         <router-link v-else to="/login">
           <Button variant="transparent">會員登入</Button>
         </router-link>
       </nav>
-      <!-- 手機導覽列 -->
       <nav id="mobile_nav">
         <router-link v-if="authStore.isLoggedIn" to="/member" @click="edu_linkclick">
           <img :src="avatar" alt="User Avatar" id="user_avatar" />
@@ -178,14 +177,13 @@
         <router-link v-else to="/login" @click="edu_linkclick">
           <i class="fa-solid fa-user"></i>
         </router-link>
-        <router-link to="/cart" class="cart-icon" @click="edu_linkclick">
+        <router-link to="/cart" class="cart-icon" @click.prevent="checkAndRedirectToCart">
           <i class="fa-solid fa-cart-shopping"></i>
           <span class="cart-count" v-if="cartCount > 0">{{ cartCount }}</span>
         </router-link>
         <i :class="change_ham_icon" @click="toggle_menu"></i>
       </nav>
     </div>
-    <!-- 手機導覽展開 -->
     <transition name="fade">
       <div v-if="menu_open" id="md_menu">
         <ul>

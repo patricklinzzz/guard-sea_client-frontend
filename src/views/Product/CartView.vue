@@ -6,63 +6,91 @@
   import QuantityInput from '@/components/product/quantity_button.vue'
   import Button from '@/components/buttons/button.vue'
   import CouponCard from '@/components/product/coupon_card.vue'
+  import { useAuthStore } from '@/stores/auth'
+
+  const API_BASE_URL = import.meta.env.VITE_API_BASE
 
   const cartStore = useCartStore()
   const couponStore = useCouponStore()
+  const authStore = useAuthStore()
+  const router = useRouter()
 
-  //================預設使用者
-  onMounted(() => {
-    if (import.meta.env.DEV) {
-      console.log('開發模式：正在為購物車設定預設使用者優惠券...')
-      couponStore.clearUserCoupons()
-      couponStore.grantCoupon('onRegister')
-      couponStore.grantCoupon('onFirstPurchase')
-      couponStore.grantCoupon('onQuizPass', { quiz_category: 'fish' })
-    }
-  })
-
-  //==============購物車與訂單金額計算
-  const totalAmount = computed(() =>
+  const cartTotalAmount = computed(() =>
     cartStore.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   )
-  const shippingFee = 60
+  const shippingFee = ref(60)
 
-  //=====================優惠券
-  const selectedCouponCode = ref(null)
-  const availableCoupons = computed(() => couponStore.formattedAvailableCoupons)
-  const applyCoupon = (coupon) => {
-    if (selectedCouponCode.value === coupon.code) {
-      selectedCouponCode.value = null
-    } else {
-      selectedCouponCode.value = coupon.code
-    }
-  }
-  const discount = computed(() => {
-    if (!selectedCouponCode.value) {
-      return 0
-    }
-    const coupon = couponStore.getCouponByCode(selectedCouponCode.value)
-    return coupon ? coupon.value : 0
-  })
-  //==================計算最後總金額
+  const discountAmount = computed(() => couponStore.appliedCoupon.discount_amount)
+
   const finalTotal = computed(() => {
-    const total = totalAmount.value + shippingFee - discount.value
+    const total = cartTotalAmount.value + shippingFee.value - discountAmount.value
     return total > 0 ? total : 0
   })
 
-  //==================監聽數量按鈕
+  const getImageUrl = (path) => {
+    if (!path || path.startsWith('http')) {
+      return path
+    }
+    return `${API_BASE_URL}${path}`
+  }
+
+  onMounted(async () => {
+    if (authStore.isLoggedIn) {
+      await cartStore.fetchCartItemsFromBackend()
+      await cartStore.syncCartToBackend()
+      await couponStore.fetchCoupons()
+    } else {
+      cartStore.loadCartFromStorage()
+    }
+  })
+
+  const availableCoupons = computed(() => {
+    return couponStore.formattedAvailableCoupons.map((coupon) => ({
+      ...coupon,
+      isActive: coupon.coupon_code === couponStore.appliedCoupon.coupon_code,
+    }))
+  })
+
+  const applyCoupon = async (coupon) => {
+    if (!authStore.isLoggedIn) {
+      alert('請先登入以套用優惠券。')
+      return
+    }
+
+    const result = await couponStore.validateCoupon(coupon.coupon_code)
+
+    if (result.success) {
+      alert(result.message)
+    } else {
+      alert(result.error)
+    }
+  }
+
+  const handleUpdateQuantity = (index, newQuantity) => {
+    cartStore.updateQuantity(index, newQuantity)
+  }
+
   watch(
     () => cartStore.items,
-    (newItems) => {
+    (newItems, oldItems) => {
+      newItems.forEach((newItem, index) => {
+        const oldItem = oldItems[index]
+        if (oldItem && newItem.quantity !== oldItem.quantity) {
+          cartStore.updateQuantity(index, newItem.quantity)
+        }
+      })
       const indexToRemove = newItems.findIndex((item) => item.quantity === 0)
       if (indexToRemove !== -1) {
         cartStore.removeItem(indexToRemove)
       }
+
+      if (couponStore.appliedCoupon.coupon_id) {
+        couponStore.validateCoupon(couponStore.appliedCoupon.coupon_code)
+      }
     },
     { deep: true }
   )
-  //====================確認購物車有沒有東西,才進行下一步
-  const router = useRouter()
+
   const goToNextStep = () => {
     if (cartStore.items.length === 0) {
       alert('您的購物車是空的，無法結帳！')
@@ -78,7 +106,14 @@
       <h1>購物車</h1>
     </div>
 
-    <div class="cart_content">
+    <div v-if="!authStore.isLoggedIn" class="cart_content">
+      <div class="login-prompt">
+        <h2>請先登入會員以查看購物車</h2>
+        <p>登入後，你加入的商品會自動同步</p>
+        <button @click="router.push('/login')">前往登入</button>
+      </div>
+    </div>
+    <div v-else class="cart_content">
       <h2>購物車內容</h2>
       <div v-if="cartStore.items.length === 0">
         <h3>購物車是空的</h3>
@@ -89,7 +124,7 @@
         class="cart_item"
       >
         <div class="item_img">
-          <img :src="item.image" alt="商品圖" class="product_img" />
+          <img :src="getImageUrl(item.image)" alt="商品圖" class="product_img" />
         </div>
         <div class="item_details">
           <h3 class="name">{{ item.name }}</h3>
@@ -99,7 +134,11 @@
           </h3>
           <h3>尺寸：{{ item.size }}</h3>
           <div class="quantity_box">
-            <QuantityInput v-model="item.quantity" :min="0" />
+            <QuantityInput
+              :modelValue="cartStore.items[index].quantity"
+              @update:modelValue="(newQuantity) => handleUpdateQuantity(index, newQuantity)"
+              :min="0"
+            />
           </div>
           <h3>
             價格:
@@ -115,9 +154,9 @@
         <div v-if="availableCoupons.length > 0" class="coupon_list">
           <CouponCard
             v-for="coupon in availableCoupons"
-            :key="coupon.code"
+            :key="coupon.coupon_code"
             :coupon="coupon"
-            :is-active="coupon.code === selectedCouponCode"
+            :is-active="coupon.coupon_code === couponStore.appliedCoupon.coupon_code"
             @click="applyCoupon(coupon)"
             style="cursor: pointer"
           ></CouponCard>
@@ -139,11 +178,11 @@
           <ul>
             <li>
               <p>商品小計</p>
-              <p>${{ totalAmount }}</p>
+              <p>${{ cartTotalAmount }}</p>
             </li>
             <li>
               <p>優惠折抵</p>
-              <p class="discount-text">-${{ discount }}</p>
+              <p class="discount-text">-${{ discountAmount }}</p>
             </li>
             <li>
               <p>運費小計</p>
