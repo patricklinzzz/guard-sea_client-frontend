@@ -17,15 +17,15 @@ const router = createRouter({
       component: () => import('@/views/Educate/EducateView.vue'),
     },
     {
-      path: '/edu/species/:id(\\d+)',
-      name: 'speciesinfo',
-      component: () => import('@/views/Educate/SpeciesinfoView.vue'),
-      props: true,
-    },
-    {
       path: '/edu/species/:typeId?',
       name: 'species',
       component: () => import('@/views/Educate/SpeciesView.vue'),
+      props: true,
+    },
+    {
+      path: '/edu/species/:id(\\d+)',
+      name: 'speciesinfo',
+      component: () => import('@/views/Educate/SpeciesinfoView.vue'),
       props: true,
     },
     {
@@ -169,11 +169,11 @@ const router = createRouter({
     }
   },
 })
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
   if (to.meta.requiresAuth) {
-    const token = authStore.fetchUser()
+    await authStore.fetchUser()
   }
   if (to.meta.requiresAuth && !authStore.isLoggedIn) {
     next({ name: 'login', query: { redirect: to.fullPath } })
