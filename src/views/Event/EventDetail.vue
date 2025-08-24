@@ -7,21 +7,19 @@ import { formatEventDates } from '@/utils/dateFormat'
 
 // 連結按鈕報名表單
 const route = useRoute()
-// 確保 eventId 是一個數字，因為你的 API 查找是基於數字
+// 確保 eventId 是一個數字
 const eventId = parseInt(route.params.id) 
 const router = useRouter()
 
 // 導入所有活動數據
 const eventStore = useEventStore()
 
-// 根據 ID 查找對應的活動資料
-// 這裡直接使用 store 的 getter 
+// 根據 ID 查找對應的活動資料，使用 store 的 getter 
 const current_event = computed(() => eventStore.getEventById(eventId))
 
 // 確保在元件載入時呼叫 API
 onMounted(() => {
     // 只有在 store 中沒有資料時才呼叫 API
-    // 你的 store 已經有防重複的邏輯，這裡可以直接調用
     eventStore.fetchEvents().then(() => {
         // 在資料載入後，如果還是找不到對應活動，再執行導航
         if (!current_event.value) {
@@ -32,7 +30,6 @@ onMounted(() => {
 
 // 轉換日期格式
 const eventDates = computed(() => {
-    // 在這裡處理 current_event 為 null 的情況
     if (!current_event.value) return {}
     return formatEventDates(current_event.value)
 })

@@ -95,7 +95,6 @@ const issueCoupon = async () => {
         headers: {
             'Content-Type': 'application/json',
         },
-        // 依據後端需求，可能需要傳送 member_id 或其他資料
         body: JSON.stringify({ 
             // member_id: '使用者會員 ID',
             coupon_id: 3 
