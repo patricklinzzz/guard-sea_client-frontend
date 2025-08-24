@@ -240,13 +240,13 @@
   import { useRouter, useRoute } from 'vue-router'
   import { useAuthStore } from '@/stores/auth'
   import { useQuizStore } from '@/stores/quiz_state'
-  import { useCartStore } from '@/stores/cart_store' // 修正：引入 cart store
+  import { useCartStore } from '@/stores/cart_store' 
   import axios from 'axios'
 
   const router = useRouter()
   const route = useRoute()
   const authStore = useAuthStore()
-  const cartStore = useCartStore() // 修正：使用 cart store
+  const cartStore = useCartStore() 
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE
 
@@ -335,7 +335,7 @@
         localStorage.removeItem('rememberedUsername')
       }
       authStore.login(response.data.member)
-      // 修正：在登入成功後觸發購物車同步
+      // 購物車同步
       if (localStorage.getItem('cart_items')) {
         await cartStore.syncCartToBackend()
       }

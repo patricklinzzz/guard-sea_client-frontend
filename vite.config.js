@@ -25,11 +25,6 @@ export default defineConfig(({ mode }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
-    server: {
-      host: true, // 修正：將 host 設為 true
-      // 修正：新增 allowedHosts 欄位
-      allowedHosts: ['41e2b5a0c739.ngrok-free.app', 'fc28ef460f6f.ngrok-free.app'],
-    },
   }
 })
 

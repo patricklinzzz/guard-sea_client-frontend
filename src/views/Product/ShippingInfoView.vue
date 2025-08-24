@@ -2,13 +2,14 @@
   import { reactive, ref, onMounted, watch } from 'vue'
   import { useRouter } from 'vue-router'
   import { useCartStore } from '@/stores/cart_store'
-  import { useAuthStore } from '@/stores/auth' // 修正: 引入 useAuthStore
+  import { useAuthStore } from '@/stores/auth'
   import { validatePhone } from '@/utils/validators.js'
   import Button from '@/components/buttons/button.vue'
 
   const cartStore = useCartStore()
-  const authStore = useAuthStore() // 修正: 實例化 authStore
+  const authStore = useAuthStore()
   const router = useRouter()
+  const isLoading = ref(false)
 
   const formData = reactive({
     name: '',
@@ -16,7 +17,6 @@
     address: '',
   })
   const sameAsMember = ref(false)
-
   const selectedPayment = ref('credit_card')
 
   const selectPayment = (method) => {
@@ -49,7 +49,6 @@
     return !nameError.value && !phoneError.value && !addressError.value
   }
 
-  // 修正: 整合訂單提交邏輯
   const submitOrder = async () => {
     const isFormValid = validateForm()
     if (!isFormValid) {
@@ -57,30 +56,59 @@
       return
     }
 
-    // 建立完整的 payload
     const payload = {
       payment_method: selectedPayment.value,
       receiver_name: formData.name,
       receiver_phone: formData.phone,
       receiver_address: formData.address,
-      // 假設聯絡電話使用會員資料
       contact_phone: authStore.memberData?.phone_number || formData.phone,
       coupon_id: cartStore.couponStore?.appliedCoupon.coupon_id || null,
-      notes: '', // 假設有備註欄位
+      notes: '',
     }
 
+    isLoading.value = true
+
     try {
-      // 呼叫 cartStore 中的 placeOrder 動作
-      const result = await cartStore.placeOrder(payload)
-      if (result.success) {
-        alert('訂單建立成功！')
-        router.push('/ordercomplete')
+      const responseData = await cartStore.placeOrder(payload)
+
+      if (responseData.order_id) {
+        if (responseData.payment_url && responseData.payment_form) {
+          // 綠界支付（信用卡）
+          const form = document.createElement('form')
+          form.method = 'POST'
+          form.action = responseData.payment_url
+          form.style.display = 'none'
+
+          for (const key in responseData.payment_form) {
+            if (Object.prototype.hasOwnProperty.call(responseData.payment_form, key)) {
+              const input = document.createElement('input')
+              input.type = 'hidden'
+              input.name = key
+              input.value = responseData.payment_form[key]
+              form.appendChild(input)
+            }
+          }
+          document.body.appendChild(form)
+          form.submit()
+        } else if (responseData.redirect_url) {
+          // Line Pay
+          window.location.href = responseData.redirect_url
+        } else {
+          // 貨到付款
+          alert('訂單已建立，感謝您的訂購！')
+          router.push({
+            name: 'order-complete',
+            query: { order_id: responseData.order_id },
+          })
+        }
       } else {
-        alert(result.error)
+        alert(responseData.error || '訂單建立失敗')
       }
     } catch (error) {
       console.error('訂單提交失敗:', error)
       alert('訂單提交失敗，請稍後再試。')
+    } finally {
+      isLoading.value = false
     }
   }
 
@@ -88,20 +116,16 @@
     router.back()
   }
 
-  // 修正: 頁面載入時獲取會員資料
   onMounted(async () => {
     await authStore.fetchMemberData()
   })
 
-  // 修正: 監聽同會員資料 checkbox 的變化
   watch(sameAsMember, (newValue) => {
     if (newValue && authStore.memberData) {
-      // 如果勾選，則填入會員資料
       formData.name = authStore.memberData.fullname
       formData.phone = authStore.memberData.phone_number
       formData.address = authStore.memberData.address
     } else if (!newValue) {
-      // 如果取消勾選，則清空表單
       formData.name = ''
       formData.phone = ''
       formData.address = ''
@@ -157,8 +181,15 @@
             </button>
             <button
               type="button"
-              :class="{ active: selectedPayment === 'cod' }"
-              @click="selectPayment('cod')"
+              :class="{ active: selectedPayment === 'linepay' }"
+              @click="selectPayment('linepay')"
+            >
+              Line Pay
+            </button>
+            <button
+              type="button"
+              :class="{ active: selectedPayment === 'cash_on_delivery' }"
+              @click="selectPayment('cash_on_delivery')"
             >
               貨到付款
             </button>
@@ -167,7 +198,9 @@
 
         <div class="form-actions">
           <Button variant="gray" type="button" @click="goBack">返回編輯頁</Button>
-          <Button variant="default" type="submit">確認下單</Button>
+          <Button variant="default" type="submit" :disabled="isLoading">
+            {{ isLoading ? '處理中...' : '確認下單' }}
+          </Button>
         </div>
       </form>
     </div>
@@ -209,6 +242,7 @@
         .checkbox {
           input[type='checkbox'] {
             -webkit-appearance: auto;
+            appearance: auto;
           }
         }
       }

@@ -6,7 +6,7 @@ const baseUrl = import.meta.env.VITE_API_BASE
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
-  const memberData = ref(null) // 修正：新增 memberData 狀態
+  const memberData = ref(null)
 
   const isLoggedIn = computed(() => user.value !== null)
 
@@ -24,7 +24,6 @@ export const useAuthStore = defineStore('auth', () => {
       return false
     }
   }
-  // 修正：新增 fetchMemberData 動作
   async function fetchMemberData() {
     if (!isLoggedIn.value) return
     try {
@@ -53,7 +52,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (response.data.success) {
         user.value = null
-        memberData.value = null // 修正：登出時清除會員資料
+        memberData.value = null 
         return true
       } else {
         throw new Error('登出失敗')

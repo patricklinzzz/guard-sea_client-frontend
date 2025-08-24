@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE
 const CART_API_URL = `${API_BASE_URL}/cart`
-const ORDER_API_URL = `${API_BASE_URL}/orders` // 修正：新增訂單 API 基礎 URL
+const ORDER_API_URL = `${API_BASE_URL}/orders`
 export const useCartStore = defineStore('cart', () => {
   const items = ref([])
   const shippingMethod = ref('homedelivery')
@@ -175,86 +175,23 @@ export const useCartStore = defineStore('cart', () => {
     shippingMethod.value = method
   }
 
-  // const placeOrder = (orderDetails) => {
-  //   finalOrder.value = {
-  //     ...orderDetails,
-  //     orderDate: new Date().toISOString().slice(0, 10),
-  //     orderNumber: `GS${Date.now()}`,
-  //   }
-  //   items.value = []
-  // }
   const placeOrder = async (orderDetails) => {
     try {
       const response = await axios.post(`${ORDER_API_URL}/post_order_create.php`, orderDetails, {
         withCredentials: true,
       })
-      // 修正：針對綠界支付，使用 ngrok 網址
-      // const ORDER_API_NGROK_URL = 'https://fc28ef460f6f.ngrok-free.app/guard-sea_api/orders'
-      //guard-sea_api/orders/post_order_create.php
-      // try {
-      //   const response = await axios.post(
-      //     `${ORDER_API_NGROK_URL}/post_order_create.php`,
-      //     orderDetails,
-      //     { withCredentials: true }
-      //   )
 
       if (response.data.order_id) {
-        // 訂單建立成功後，可以清空本地購物車狀態
         items.value = []
         localStorage.removeItem('cart_items')
-
-        //       // 處理支付邏輯
-        //       if (response.data.payment_url) {
-        //         // 如果有支付 URL，則自動跳轉
-        //         window.location.href = response.data.payment_url
-        //       } else {
-        //         // 如果沒有支付 URL，直接導向訂單完成頁面
-        //         return { success: true, orderId: response.data.order_id }
-        //       }
-        //     } else {
-        //       throw new Error(response.data.message || '訂單建立失敗')
-        //     }
-        //   } catch (error) {
-        //     console.error('建立訂單失敗:', error)
-        //     return { success: false, error: error.response?.data?.message || '建立訂單失敗' }
-        //   }
-        // }
-        // 修正：處理支付邏輯
-        if (response.data.payment_url && response.data.payment_form) {
-          // 步驟 1: 建立一個隱藏的 HTML 表單
-          const form = document.createElement('form')
-          form.method = 'POST'
-          form.action = response.data.payment_url
-          form.style.display = 'none'
-
-          // 步驟 2: 將 payment_form 的所有資料作為隱藏欄位
-          for (const key in response.data.payment_form) {
-            if (Object.prototype.hasOwnProperty.call(response.data.payment_form, key)) {
-              const input = document.createElement('input')
-              input.type = 'hidden'
-              input.name = key
-              input.value = response.data.payment_form[key]
-              form.appendChild(input)
-            }
-          }
-
-          // 步驟 3: 將表單加入頁面並自動提交
-          document.body.appendChild(form)
-          form.submit()
-        } else {
-          // 如果後端沒有回傳支付 URL，直接導向訂單完成頁面
-          alert('訂單建立成功，但無支付資訊')
-          return { success: true, orderId: response.data.order_id }
-        }
-      } else {
-        console.log('response', response)
-        throw new Error(response.data.message || '訂單建立失敗')
       }
+      return response.data
     } catch (error) {
       console.error('建立訂單失敗:', error)
-      return { success: false, error: error.response?.data?.message || '建立訂單失敗' }
+      return { success: false, error: error.response?.data?.error || '建立訂單失敗' }
     }
   }
+
   loadCartFromStorage()
 
   return {

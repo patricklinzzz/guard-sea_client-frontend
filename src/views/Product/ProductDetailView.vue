@@ -19,7 +19,7 @@
   const router = useRouter()
   const productStore = useProductStore()
   const cartStore = useCartStore()
-  const authStore = useAuthStore() // 使用 auth store
+  const authStore = useAuthStore()
 
   const info = computed(() => productStore.getProductById(Number(route.params.id)))
 
@@ -33,17 +33,8 @@
     if (!path || path.startsWith('http')) {
       return path
     }
-    // 使用 API_BASE_URL 確保在不同環境下都能正確運行
     return `${API_BASE_URL}${path}`
   }
-  // const getImageUrl = (path) => {
-  //   if (!path) return ''
-  //   if (path.startsWith('http')) {
-  //     return path
-  //   }
-  //   return `http://localhost:8888/guard-sea_api${path}`
-  // }
-
   const images = computed(() => {
     if (!info.value) return []
     const imageArray = []
@@ -96,7 +87,6 @@
     }
 
     if (!authStore.isLoggedIn) {
-      // 未登入：將商品加入 localStorage 並導向登入頁
       const productToAdd = {
         product_id: info.value.product_id,
         name: info.value.name,
@@ -108,10 +98,8 @@
       }
       cartStore.addItem(productToAdd)
 
-      // 導向登入頁，並在 URL 中帶入轉址參數，登入後會回到購物車頁
       router.push({ path: '/login', query: { redirect: '/cart' } })
     } else {
-      // 已登入：將商品加入資料庫並導向購物車頁
       addItemToCart()
       router.push('/cart')
     }
