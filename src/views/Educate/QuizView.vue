@@ -311,7 +311,7 @@
   <LightRays />
 
   <main class="wrapper">
-    <img
+    <!-- <img
       :src="doge"
       alt=""
       class="doge"
@@ -333,7 +333,7 @@
         {{ ct }}
       </Button>
       <h2 style="color: white">score: {{ quizStore.score }}</h2>
-    </div>
+    </div> -->
     <div class="content_block">
       <Transition @leave="onLeaveStart">
         <div v-if="!quizStore.quiz_start" class="quiz_main">

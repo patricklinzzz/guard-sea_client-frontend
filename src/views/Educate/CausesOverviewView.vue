@@ -93,7 +93,7 @@
       }
       setTimeout(() => {
         navigate()
-      }, 100)
+      }, 230)
     })
   }
 
