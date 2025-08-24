@@ -1,121 +1,149 @@
 <script setup>
-    import { ref, computed } from 'vue'
-    import DropdownFilter from '@/components/event/dropdown_filter.vue'
-    import PageNumber from '@/components/buttons/page_number.vue'
-    import { events_all } from '@/assets/data/event.js'
+import { ref, computed, onMounted } from 'vue'
+import DropdownFilter from '@/components/event/dropdown_filter.vue'
+import PageNumber from '@/components/buttons/page_number.vue'
+import { useEventStore } from '@/stores/event_store'
+import { formatEventDates } from '@/utils/dateFormat'
 
-    //活動資料
-    const events = ref(events_all)
+// 活動資料
+const eventStore = useEventStore()
+const events = computed(() => Array.isArray(eventStore.allEvents) ? eventStore.allEvents : [])
 
-    //頁碼
-    const current_page = ref(1)
-    const items_per_page = 12
+// 生命週期掛載時呼叫 API
+onMounted(() => {
+    eventStore.fetchEvents()
+})
 
-    //分類活動
-    const events_cat_all = ref('全部活動');
-    const events_cat = ['全部活動', '實體行動', '教育推廣', '線上參與'];
+// 頁碼
+const current_page = ref(1)
+const items_per_page = 12
 
-    const status_filter = ref('全部');
-    const statusOptions = ['全部', '報名中', '已截止'];
+// 分類活動
+const events_cat_all = ref('全部活動')
+const events_cat = ['全部活動', '實體行動', '推廣教育', '線上參與']
 
-    // 篩選分類資料
-    const filtered_events = computed(() => {
+// 狀態
+const status_filter = ref('全部')
+const statusOptions = ['全部', '報名中', '已截止']
+
+// 分類文字對應 category_id
+const categoryMap = {
+    '實體行動': '1',
+    '推廣教育': '2',
+    '線上參與': '3'
+}
+
+// 篩選分類資料
+const filtered_events = computed(() => {
     return events.value
-        .filter(event => {
+    .filter(event => {
         const matchCategory =
-            events_cat_all.value === '全部活動' || event.category === events_cat_all.value;
+        events_cat_all.value === '全部活動' ||
+        event.category_id === categoryMap[events_cat_all.value]
         const matchStatus =
-            status_filter.value === '全部' || event.status === status_filter.value;
-        return matchCategory && matchStatus;
-        })
-        .sort((a, b) => {
-        const dateA = new Date(a.date.replaceAll('.', '/'));
-        const dateB = new Date(b.date.replaceAll('.', '/'));
-        return dateB - dateA;
-        });
-    });
+        status_filter.value === '全部' || event.status === status_filter.value
+        return matchCategory && matchStatus
+    })
+    .sort((a, b) => {
+        const dateA = new Date(formatEventDates(a).date.replaceAll('.', '/'))
+        const dateB = new Date(formatEventDates(b).date.replaceAll('.', '/'))
+        return dateB - dateA
+    })
+})
 
-    const filter_items = computed(() => filtered_events.value)
-    const show_per_page_items = computed(() => {
-    const start = (current_page.value - 1) * items_per_page
+const filter_items = computed(() => filtered_events.value)
+const show_per_page_items = computed(() => {
+  const start = (current_page.value - 1) * items_per_page
     const end = start + items_per_page
     return filter_items.value.slice(start, end)
-    })
+})
 
-    // 切換分類
-    function change_cate(item) {
+// 切換分類
+function change_cate(item) {
     events_cat_all.value = item
     current_page.value = 1
-    }
+}
+
+//圖片處理
+const getImageUrl = (path) => {
+    if (!path) return ''
+    return `http://localhost:8888/guard-sea_api${path}`
+}
 </script>
 
 <template>
     <div class="event_hero">
-        <div class="hero_title">
-            <h1>活動</h1>
-        </div>
+    <div class="hero_title">
+        <h1>活動</h1>
+    </div>
     </div>
 
     <div class="wrapper">
-        <nav class="event_nav">
+    <nav class="event_nav">
         <ul>
-            <li v-for="item in events_cat" :key="item">
+        <li v-for="item in events_cat" :key="item">
             <button
-                :class="{ active: events_cat_all === item }"
-                @click="() => change_cate(item)"
+            :class="{ active: events_cat_all === item }"
+            @click="change_cate(item)"
             >
-                <h3>{{ item }}</h3>
+            <h3>{{ item }}</h3>
             </button>
-            </li>
+        </li>
         </ul>
-        </nav>
+    </nav>
 
-        <div class="box">
-            <DropdownFilter
-                v-model="status_filter"
-                :options="statusOptions"
-                placeholder="請選擇活動狀態"
-            />
-        </div>
+    <div class="box">
+        <DropdownFilter
+        v-model="status_filter"
+        :options="statusOptions"
+        placeholder="請選擇活動狀態"
+        />
+    </div>
 
-        <div class="card_list">
-        <div 
-            v-for="(item, index) in show_per_page_items"
-            :key="item.id"
-            class="event_card"
+    <div class="card_list">
+        <div
+        v-for="item in show_per_page_items"
+        :key="item.activity_id"
+        class="event_card"
         >
-            <router-link :to="{ name: 'EventDetail', params: { id: item.id } }" class="event_card_link">
+        <router-link
+            :to="{ name: 'EventDetail', params: { id: item.activity_id } }"
+            class="event_card_link"
+        >
             <div class="event_pic">
-                <img :src="item.img" :alt="item.title" />
+            <img :src="getImageUrl(item.image_url)" :alt="item.title" />
             </div>
+        </router-link>
+
+        <div class="card_content">
+            <div class="detail">
+            <span class="date">{{ formatEventDates(item).date }}</span>
+            <span class="tag" :class="item.status">{{ item.status }}</span>
+            </div>
+
+            <router-link
+            :to="{ name: 'EventDetail', params: { id: item.activity_id } }"
+            class="event_card_link"
+            >
+            <p class="title">{{ item.title }}</p>
             </router-link>
 
-            <div class="card_content">
-                <div class="detail">
-                    <span class="date">{{ item.date }}</span>
-                    <span class="tag" :class="item.status">{{ item.status }}</span>
-                </div>
-
-                <router-link :to="{ name: 'EventDetail', params: { id: item.id } }" class="event_card_link">
-                    <p class="title">{{ item.title }}</p>
-                </router-link>
-
-                <span class="location">
-                    <img src="@/assets/images/event/location.svg" alt="locationIcon">
-                    {{ item.location }}
-                </span>
-            </div>
+            <span class="location">
+            <img src="@/assets/images/event/location.svg" alt="locationIcon" />
+            {{ item.location }}
+            </span>
         </div>
         </div>
     </div>
+    </div>
 
     <nav>
-        <PageNumber
+    <PageNumber
         v-model="current_page"
         :total-items="filter_items.length"
         :items-per-page="items_per_page"
         class="my_pagination"
-        />
+    />
     </nav>
 </template>
 
@@ -283,7 +311,7 @@
         overflow: hidden;
         img {
             width: 100%;
-            height: 100%;
+            height: 210px;
             object-fit: cover;
             display: block;
             transition: transform 0.4s ease-in-out;

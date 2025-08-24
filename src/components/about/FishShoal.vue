@@ -7,12 +7,15 @@
   // 註冊 CustomEase 插件
   gsap.registerPlugin(CustomEase)
 
+  // --- 1. 響應式斷點 Refs ---
+  const isMobile = ref(false)
+
   // --- 2. Refs ---
   const fishContainerBg = ref(null)
   const fishContainerFg = ref(null)
   let fishCtx
 
-  // --- 3. 魚群數據  ---
+  // --- 3. 魚群數據 (維持不變) ---
   const fishData = [
     {
       id: 6,
@@ -164,7 +167,6 @@
       duration: 36,
       rotation: -8,
     },
-    // [最終修正] 將 initialY 從 10% 改為 15%，避免初始裁切
     {
       id: 8,
       layer: 'foreground',
@@ -175,7 +177,6 @@
       duration: 25,
       rotation: 8,
     },
-    // [最終修正] 將 initialY 從 12% 改為 18%，避免初始裁切
     {
       id: 21,
       layer: 'background',
@@ -240,15 +241,20 @@
 
   // --- 4. GSAP 動畫核心函式 (已修正) ---
   const createFishShoal = () => {
+    if (fishCtx) {
+      fishCtx.revert()
+    }
+    if (fishContainerBg.value) fishContainerBg.value.innerHTML = ''
+    if (fishContainerFg.value) fishContainerFg.value.innerHTML = ''
+
     CustomEase.create(
       'fishEase',
       'M0,0 C0.1,0 0.25,0.2 0.4,0.4 0.5,0.5 0.5,0.5 0.6,0.6 0.75,0.8 0.9,1 1,1'
     )
 
-    if (!fishCtx) {
-      fishCtx = gsap.context(() => {})
-    }
-    fishCtx.add(() => {
+    fishCtx = gsap.context(() => {
+      if (!fishContainerBg.value) return
+
       const containerWidth = fishContainerBg.value.offsetWidth
       const offscreenBuffer = 150
 
@@ -281,11 +287,11 @@
         const fishSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
         fishSvg.setAttribute('viewBox', '0 0 129 82')
         fishSvg.innerHTML = `
-        <g>
-          <path class="fish-body" d="M70.822 3.80924C51.4652 4.88134 35.2573 18.3868 26.4446 29.6618L6.81631 15.5446C4.0899 13.5824 0.317903 16.0426 1.16357 19.2323L7.76093 44.133L3.95177 69.6124C3.46353 72.876 7.48401 74.9023 9.97719 72.6533L27.9264 56.4549C37.9302 66.6854 55.5326 78.3182 74.8894 77.2461C104.463 75.6081 126.812 44.9054 126.406 37.5617C125.999 30.2181 100.396 2.17125 70.822 3.80924Z"/>
-          <path class="fish-eye" fill="#1c1c1c" d="M91.971 44.9936C89.1203 45.1515 86.6708 42.8126 86.5024 39.7718C86.3339 36.7288 88.5102 34.136 91.3609 33.9781C94.2137 33.8201 96.6609 36.1568 96.8294 39.1999C96.9979 42.2406 94.8217 44.8357 91.971 44.9936Z"/>
-        </g>
-      `
+      <g>
+        <path class="fish-body" d="M70.822 3.80924C51.4652 4.88134 35.2573 18.3868 26.4446 29.6618L6.81631 15.5446C4.0899 13.5824 0.317903 16.0426 1.16357 19.2323L7.76093 44.133L3.95177 69.6124C3.46353 72.876 7.48401 74.9023 9.97719 72.6533L27.9264 56.4549C37.9302 66.6854 55.5326 78.3182 74.8894 77.2461C104.463 75.6081 126.812 44.9054 126.406 37.5617C125.999 30.2181 100.396 2.17125 70.822 3.80924Z"/>
+        <path class="fish-eye" fill="#1c1c1c" d="M91.971 44.9936C89.1203 45.1515 86.6708 42.8126 86.5024 39.7718C86.3339 36.7288 88.5102 34.136 91.3609 33.9781C94.2137 33.8201 96.6609 36.1568 96.8294 39.1999C96.9979 42.2406 94.8217 44.8357 91.971 44.9936Z"/>
+      </g>
+    `
         const fishBody = fishSvg.querySelector('.fish-body')
         if (fishBody) fishBody.style.fill = fish.color
         fishSvg.style.width = 'auto'
@@ -295,18 +301,24 @@
 
         const initialRotation = fish.direction === 1 ? fish.rotation : 180 + fish.rotation
 
+        // [核心修改 1] 根據 isMobile 的值來決定 Y 軸的隨機範圍
+        const randomYRange = isMobile.value ? { min: 10, max: 70 } : { min: 15, max: 85 }
+
+        // [核心修改 2] 根據 isMobile 的值來決定魚的尺寸
+        const effectiveScale = isMobile.value ? fish.scale * 0.7 : fish.scale
+
         const tl = gsap.timeline({
           repeat: -1,
           onRepeat: () => {
-            // [最終修正] 縮小隨機 Y 軸範圍，建立上下安全區
-            gsap.set(fishSvg, { top: `${gsap.utils.random(15, 85)}%` })
+            gsap.set(fishSvg, { top: `${gsap.utils.random(randomYRange.min, randomYRange.max)}%` })
           },
         })
 
         tl.fromTo(
           fishSvg,
           {
-            scale: fish.scale,
+            // 使用新的尺寸變數
+            scale: effectiveScale,
             rotation: initialRotation,
             top: fish.initialY,
             yPercent: -50,
@@ -340,16 +352,44 @@
     })
   }
 
-  // --- 5. 生命週期 ---
+  // --- 5. 生命週期函式 (維持不變) ---
+  let mql
+  let resizeObserver
+
+  const handleMatchChange = (event) => {
+    isMobile.value = event.matches
+    createFishShoal()
+  }
+
   onMounted(() => {
     requestAnimationFrame(() => {
+      mql = window.matchMedia('(max-width: 767px)')
+      isMobile.value = mql.matches
+      mql.addEventListener('change', handleMatchChange)
+
       createFishShoal()
+
+      const wrapper = document.querySelector('.fish-shoal-wrapper')
+      if (wrapper) {
+        resizeObserver = new ResizeObserver(() => {
+          if (mql.matches === isMobile.value) {
+            gsap.delayedCall(0.5, createFishShoal)
+          }
+        })
+        resizeObserver.observe(wrapper)
+      }
     })
   })
 
   onUnmounted(() => {
     if (fishCtx) {
       fishCtx.revert()
+    }
+    if (mql) {
+      mql.removeEventListener('change', handleMatchChange)
+    }
+    if (resizeObserver) {
+      resizeObserver.disconnect()
     }
   })
 </script>
@@ -361,19 +401,18 @@
 </template>
 
 <style lang="scss" scoped>
+  /* 樣式維持不變 */
   .fish-shoal-wrapper {
     position: relative;
     height: 350px;
     pointer-events: none;
     width: 120%;
-    /* 把它往左邊推一點，讓它在畫面上保持居中 */
     left: -10%;
     padding: 20px 0;
   }
   .fish-container-bg,
   .fish-container-fg {
     position: absolute;
-
     top: 0;
     left: 0;
     width: 100%;
@@ -385,7 +424,6 @@
   .fish-container-fg {
     z-index: 15;
   }
-
   :deep(svg) {
     position: absolute;
     width: auto;

@@ -3,6 +3,7 @@
   import { useRoute, useRouter, RouterLink } from 'vue-router'
   import { useProductStore } from '@/stores/product_store'
   import { useCartStore } from '@/stores/cart_store'
+  import { useAuthStore } from '@/stores/auth'
   import Button from '@/components/buttons/button.vue'
   import ProductCard from '@/components/product/product_card.vue'
   import QuantityControl from '@/components/product/quantity_button.vue'
@@ -18,6 +19,7 @@
   const router = useRouter()
   const productStore = useProductStore()
   const cartStore = useCartStore()
+  const authStore = useAuthStore()
 
   const info = computed(() => productStore.getProductById(Number(route.params.id)))
 
@@ -25,13 +27,13 @@
   const selectedColor = ref('')
   const selectedSize = ref('')
   const quantity = ref(1)
+  const API_BASE_URL = import.meta.env.VITE_API_BASE
 
   const getImageUrl = (path) => {
-    if (!path) return ''
-    if (path.startsWith('http')) {
+    if (!path || path.startsWith('http')) {
       return path
     }
-    return `http://localhost:8888/guard-sea_api${path}`
+    return `${API_BASE_URL}${path}`
   }
   const images = computed(() => {
     if (!info.value) return []
@@ -50,23 +52,57 @@
     selectedImageIndex.value = index
   }
 
-  const addToCart = () => {
+  const addItemToCart = () => {
     if (!selectedColor.value || !selectedSize.value) {
       alert('請選擇顏色與尺寸')
-      return
+      return false
     }
 
-    cartStore.addItem({
-      id: info.value.id,
+    const productToAdd = {
+      product_id: info.value.product_id,
       name: info.value.name,
       price: info.value.price,
       image: getImageUrl(info.value.main_image_url),
       color: selectedColor.value,
       size: selectedSize.value,
       quantity: quantity.value,
-    })
+    }
+    cartStore.addItem(productToAdd)
+    return true
+  }
 
-    alert('已加入購物車！')
+  const handleAddToCart = () => {
+    if (addItemToCart()) {
+      alert('已加入購物車！')
+      if (authStore.isLoggedIn) {
+        cartStore.syncCartToBackend()
+      }
+    }
+  }
+
+  const handleBuyNow = () => {
+    if (!selectedColor.value || !selectedSize.value) {
+      alert('請選擇顏色與尺寸')
+      return
+    }
+
+    if (!authStore.isLoggedIn) {
+      const productToAdd = {
+        product_id: info.value.product_id,
+        name: info.value.name,
+        price: info.value.price,
+        image: getImageUrl(info.value.main_image_url),
+        color: selectedColor.value,
+        size: selectedSize.value,
+        quantity: quantity.value,
+      }
+      cartStore.addItem(productToAdd)
+
+      router.push({ path: '/login', query: { redirect: '/cart' } })
+    } else {
+      addItemToCart()
+      router.push('/cart')
+    }
   }
 
   const goBack = () => {
@@ -147,8 +183,8 @@
             <QuantityControl v-model="quantity" />
           </div>
           <div class="cart_buttons">
-            <Button variant="transparent" @click="addToCart">加入購物車</Button>
-            <RouterLink to="/login"><Button variant="default">立即購買</Button></RouterLink>
+            <Button variant="transparent" @click="handleAddToCart">加入購物車</Button>
+            <Button variant="default" @click="handleBuyNow">立即購買</Button>
           </div>
         </div>
       </div>
@@ -306,6 +342,12 @@
       }
       @include respond(md) {
         max-width: 320px;
+      }
+      .product_list {
+        display: flex;
+        column-gap: 1rem;
+        justify-content: center;
+        align-items: center;
       }
       .go_back {
         text-decoration: none;

@@ -1,22 +1,3 @@
-//列表頁圖片
-import clean from '@/assets/images/event/list/clean.jpg'
-import seminar from '@/assets/images/event/list/seminar.jpg'
-import live from '@/assets/images/event/list/live.jpg'
-import yoga from '@/assets/images/event/list/yoga.jpg'
-import threeD from '@/assets/images/event/list/threeD.jpg'
-import night from '@/assets/images/event/list/night.jpg'
-import food from '@/assets/images/event/list/food.jpg'
-import sound from '@/assets/images/event/list/sound.jpg'
-import sand from '@/assets/images/event/list/sand.jpg'
-import discuss from '@/assets/images/event/list/discuss.jpg'
-import port from '@/assets/images/event/list/port.jpg'
-import art from '@/assets/images/event/list/art.jpg'
-import rubbish from '@/assets/images/event/list/rubbish.jpg'
-import ocean from '@/assets/images/event/list/ocean.jpg'
-import quizz from '@/assets/images/event/list/quizz.jpg'
-import restoration from '@/assets/images/event/list/restoration.jpg'
-
-//詳情頁圖片
 import cleanBanner from '@/assets/images/event/detail/cleanBanner.jpg'
 import seminarBanner from '@/assets/images/event/detail/seminarBanner.jpg';
 import liveBanner from '@/assets/images/event/detail/liveBanner.jpg';
@@ -34,42 +15,42 @@ import oceanBanner from '@/assets/images/event/detail/oceanBanner.jpg';
 import quizzBanner from '@/assets/images/event/detail/quizzBanner.jpg';
 import restorationBanner from '@/assets/images/event/detail/restorationBanner.jpg';
 
+
 export const events_all = [
     {
         id: 1,
-        title: '淨灘活動：用雙手還給海洋純淨',
-        img: clean,
-        bannerImage: cleanBanner,
         category: '實體行動',
+        title: '淨灘活動：用雙手還給海洋純淨',
+        image_url: cleanBanner,
+        start_date: '2025-11-28 09:00:00',   // ✅ 原始開始時間
+        end_date: '2025-11-28 12:00:00',     // ✅ 原始結束時間
         date: '2025.11.28', //列表
         dateTime: '2025.11.28(六) 09:00 - 12:00', //詳情頁
-        location: '福隆海水浴場',
+        location: '新北市福隆海水浴場',
         mapUrl: 'https://maps.app.goo.gl/b29jWkTu8wz2UwXv8',
-        status: '報名中', //改成slot
-        speaker: '海洋志工協會',
-        introductionHtml: `
+        status: '報名中',
+        presenter: '海洋志工協會',
+        preface: `
             <p>本次淨灘活動旨在提高大眾對海洋塑膠污染的意識，並透過實際行動共同維護海岸線的清潔。我們將提供所有必要的工具和指導，讓參與者能安全有效地進行淨灘工作。</p>
             <p>活動結束後，將有海洋保育專家進行簡短分享，講解淨灘的重要性以及如何從日常生活中減少塑膠使用。</p>
         `,
-        contentHtml: `
-            <ul>
+        description: `<ul>
                 <li><p>集合與報到：福隆海水浴場入口</p></li>
                 <li><p>淨灘工具發放與安全說明</p></li>
                 <li><p>分組進行淨灘</p></li>
                 <li><p>垃圾分類與稱重記錄</p></li>
                 <li><p>海洋保育講座與心得分享</p></li>
                 <li><p>活動結束與歸還工具</p></li>
-            </ul>
-        `,
-        deadline: '2025 年 11 月 23 日',
-        registrationSpots: '名額：限100人，額滿為止',
+            </ul>`,
+        registration_close_date: '2025-11-23 23:59:59',
+        quota: 100,
+        notes: '名額：限100人，額滿為止',
     },
     {
         id: 2,
         title: '教育講座：深度認識海洋',
-        img: seminar,
-        bannerImage: seminarBanner,
-        category: '教育推廣',
+        image_url: seminarBanner,
+        category: '推廣教育',
         date: '2025.11.20',
         dateTime: '2025.11.20(四) 10:00 - 13:00',
         location: '台北市立圖書館',
@@ -94,8 +75,7 @@ export const events_all = [
     { 
         id: 3,
         title: '海底漫遊live：水下攝影即時導覽',
-        img: live,
-        bannerImage: liveBanner,
+        image_url: liveBanner,
         category: '線上參與',
         date: '2025.11.13',
         dateTime: '2025.11.13(四) 20:00 - 21:00',
@@ -120,8 +100,7 @@ export const events_all = [
     { 
         id: 4, 
         title: '海上瑜珈&日出冥想', 
-        img: yoga, 
-        bannerImage: yogaBanner,
+        image_url: yogaBanner,
         category: '實體行動',
         date: '2025.11.08',
         dateTime: '2025.11.08(六) 05:30 - 07:00',
@@ -146,9 +125,8 @@ export const events_all = [
     { 
         id: 5, 
         title: '深海奇遇：3D', 
-        img: threeD, 
-        bannerImage: vrBanner,
-        category: '教育推廣',
+        image_url: vrBanner,
+        category: '推廣教育',
         date: '2025.11.01',
         dateTime: '2025.11.01(六) 14:00 - 16:00',
         location: '國立海洋科技博物館 IMAX 影廳',
@@ -172,8 +150,7 @@ export const events_all = [
     { 
         id: 6, 
         title: '夜間潮間帶探索活動', 
-        img: night, 
-        bannerImage: nightBanner,
+        image_url: nightBanner,
         category: '實體行動',
         date: '2025.10.30',
         dateTime: '2025.10.30(四) 19:00 - 21:00',
@@ -198,9 +175,8 @@ export const events_all = [
     { 
         id: 7, 
         title: '餐桌上的海洋：永續漁業探索', 
-        img: food,
-        bannerImage: foodBanner,
-        category: '教育推廣',
+        image_url: foodBanner,
+        category: '推廣教育',
         date: '2025.10.21',
         dateTime: '2025.10.21(二) 14:00 - 16:00',
         location: '國立臺灣大學漁業科學所',
@@ -224,8 +200,7 @@ export const events_all = [
     { 
         id: 8, 
         title: '海的聲音：鯨豚聲音導聽工作坊', 
-        img: sound, 
-        bannerImage: soundBanner,
+        image_url: soundBanner,
         category: '線上參與',
         date: '2025.10.17',
         dateTime: '2025.10.17(五) 19:30 - 21:00',
@@ -249,8 +224,7 @@ export const events_all = [
     { 
         id: 9, 
         title: '微塑膠在哪裡？沙灘採樣與顯微觀察體驗', 
-        img: sand, 
-        bannerImage: sandBanner,
+        image_url: sandBanner,
         category: '實體行動',
         date: '2025.10.11',
         dateTime: '2025.10.11(六) 10:00 - 14:00',
@@ -275,8 +249,7 @@ export const events_all = [
     { 
         id: 10, 
         title: '打造你的海洋行動提案', 
-        img: discuss, 
-        bannerImage: discussBanner,
+        image_url: discussBanner,
         category: '實體行動',
         date: '2025.10.01',
         dateTime: '2025.10.01(三) 13:00 - 17:00',
@@ -301,8 +274,7 @@ export const events_all = [
     { 
         id: 11, 
         title: '環保漁港導覽與清港行動', 
-        img: port, 
-        bannerImage: portBanner,
+        image_url: portBanner,
         category: '實體行動',
         date: '2025.09.21',
         dateTime: '2025.09.21(日) 09:00 - 16:00',
@@ -328,9 +300,8 @@ export const events_all = [
     { 
         id: 12, 
         title: '海洋藝術創作工作坊', 
-        img: art, 
-        bannerImage: artBanner,
-        category: '教育推廣',
+        image_url: artBanner,
+        category: '推廣教育',
         date: '2025.09.01',
         dateTime: '2025.09.01(一) 13:00 - 17:00',
         location: '基隆海洋廣場',
@@ -354,8 +325,7 @@ export const events_all = [
     { 
         id: 13, 
         title: '無塑海灘：社區淨灘與廢棄物記錄工作坊', 
-        img: rubbish, 
-        bannerImage: rubbishBanner,
+        image_url: rubbishBanner,
         category: '實體行動',
         date: '2025.08.13',
         dateTime: '2025.08.13(日) 09:00 - 13:00',
@@ -380,9 +350,8 @@ export const events_all = [
     { 
         id: 14, 
         title: '線上海洋講座：解謎深海', 
-        img: ocean, 
         category: '線上參與',
-        bannerImage: oceanBanner,
+        image_url: oceanBanner,
         date: '2025.07.30',
         dateTime: '2025.07.30(一) 20:00 - 21:30',
         location: '線上參與',
@@ -405,8 +374,7 @@ export const events_all = [
     { 
         id: 15, 
         title: '海洋知識線上問答賽', 
-        img: quizz, 
-        bannerImage: quizzBanner,
+        image_url: quizzBanner,
         category: '線上參與',
         date: '2025.07.26',
         dateTime: '2025.07.26(日) 14:00 - 15:00',
@@ -429,8 +397,7 @@ export const events_all = [
     { 
         id: 16, 
         title: '珊瑚復育志工體驗營', 
-        img: restoration, 
-        bannerImage: restorationBanner,
+        image_url: restorationBanner,
         category: '實體行動',
         date: '2025.07.12',
         dateTime: '2025.07.12(六) 08:30 - 17:00',

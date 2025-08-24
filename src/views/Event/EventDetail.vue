@@ -1,131 +1,143 @@
 <script setup>
-    import { computed } from 'vue'
-    import Button from '@/components/buttons/button.vue'
-    import { useRouter, useRoute } from 'vue-router';
+import { computed, onMounted } from 'vue'
+import Button from '@/components/buttons/button.vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useEventStore } from '@/stores/event_store'
+import { formatEventDates } from '@/utils/dateFormat'
 
-    //連結按鈕報名表單
-    const route = useRoute()
-    const eventId = route.params.id
+// 連結按鈕報名表單
+const route = useRoute()
+// 確保 eventId 是一個數字
+const eventId = parseInt(route.params.id) 
+const router = useRouter()
 
-    // 從單一數據源導入所有活動數據
-    import { events_all } from '@/assets/data/event.js';
-    const router = useRouter();
+// 導入所有活動數據
+const eventStore = useEventStore()
 
-    // 接收路由傳來的活動 ID
-    const props = defineProps({
-        id: {
-            type: [String, Number],
-            required: true
+// 根據 ID 查找對應的活動資料，使用 store 的 getter 
+const current_event = computed(() => eventStore.getEventById(eventId))
+
+// 確保在元件載入時呼叫 API
+onMounted(() => {
+    // 只有在 store 中沒有資料時才呼叫 API
+    eventStore.fetchEvents().then(() => {
+        // 在資料載入後，如果還是找不到對應活動，再執行導航
+        if (!current_event.value) {
+            router.push({ name: 'EventList' })
         }
-    });
-    
-    // 根據 ID 查找對應的活動資料
-    const current_event = computed(() => {
-        const found_event = events_all
-        .find(event => event.id === parseInt(eventId));
+    })
+})
 
-        if (!found_event) {
-            // 如果找不到活動，導航回活動列表頁，並可以在這裡給出提示
-            alert('找不到該活動的詳細資訊！'); // 簡單提示
-            router.push({ name: 'EventList' }); // 假設你的列表頁路由名稱是 EventList
-            return null;
-        }
-        return found_event;
-    });
+// 轉換日期格式
+const eventDates = computed(() => {
+    if (!current_event.value) return {}
+    return formatEventDates(current_event.value)
+})
 
-    const buttonInfo = computed(() => {
-        const status = current_event.value?.status;
-        switch (status) {
-            case '報名中':
-                return { text:'立即報名', class:'status-open'};
-            case '已截止':
-                return { text:'報名已截止', class: 'status-closed'};
-            case '已取消':
-                return { text:'活動已取消', class: 'status-cancelled'};
-            case '已結束':
-                return {text:'活動已結束', class: 'status-ended'};
-        }
-    });
-
-    const isButtonDisabled = computed(() => {
-        if (!current_event.value) return true; // 數據未載入時禁用
-        
-        const status = current_event.value.status;
-        return status === '已截止' || status === '已取消' || status === '已結束';
-    });
-
-    //返回列表
-    const go_back = () => {
-        router.back()
+const buttonInfo = computed(() => {
+    const status = current_event.value?.status
+    switch (status) {
+        case '報名中':
+            return { text: '立即報名', class: 'status-open' }
+        case '已截止':
+            return { text: '報名已截止', class: 'status-closed' }
+        case '已取消':
+            return { text: '活動已取消', class: 'status-cancelled' }
+        case '已結束':
+            return { text: '活動已結束', class: 'status-ended' }
+        default:
+            return { text: '狀態未知', class: '' }
     }
+})
+
+const isButtonDisabled = computed(() => {
+    if (!current_event.value) return true // 數據未載入時禁用
+    
+    const status = current_event.value.status
+    return status === '已截止' || status === '已取消' || status === '已結束'
+})
+
+// 返回列表
+const go_back = () => {
+    router.back()
+}
+
+// 圖片處理
+const getImageUrl = (path) => {
+    if (!path) return ''
+    return `http://localhost:8888/guard-sea_api${path}`
+}
 </script>
 
 <template>
-    <div class="detail_pic">
-        <img :src="current_event.bannerImage" alt="current_event.title">
+    <div v-if="current_event">
+        <div class="detail_pic">
+            <img :src="getImageUrl(current_event.image_url)" :alt="current_event.title">
+        </div>
+
+        <section class="event_info">
+            <h1>{{ current_event.title }}</h1>
+            <component
+                :is="isButtonDisabled ? 'div' : 'RouterLink'"
+                :to="!isButtonDisabled ? `/event/reg/${current_event.activity_id}` : null"
+                >
+                <Button
+                    :disabled="isButtonDisabled"
+                    :class="[buttonInfo.class, 'button_inline']"
+                >
+                    {{ buttonInfo.text }}
+                </Button>
+            </component>
+
+            <div class="desc">
+                <div class="time">
+                    <img src="@/assets/images/event/time.svg" alt="icon_time">
+                    <h3>{{ eventDates.dateTime }}</h3>
+                </div>
+                <div class="location">
+                    <img src="@/assets/images/event/location.svg" alt="icon_location">
+                    <h3 v-if="current_event.mapUrl">
+                        {{ current_event.location }}
+                        <p><a :href="current_event.mapUrl" target="_blank" rel="noopener noreferrer">
+                            <i class="fa-solid fa-location-arrow"></i>
+                            搜尋地圖
+                        </a></p>
+                    </h3>
+                    <h3 v-else>
+                        {{ current_event.location }}
+                    </h3>
+                </div>
+                <div class="people">
+                    <img src="@/assets/images/event/people.svg" alt="icon_people">
+                    <h3>主講人： {{ current_event.presenter}}</h3>
+                </div>
+            </div>
+        </section>
+
+        <section class="wrapper">
+            <div class="intro">
+                <h3>活動介紹</h3>
+                <div class="content-html" v-html="current_event.preface"></div>
+            </div>
+            <div class="content">
+                <h3>活動內容</h3>
+                <div class="content-html"
+                v-html="current_event.description"></div>
+            </div>
+        </section>
+
+        <section class="registration_info">
+            <h3>報名資訊</h3>
+            <ul>
+                <li><p>截止日期：{{ eventDates.deadline }}</p></li>
+                <li><p>{{ current_event.notes }}</p></li>
+            </ul>
+        </section>
+        <Button @click="go_back" class="go_back">返回活動列表</Button>
     </div>
-
-    <section class="event_info">
-        <h1>{{ current_event.title }}</h1>
-        <component
-            :is="isButtonDisabled ? 'div' : 'RouterLink'"
-            :to="!isButtonDisabled ? `/event/reg/${current_event.id}` : null"
-            >
-            <Button
-                :disabled="isButtonDisabled"
-                :class="[buttonInfo.class, 'button_inline']"
-            >
-                {{ buttonInfo.text }}
-            </Button>
-        </component>
-
-        <div class="desc">
-            <div class="time">
-                <img src="@/assets/images/event/time.svg" alt="icon_time">
-                <h3>{{ current_event.dateTime }}</h3>
-                
-            </div>
-            <div class="location">
-                <img src="@/assets/images/event/location.svg" alt="icon_location">
-                <h3 v-if="current_event.mapUrl">
-                    {{ current_event.location }}
-                    <p><a :href="current_event.mapUrl" target="_blank" rel="noopener noreferrer">
-                        <i class="fa-solid fa-location-arrow"></i>
-                        搜尋地圖
-                    </a></p>
-                </h3>
-                <h3 v-else>
-                    {{ current_event.location }}
-                </h3>
-            </div>
-            <div class="people">
-                <img src="@/assets/images/event/people.svg" alt="icon_people">
-                <h3>主講人： {{ current_event.speaker}}</h3>
-            </div>
-        </div>
-    </section>
-
-    <section class="wrapper">
-        <div class="intro">
-            <h3>活動介紹</h3>
-            <div class="content-html" v-html="current_event.introductionHtml"></div>
-        </div>
-        <div class="content">
-            <h3>活動內容</h3>
-            <div class="content-html"
-        v-html="current_event.contentHtml"></div>
-        </div>
-    </section>
-
-    <section class="registration_info">
-        <h3>報名資訊</h3>
-        <ul>
-            <li><p>截止日期：{{ current_event.deadline }}</p></li>
-            <li><p>{{ current_event.registrationSpots }}</p></li>
-        </ul>
-    </section>
-    <Button @click="go_back"
-    class="go_back">返回活動列表</Button>
+    <div v-else class="loading-message">
+        <p>資料載入中，請稍候...</p>
+    </div>
 </template>
 
 <style lang="scss" scoped>
@@ -240,5 +252,12 @@
     .go_back {
         display: flex;
         margin: 40px auto;
+    }
+
+    .loading-message {
+        text-align: center;
+        padding: 50px;
+        font-size: 1.2rem;
+        color: #fff;
     }
 </style>

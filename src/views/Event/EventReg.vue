@@ -55,9 +55,63 @@ const toConfirm = () => {
     currentStep.value = 2
 }
 
-const submit = () => {
+const submit = async () => {
     currentStep.value = 3
     // 可加：發送 API / form.reset()
+    try {
+    //   const response = await fetch('/api/register', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(store.formData)
+    //   });
+    //   const result = await response.json();
+    //   if (result.success) {
+    //     console.log('報名成功！');
+    //     // 報名成功後，再發送發券請求
+    //     issueCoupon();
+    //   } else {
+    //     console.error('報名失敗:', result.error);
+    //     // 處理報名失敗
+    //   }
+    // } catch (error) {
+    //   console.error('API 請求失敗:', error);
+    //   // 處理網路或伺服器錯誤
+    // }
+    
+    // 報名成功後，直接發券
+    issueCoupon();
+    } catch (error) {
+        console.error('An error occurred during form submission:', error);
+    }
+}
+
+const coupon_code = ref(null);
+const issueCoupon = async () => {
+    try {
+        const response = await fetch('http://localhost:8888/guard-sea_api/coupon/post_events_coupon.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            // member_id: '使用者會員 ID',
+            coupon_id: 3 
+        }),
+        });
+        const result = await response.json();
+
+        if (result.success) {
+        console.log('發券成功！', result.coupon);
+        // 💡 獲取優惠券代碼並儲存
+        coupon_code.value = result.coupon.coupon_code;
+        } else {
+        console.error('發券失敗:', result.error);
+        }
+    } catch (error) {
+        console.error('發券 API 請求失敗:', error);
+    }
 }
 
 const go_back_event = () => {
@@ -171,6 +225,16 @@ const go_back_event = () => {
                 <img src="@/assets/images/event/success_fff.svg" alt="icon_success" class="icon_success" />
                 <h2>您已報名成功</h2>
             </div>
+
+            <div v-if="coupon_code" class="coupon_section">
+                <p>恭喜您獲得專屬優惠券！</p>
+                <div class="coupon_box">
+                <span class="coupon_label">優惠碼：</span>
+                <span class="coupon_code_display">{{ coupon_code }}</span>
+                </div>
+                <p class="coupon_note">此優惠券已發送至您的帳戶，可至會員專區查看。</p>
+            </div>
+
             <div class="button_items">
                 <Button @click="go_back_event" class="back">返回活動頁面</Button>
                 <Button class="event_member">報名活動查詢</Button>
@@ -361,6 +425,52 @@ const go_back_event = () => {
             width: 170px;
             height: 170px;
             margin-bottom: 30px;
+        }
+    }
+
+    .coupon_section {
+        width: 100%;
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: v.$color-skyblue-light;
+        border: 2px dashed v.$color-blue;
+        border-radius: v.$border-radius-md;
+        text-align: center;
+        
+        p {
+            margin: 0 0 1rem 0;
+            font-size: v.$p-desktop;
+        }
+
+        .coupon_box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .coupon_label {
+            font-weight: v.$font-bold;
+            font-size: v.$sub-desktop;
+        }
+        
+        .coupon_code_display {
+            background-color: #fff;
+            color: v.$color-blue;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid v.$color-blue;
+            border-radius: v.$border-radius-sm;
+            font-family: monospace;
+            font-weight: v.$font-bold;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .coupon_note {
+            font-size: v.$p-mobile;
+            color: v.$color-gray;
         }
     }
 </style>

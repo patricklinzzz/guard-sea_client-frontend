@@ -6,6 +6,7 @@ const baseUrl = import.meta.env.VITE_API_BASE
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
+  const memberData = ref(null)
 
   const isLoggedIn = computed(() => user.value !== null)
 
@@ -26,6 +27,22 @@ export const useAuthStore = defineStore('auth', () => {
       return false
     }
   }
+  async function fetchMemberData() {
+    if (!isLoggedIn.value) return
+    try {
+      const response = await axios.get(`${baseUrl}/members/get_member_data.php`, {
+        withCredentials: true,
+      })
+      if (response.data.member) {
+        memberData.value = response.data.member
+        return true
+      }
+    } catch (error) {
+      console.error('獲取會員資料失敗:', error)
+      memberData.value = null
+      return false
+    }
+  }
 
   function login(memberData) {
     user.value = memberData
@@ -38,6 +55,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (response.data.success) {
         user.value = null
+        memberData.value = null 
         return true
       } else {
         throw new Error('登出失敗')
@@ -48,5 +66,5 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { user, isLoggedIn, login, logout, fetchUser }
+  return { user, memberData, isLoggedIn, login, logout, fetchUser, fetchMemberData }
 })

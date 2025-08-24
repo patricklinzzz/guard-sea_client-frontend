@@ -193,6 +193,7 @@
           <RouterLink
             :to="{ name: 'newinside', params: { id: item.news_id } }"
             class="read_more_link"
+            @click="createRipple"
           >
             閱讀全文+
           </RouterLink>
@@ -362,6 +363,43 @@
           border-radius: 4px;
           font-size: 16px;
           margin-left: auto;
+
+          // 做hover掃光效果 先加上這三個屬性
+          position: relative; // 為了讓 ::before 能定位
+          overflow: hidden; // 隱藏超出範圍的閃光
+          transition: background-color 0.5s ease; // 讓背景色變化平滑
+
+          // 加上閃光帶的偽元素 ::before
+          &::before {
+            content: '';
+            position: absolute;
+            // 調整寬度與位置，確保旋轉後能完整覆蓋
+            top: -50%;
+            left: -150%;
+            width: 100%;
+            height: 200%;
+
+            background: linear-gradient(
+              90deg,
+              transparent,
+              rgba(255, 255, 255, 0.35),
+              // 光芒可以稍微調亮一點點
+              transparent
+            );
+
+            // 增加旋轉效果，讓光芒傾斜
+            transform: rotate(-30deg); // 傾斜 -30 度，您可以調整這個角度
+
+            transition: left 0.7s ease-in-out; // 可以微調速度與動畫曲線
+          }
+
+          // Hover 效果
+          &:hover {
+            // 讓閃光帶掃過去
+            &::before {
+              left: 100%;
+            }
+          }
         }
       }
 
