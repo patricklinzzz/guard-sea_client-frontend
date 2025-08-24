@@ -38,14 +38,15 @@
   const images = computed(() => {
     if (!info.value) return []
     const imageArray = []
+    if (info.value.main_image_url) imageArray.push(info.value.main_image_url)
+
     if (info.value.sub_image_1) imageArray.push(info.value.sub_image_1)
     if (info.value.sub_image_2) imageArray.push(info.value.sub_image_2)
     if (info.value.sub_image_3) imageArray.push(info.value.sub_image_3)
     return imageArray.map(getImageUrl)
   })
-
   const currentImage = computed(() => {
-    return images.value[selectedImageIndex.value]
+    return images.value.length > 0 ? images.value[selectedImageIndex.value] : ''
   })
 
   const selectImage = (index) => {
@@ -111,13 +112,22 @@
 
   onMounted(() => {
     productStore.fetchProducts({ status: 1 })
+    selectedImageIndex.value = 0
+    selectedColor.value = ''
+    selectedSize.value = ''
+    quantity.value = 1
   })
 
   watch(
     () => route.params.id,
     (newId) => {
       if (newId) {
-        productStore.fetchProducts({ status: 1 })
+        productStore.fetchProducts({ status: 1 }).then(() => {
+          selectedImageIndex.value = 0
+          selectedColor.value = ''
+          selectedSize.value = ''
+          quantity.value = 1
+        })
       }
     }
   )
