@@ -2,14 +2,15 @@
   <section id="future_action">
     <h2>未來的行動藍圖</h2>
     <div id="news_container">
-      <div v-for="news in allNews" :key="news.id">
-        <img :src="news.imgUrl" alt="最新消息圖片" />
+      <p v-if="loading">資料載入中...</p>
+      <div v-for="news in newest_news" :key="news.news_id">
+        <img :src="news.image_url" alt="最新消息圖片" />
         <div id="text_btn">
           <span>
             <p>{{ news.title }}</p>
-            <p>{{ news.info }}</p>
+            <p>{{ extract_summary(news.content) }}</p>
           </span>
-          <Button @click="goToNewsDetail(news.id)" variant="round">
+          <Button @click="goToNewsDetail(news.news_id)" variant="round">
             <i class="fa-solid fa-chevron-right"></i>
           </Button>
         </div>
@@ -19,11 +20,36 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import { useRouter } from 'vue-router'
-  import { newsData } from '@/assets/data/map_news'
+  // import { newsData } from '@/assets/data/map_news'
+  import { useNewsStore } from '@/stores/new_store.js'
   import Button from '@/components/buttons/button.vue'
-  const allNews = ref(newsData)
+  const newsStore = useNewsStore()
+  const allnews = computed(() => newsStore.allNews)
+  const loading = computed(() => newsStore.loading)
+
+  onMounted(() => {
+    newsStore.fetchNews()
+  })
+  const published_news = computed(() => {
+    return allnews.value.filter((item) => item.status === 1)
+  })
+  const newest_news = computed(() => {
+    return published_news.value.slice(0, 4)
+  })
+
+  function extract_text(htmlString) {
+    const extract_el = document.createElement('div')
+    extract_el.innerHTML = htmlString
+    return extract_el.innerText || ''
+  }
+
+  function extract_summary(text, maxLength = 110) {
+    const alltext = extract_text(text).trim()
+    return alltext.length > maxLength ? alltext.slice(0, 110) + '...' : alltext
+  }
+  // const allNews = ref(newsData)
   const router = useRouter()
   const goToNewsDetail = (id) => {
     router.push(`/new/${id}`)
@@ -75,7 +101,7 @@
           flex-basis: 70%;
           button {
             aspect-ratio: 1/1;
-            @include respond(md){
+            @include respond(md) {
               width: 40px;
               height: 40px;
             }
@@ -105,6 +131,7 @@
           }
           img {
             width: 100%;
+            overflow: hidden;
           }
         }
       }
