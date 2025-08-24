@@ -10,7 +10,7 @@
   const categoryStore = useProductCategoryStore()
 
   const selectCategory = ref('全部商品')
-  const categories = ref([]) 
+  const categories = ref([])
   const selectSortText = ref('價格低到高')
 
   const sortOptionMap = {
@@ -20,7 +20,7 @@
   const displayOptions = Object.keys(sortOptionMap)
   const sortOrder = computed(() => sortOptionMap[selectSortText.value])
   onMounted(() => {
-    productStore.fetchProducts({ status: 1 }) 
+    productStore.fetchProducts({ status: 1 })
     categoryStore.fetchCategories()
   })
 
@@ -53,10 +53,6 @@
     return result
   })
 
-  const getImageUrl = (path) => {
-    if (!path) return ''
-    return `http://localhost:8888/guard-sea_api${path}`
-  }
 </script>
 
 <template>

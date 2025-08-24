@@ -97,7 +97,7 @@
           // 貨到付款
           alert('訂單已建立，感謝您的訂購！')
           router.push({
-            name: 'order-complete',
+            name: 'ordercomplete',
             query: { order_id: responseData.order_id },
           })
         }
@@ -117,18 +117,23 @@
   }
 
   onMounted(async () => {
-    await authStore.fetchMemberData()
+    try {
+      await authStore.fetchMemberData()
+    } catch (error) {
+      console.error('載入會員資料失敗：', error)
+    }
   })
 
   watch(sameAsMember, (newValue) => {
-    if (newValue && authStore.memberData) {
-      formData.name = authStore.memberData.fullname
-      formData.phone = authStore.memberData.phone_number
-      formData.address = authStore.memberData.address
-    } else if (!newValue) {
-      formData.name = ''
-      formData.phone = ''
-      formData.address = ''
+    if (newValue) {
+      if (!authStore.memberData) {
+        alert('無法獲取會員資料，請重新登入。')
+        sameAsMember.value = false
+        return
+      }
+      formData.name = authStore.memberData.fullname || ''
+      formData.phone = authStore.memberData.phone_number || ''
+      formData.address = authStore.memberData.address || ''
     }
   })
 </script>
