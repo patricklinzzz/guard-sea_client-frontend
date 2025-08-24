@@ -1,17 +1,48 @@
 <script setup>
   import { useRoute } from 'vue-router'
   import CountUp from '@/components/edu/CountUp.vue'
+  import { onMounted, ref } from 'vue'
+  import gsap from 'gsap'
+  import { SplitText } from 'gsap/SplitText'
+  import ScrollArrow from '@/components/edu/ScrollArrow.vue'
+
   // import { onMounted, ref } from 'vue'
 
   const route = useRoute()
   // const topic = route.params.topic
   // const fileName = 'pollution.jpeg'
   // const Image = new URL(`@/assets/images/Educate/Causes/${fileName}`, import.meta.url).href
+  const h1 = ref(null)
+  const h2 = ref(null)
+  gsap.registerPlugin(SplitText)
+  onMounted(() => {
+    let h1_split = new SplitText(h1.value, { type: 'lines' })
+    let h2_split = new SplitText(h2.value, { type: 'lines' })
+    gsap
+      .timeline()
+      .from(h1_split.lines, {
+        yPercent: 100,
+        duration: 2,
+        ease: 'expo.out',
+        stagger: 0.1,
+      })
+      .from(
+        h2_split.lines,
+        {
+          yPercent: 100,
+          duration: 2,
+          ease: 'expo.out',
+          stagger: 0.1,
+        },
+        '<'
+      )
+  })
 </script>
 <template>
   <div class="title">
-    <h1>海洋汙染</h1>
-    <h2>從塑膠到化學，步步侵蝕海洋生機</h2>
+    <h1 ref="h1">海洋汙染</h1>
+    <h2 ref="h2">從塑膠到化學，步步侵蝕海洋生機</h2>
+    <ScrollArrow></ScrollArrow>
   </div>
 
   <div class="wrapper">
@@ -143,8 +174,9 @@
   }
 
   .title {
-    height: 200px;
-    background-image: url('@/assets/images/Educate/Causes/pollution_banner.jpeg');
+    // height: 200px;
+    height: 100vh;
+    background-image: url('@/assets/images/Educate/Causes/ta.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -158,7 +190,8 @@
     padding: 0 20px;
 
     @media (min-width: 768px) {
-      height: 400px;
+      // height: 400px;
+      height: 100vh;
     }
   }
 
@@ -166,7 +199,9 @@
   h2,
   h3 {
     font-weight: v.$font-bold;
+    overflow: hidden;
   }
+
   h1,
   h2 {
     letter-spacing: v.$letter-spacing-wide;

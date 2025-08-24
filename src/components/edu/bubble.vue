@@ -2,10 +2,9 @@
   import { ref, onMounted } from 'vue'
   import { gsap } from 'gsap'
 
-  import Pollution from '@/assets/images/Educate/Causes/pollution_banner.jpeg'
+  import Pollution from '@/assets/images/Educate/Causes/ta.jpg'
   import Overfishing from '@/assets/images/Educate/Causes/overfishing_banner.jpeg'
   import Degradation from '@/assets/images/Educate/Causes/degradation_banner.jpeg'
-
   function pointsInPath(path, numPoints = 10) {
     const pathLength = path.getTotalLength()
     const step = pathLength / numPoints

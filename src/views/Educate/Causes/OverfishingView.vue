@@ -1,15 +1,45 @@
 <script setup>
   import { useRoute } from 'vue-router'
+  import { onMounted, ref } from 'vue'
+  import gsap from 'gsap'
+  import { SplitText } from 'gsap/SplitText'
+    import ScrollArrow from '@/components/edu/ScrollArrow.vue'
 
   const route = useRoute()
   // const topic = route.params.topic
   // const fileName = 'pollution.jpeg'
   // const Image = new URL(`@/assets/images/Educate/Causes/${fileName}`, import.meta.url).href
+  const h1 = ref(null)
+  const h2 = ref(null)
+  gsap.registerPlugin(SplitText)
+  onMounted(() => {
+    let h1_split = new SplitText(h1.value, { type: 'lines' })
+    let h2_split = new SplitText(h2.value, { type: 'lines' })
+    gsap
+      .timeline()
+      .from(h1_split.lines, {
+        yPercent: 100,
+        duration: 2,
+        ease: 'expo.out',
+        stagger: 0.1,
+      })
+      .from(
+        h2_split.lines,
+        {
+          yPercent: 100,
+          duration: 2,
+          ease: 'expo.out',
+          stagger: 0.1,
+        },
+        '<'
+      )
+  })
 </script>
 <template>
   <div class="title">
-    <h1>過度捕撈</h1>
-    <h2>失衡的漁業，正在讓海洋走向沉默</h2>
+    <h1 ref="h1">過度捕撈</h1>
+    <h2 ref="h2">失衡的漁業，正在讓海洋走向沉默</h2>
+    <ScrollArrow></ScrollArrow>
   </div>
 
   <div class="wrapper">
@@ -86,7 +116,8 @@
   }
 
   .title {
-    height: 200px;
+    // height: 200px;
+    height: 100vh;
     background-image: url('@/assets/images/Educate/Causes/overfishing_banner.jpeg');
     background-size: cover;
     background-position: center;
@@ -101,7 +132,8 @@
     padding: 0 20px;
 
     @media (min-width: 768px) {
-      height: 400px;
+      // height: 400px;
+      height: 100vh;
     }
   }
 
@@ -109,6 +141,7 @@
   h2,
   h3 {
     font-weight: v.$font-bold;
+    overflow: hidden;
   }
   h1,
   h2 {
