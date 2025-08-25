@@ -20,16 +20,24 @@
 </template>
 
 <script setup>
-  import { computed } from 'vue'
+  import { computed,onMounted } from 'vue'
   import Button from '@/components/buttons/button.vue'
   import ProductCard from '@/components/product/product_card.vue'
-  import { fakeProducts } from '@/assets/data/product'
+  // import { fakeProducts } from '@/assets/data/product'
+    import { useProductStore } from '@/stores/product_store.js'
   import { useRouter } from 'vue-router'
   import banner from '@/assets/images/homepage/store_banner.svg'
   const router = useRouter()
-  const productsToShow = computed(() => {
-    let products = [...fakeProducts]
-    return products.slice(0, 4)
+  const productStore = useProductStore()
+  // const productsToShow = computed(() => {
+  //   let products = [...fakeProducts]
+  //   return products.slice(0, 4)
+  // })
+  onMounted(() => {
+    productStore.fetchProducts({ status: 1 }) 
+  })
+  const productsToShow = computed(()=>{
+    return [...productStore.products].slice(0,4)
   })
 </script>
 

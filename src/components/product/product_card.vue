@@ -2,20 +2,20 @@
   import { computed } from 'vue'
   import { RouterLink } from 'vue-router'
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE
   const props = defineProps({
     product: {
       type: Object,
       required: true,
     },
   })
-
   const getImageUrl = computed(() => {
     const path = props.product.main_image_url
     if (!path) return ''
     if (path.startsWith('http')) {
       return path
     }
-    return `http://localhost:8888/guard-sea_api${path}`
+    return `${API_BASE_URL}${path}`
   })
 </script>
 <template>
@@ -29,7 +29,6 @@
     </RouterLink>
   </div>
 </template>
-
 <style lang="scss" scoped>
   .product_card {
     width: 14.58vw;

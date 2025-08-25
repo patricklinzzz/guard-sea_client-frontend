@@ -231,7 +231,9 @@
 
 <style scoped lang="scss">
   #user_avatar {
+    border-radius: 50%;
     width: 40px;
+    aspect-ratio: 1/1;
     vertical-align: middle;
     @include respond(md) {
       width: 30px;
