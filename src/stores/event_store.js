@@ -1,4 +1,3 @@
-// stores/eventStore.js
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import axios from 'axios'
@@ -23,14 +22,22 @@ export const useEventStore = defineStore('event', () => {
     const baseUrl = import.meta.env.VITE_API_BASE
     // 檢查回傳資料是否為陣列
     // 注意：這裡的 data?.events 需要根據實際 API 回傳的 JSON 結構調整
-    const eventsArray = Array.isArray(data) ? data : (data?.events || []);
+    const eventsArray = Array.isArray(data) ? data : data?.events || []
 
     return eventsArray.map((item) => {
       let processedItem = { ...item }
-      // 處理 main_image 的圖片路徑
-      if (processedItem.main_image && processedItem.main_image.startsWith('/')) {
-        processedItem.main_image = baseUrl + processedItem.main_image
+
+      // 檢查 image_url 屬性
+      if (processedItem.image_url) {
+        // 如果 image_url 以 '/' 開頭，加上 baseUrl
+        if (processedItem.image_url.startsWith('/')) {
+          processedItem.main_image = baseUrl + processedItem.image_url
+        } else {
+          // 否則直接使用 image_url 的值
+          processedItem.main_image = processedItem.image_url
+        }
       }
+
       // 處理 content 中的圖片路徑
       if (processedItem.activity_content) {
         const regex = /src="(\/uploads\/.*?)"/g
@@ -54,7 +61,7 @@ export const useEventStore = defineStore('event', () => {
       const baseUrl = import.meta.env.VITE_API_BASE
       const apiUrl = `${baseUrl}/events/get_event.php`
       const response = await axios.get(apiUrl)
-      
+
       // 修正資料路徑：從 response.data.data 讀取資料
       // 並將其傳遞給輔助函式進行處理
       const processedEvents = processEventData(response.data.data)
