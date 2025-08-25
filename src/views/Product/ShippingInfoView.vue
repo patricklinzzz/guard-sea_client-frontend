@@ -3,11 +3,13 @@
   import { useRouter } from 'vue-router'
   import { useCartStore } from '@/stores/cart_store'
   import { useAuthStore } from '@/stores/auth'
+  import { useCouponStore } from '@/stores/coupon_store'
   import { validatePhone } from '@/utils/validators.js'
   import Button from '@/components/buttons/button.vue'
 
   const cartStore = useCartStore()
   const authStore = useAuthStore()
+  const couponStore = useCouponStore()
   const router = useRouter()
   const isLoading = ref(false)
 
@@ -62,7 +64,7 @@
       receiver_phone: formData.phone,
       receiver_address: formData.address,
       contact_phone: authStore.memberData?.phone_number || formData.phone,
-      coupon_id: cartStore.couponStore?.appliedCoupon.coupon_id || null,
+      coupon_id: couponStore.appliedCoupon.coupon_id || null,
       notes: '',
     }
 
