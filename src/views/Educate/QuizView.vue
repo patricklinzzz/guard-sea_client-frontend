@@ -133,6 +133,7 @@
       quiz_chosen.value = questions.value.filter((q) => q.quiz_id == quiz_type_selected.value + 1)
       quizStore.quiz_start = true
       q_num.value = quizzes.value[quiz_type_selected.value].question_num
+      quizStore.max_score = q_num.value * 10
       q_order.value = [...Array(+q_num.value).keys()]
       shuffleArray(q_order.value)
       quiz_cur.value = quiz_chosen.value[q_order.value[q_index.value]]
@@ -412,7 +413,7 @@
       <Transition @before-enter="onBeforeEnter" @enter="onEnter" @leave="onLeave" :css="false">
         <div v-if="quizStore.show_result" class="final_result">
           <div class="bubble_score">
-            <ScoreBubble size="80" :score="quizStore.score" :max_score="q_num * 10"></ScoreBubble>
+            <ScoreBubble size="80" :score="quizStore.score" :max_score="quizStore.max_score"></ScoreBubble>
           </div>
           <div class="text">
             <Transition

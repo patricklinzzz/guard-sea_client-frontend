@@ -19,7 +19,7 @@
   const isEvent = isActive('/event')
   const isNew = isActive('/new')
 
-  const avatar = authStore.user?.avatar_url ?? defaultAvatar
+  const avatar = authStore.user?.avatar_url || defaultAvatar
   const menu_open = ref(false)
   const isedu_dropdown = ref(false)
   const ismember_dropdown = ref(false)

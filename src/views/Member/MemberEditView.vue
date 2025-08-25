@@ -5,6 +5,7 @@
   import defaultAvatar from '@/assets/images/member-system/avatar.svg'
   import { useAuthStore } from '@/stores/auth'
   import axios from 'axios'
+  import Button from '@/components/buttons/button.vue'
 
   const authStore = useAuthStore()
   const baseUrl = import.meta.env.VITE_API_BASE
@@ -85,7 +86,7 @@
     </div>
     <div class="content_body">
       <h3>編輯會員資料</h3>
-      <button @click="reset">reset</button>
+      <Button @click="reset">重置頭像</Button>
       <form @submit.prevent="handleProfileUpdate">
         <div class="avatar_editor">
           

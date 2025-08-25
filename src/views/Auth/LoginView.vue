@@ -339,8 +339,7 @@
       if (localStorage.getItem('cart_items')) {
         await cartStore.syncCartToBackend()
       }
-
-      const redirectPath = route.query.redirect || '/'
+      const redirectPath = (route.query.redirect || (quizStore.log_in_prompted ? '/edu/quiz' : null)) ?? '/'
       router.push(redirectPath)
     } catch (error) {
       if (error.response) {

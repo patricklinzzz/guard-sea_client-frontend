@@ -7,6 +7,7 @@ export const useQuizStore = defineStore('quiz', () => {
   const option_shown = ref(true)
   const show_result = ref(false)
   const score = ref(0)
+  const max_score = ref(0)
   const log_in_prompted = ref(false)
 
   const quizReset = () => {
@@ -16,6 +17,7 @@ export const useQuizStore = defineStore('quiz', () => {
     show_result.value = false
     score.value = 0
     log_in_prompted.value = false
+    max_score.value = 0
   }
   return {
     quiz_start,
@@ -24,6 +26,7 @@ export const useQuizStore = defineStore('quiz', () => {
     show_result,
     score,
     log_in_prompted,
+    max_score,
     quizReset,
   }
 })

@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted, defineExpose } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { gsap } from 'gsap'
 
   import Pollution from '@/assets/images/Educate/Causes/ta.jpg'
