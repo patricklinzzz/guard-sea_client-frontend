@@ -94,7 +94,11 @@
             </li>
             <li>
               <h3>付款方式:</h3>
-              <span>{{ paymentMethodsMap[order.payment_method] || order.payment_method }}</span>
+              {{
+                order.payment_method === 'credit_card' || order.payment_method === 'linepay'
+                  ? '已付款'
+                  : '未付款'
+              }}
             </li>
             <li>
               <h3>付款狀態:</h3>

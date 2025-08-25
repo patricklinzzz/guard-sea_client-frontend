@@ -14,7 +14,17 @@
       </form>
     </div>
 
-    <div class="order_list">
+    <div v-if="isLoading" class="status-message">
+      <p>正在努力載入訂單...</p>
+    </div>
+    <div v-else-if="error" class="status-message error">
+      <p>{{ error }}</p>
+    </div>
+    <div v-else-if="filteredOrders.length === 0" class="status-message">
+      <p>找不到符合條件的訂單。</p>
+    </div>
+
+    <div v-else class="order_list">
       <div class="order_card" v-for="order in paginatedOrders" :key="order.id">
         <div class="order_card_header">
           <div class="order_meta">
@@ -42,14 +52,17 @@
 
         <template v-if="order.isExpanded">
           <div class="order_card_body">
-            <div class="product_item" v-for="item in order.items" :key="item.name">
-              <img :src="item.image" :alt="item.name" class="product_image" />
+            <div class="product_item" v-for="(item, index) in order.items" :key="index">
+              <img :src="getImageUrl(item.image)" :alt="item.name" class="product_image" />
               <div class="product_details">
                 <div class="detail_item">商品名稱：{{ item.name }}</div>
                 <div class="detail_item">尺寸：{{ item.size }}</div>
                 <div class="detail_item">
                   顏色：
-                  <span class="product_color_swatch"></span>
+                  <span
+                    class="product_color_swatch"
+                    :style="{ backgroundColor: item.color }"
+                  ></span>
                 </div>
                 <div class="detail_item">數量：{{ item.quantity }}</div>
                 <div class="detail_item">價錢：$ {{ item.price }}</div>
@@ -81,6 +94,7 @@
     </div>
 
     <PageNumber
+      v-if="!isLoading && !error && filteredOrders.length > 0"
       class="my_pagination"
       :total-items="filteredOrders.length"
       :items-per-page="itemsPerPage"
@@ -90,39 +104,47 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, computed } from 'vue'
-  import productTshirtImage from '@/assets/images/member-system/cloth.png'
-
+  import { ref, onMounted, computed, watch } from 'vue'
+  import axios from 'axios'
   import PageNumber from '@/components/buttons/page_number.vue'
 
+  const allOrders = ref([])
+  const isLoading = ref(true)
+  const error = ref(null)
   const selectedStatus = ref('processing')
-
   const currentPage = ref(1)
   const itemsPerPage = ref(3)
 
-  const allOrders = ref([
-    {
-      id: '10043475',
-      date: '2025/07/04',
-      status: '處理中',
-      shipping_estimate: '7天內',
-      items: [
-        {
-          name: '淨灘支持T恤',
-          image: productTshirtImage,
-          color: '白色',
-          size: 'L',
-          quantity: 2,
-          price: 1540,
-        },
-      ],
-      summary: { subtotal: 1540, discount: 0, shipping_fee: 100, total: 1640 },
-    },
+  const apiUrl = `${import.meta.env.VITE_API_BASE}/members/get_member_orders.php`
 
-    // { id: '10043474', date: '2025/07/03', status: '處理中', shipping_estimate: '7天內', items: [{ name: '環保杯', image: productTshirtImage, color: '藍色', size: 'M', quantity: 1, price: 800 }], summary: { subtotal: 800, discount: 0, shipping_fee: 100, total: 900 } },
-    // { id: '10043473', date: '2025/07/02', status: '處理中', shipping_estimate: '7天內', items: [{ name: '海龜抱枕', image: productTshirtImage, color: '綠色', size: 'S', quantity: 1, price: 1200 }], summary: { subtotal: 1200, discount: 50, shipping_fee: 100, total: 1250 } },
-    // { id: '10043472', date: '2025/07/01', status: '已出貨', shipping_estimate: 'N/A', items: [{ name: '淨灘支持T恤', image: productTshirtImage, color: '白色', size: 'XL', quantity: 3, price: 2310 }], summary: { subtotal: 2310, discount: 0, shipping_fee: 0, total: 2310 } },
-  ])
+  const baseImageUrl = import.meta.env.VITE_API_BASE || ''
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return ''
+    if (imagePath.startsWith('http')) {
+      return imagePath
+    }
+    return `${baseImageUrl}${imagePath}`
+  }
+
+  const fetchOrders = async () => {
+    isLoading.value = true
+    error.value = null
+    try {
+      const response = await axios.get(apiUrl)
+      console.log('API 回傳的原始 response.data:', response.data)
+      allOrders.value = response.data.map((order) => ({
+        ...order,
+        isExpanded: false,
+      }))
+    } catch (err) {
+      console.error('無法獲取訂單資料:', err)
+      error.value = '讀取訂單失敗，請稍後再試或聯繫客服。'
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  onMounted(fetchOrders)
 
   const filteredOrders = computed(() => {
     const statusMap = {
@@ -139,15 +161,13 @@
     return filteredOrders.value.slice(start, end)
   })
 
-  onMounted(() => {
-    allOrders.value.forEach((order) => {
-      order.isExpanded = false
-    })
-  })
-
   const toggleDetails = (order) => {
     order.isExpanded = !order.isExpanded
   }
+
+  watch(selectedStatus, () => {
+    currentPage.value = 1
+  })
 </script>
 
 <style scoped lang="scss">
