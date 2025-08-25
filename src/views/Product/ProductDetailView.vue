@@ -7,6 +7,7 @@
   import Button from '@/components/buttons/button.vue'
   import ProductCard from '@/components/product/product_card.vue'
   import QuantityControl from '@/components/product/quantity_button.vue'
+  import Swal from 'sweetalert2'
 
   const props = defineProps({
     id: {
@@ -55,7 +56,10 @@
 
   const addItemToCart = () => {
     if (!selectedColor.value || !selectedSize.value) {
-      alert('請選擇顏色與尺寸')
+      Swal.fire({
+        icon: 'error',
+        title: '請選擇顏色與尺寸',
+      })
       return false
     }
 
@@ -74,7 +78,10 @@
 
   const handleAddToCart = () => {
     if (addItemToCart()) {
-      alert('已加入購物車！')
+      Swal.fire({
+        icon: 'success',
+        title: '已加入購物車！',
+      })
       if (authStore.isLoggedIn) {
         cartStore.syncCartToBackend()
       }
@@ -83,7 +90,10 @@
 
   const handleBuyNow = () => {
     if (!selectedColor.value || !selectedSize.value) {
-      alert('請選擇顏色與尺寸')
+      Swal.fire({
+        icon: 'error',
+        title: '請選擇顏色與尺寸',
+      })
       return
     }
 

@@ -43,6 +43,7 @@
   import { useAuthStore } from '@/stores/auth'
   import { useRouter } from 'vue-router'
   import defaultAvatar from '@/assets/images/member-system/avatar.svg'
+  import Swal from 'sweetalert2'
 
   const authStore = useAuthStore()
   const router = useRouter()
@@ -53,7 +54,10 @@
       if (ok) {
         router.push({ name: 'login' })
       } else {
-        alert('登出失敗')
+        Swal.fire({
+          icon: 'error',
+          title: '登出失敗',
+        })
       }
     }
   }

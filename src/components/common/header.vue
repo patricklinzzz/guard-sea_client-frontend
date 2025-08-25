@@ -5,6 +5,7 @@
   import { useAuthStore } from '@/stores/auth'
   import Button from '@/components/buttons/button.vue'
   import defaultAvatar from '@/assets/images/member-system/avatar.svg'
+  import Swal from 'sweetalert2'
 
   const authStore = useAuthStore()
   const route = useRoute()
@@ -30,7 +31,10 @@
   const checkAndRedirectToCart = (event) => {
     if (!authStore.isLoggedIn) {
       event.preventDefault()
-      alert('請先登入以查看購物車內容！')
+      Swal.fire({
+        icon: 'info',
+        title: '請先登入以查看購物車內容！',
+      })
       router.push({ path: '/login', query: { redirect: '/cart' } })
     }
   }
@@ -42,7 +46,10 @@
         menu_open.value = false
         router.push({ name: 'login' })
       } else {
-        alert('登出失敗')
+        Swal.fire({
+          icon: 'error',
+          title: '登出失敗',
+        })
       }
     }
   }

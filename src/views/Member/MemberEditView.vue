@@ -6,6 +6,7 @@
   import { useAuthStore } from '@/stores/auth'
   import axios from 'axios'
   import Button from '@/components/buttons/button.vue'
+  import Swal from 'sweetalert2'
 
   const authStore = useAuthStore()
   const baseUrl = import.meta.env.VITE_API_BASE
@@ -36,10 +37,9 @@
     formD.append('gender', formData.value.gender)
     formD.append('address', formData.value.address)
     formD.append('birthdate', formData.value.birthdate)
-    if(uploaded_avatar.value){
+    if (uploaded_avatar.value) {
       formD.append('avatar_url', uploaded_avatar.value)
-    } 
-    
+    }
 
     try {
       const apiUrl = `${baseUrl}/members/edit_member.php`
@@ -50,7 +50,10 @@
     }
     originalData = JSON.parse(JSON.stringify(formData.value))
 
-    alert('會員資料已儲存')
+    Swal.fire({
+      icon: 'success',
+      title: '會員資料已儲存',
+    })
   }
 
   const cancelChanges = () => {
@@ -89,7 +92,6 @@
       <Button @click="reset">重置頭像</Button>
       <form @submit.prevent="handleProfileUpdate">
         <div class="avatar_editor">
-          
           <input
             ref="avatar_input"
             @change="file_change"

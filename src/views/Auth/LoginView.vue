@@ -240,13 +240,14 @@
   import { useRouter, useRoute } from 'vue-router'
   import { useAuthStore } from '@/stores/auth'
   import { useQuizStore } from '@/stores/quiz_state'
-  import { useCartStore } from '@/stores/cart_store' 
+  import { useCartStore } from '@/stores/cart_store'
   import axios from 'axios'
+  import Swal from 'sweetalert2'
 
   const router = useRouter()
   const route = useRoute()
   const authStore = useAuthStore()
-  const cartStore = useCartStore() 
+  const cartStore = useCartStore()
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE
 
@@ -339,15 +340,22 @@
       if (localStorage.getItem('cart_items')) {
         await cartStore.syncCartToBackend()
       }
-      const redirectPath = (route.query.redirect || (quizStore.log_in_prompted ? '/edu/quiz' : null)) ?? '/'
+      const redirectPath =
+        (route.query.redirect || (quizStore.log_in_prompted ? '/edu/quiz' : null)) ?? '/'
       router.push(redirectPath)
     } catch (error) {
       if (error.response) {
-        alert(error.response.data.error)
+        Swal.fire(error.response.data.error)
       } else if (error.request) {
-        alert('登入失敗，伺服器無回應。')
+        Swal.fire({
+          icon: 'error',
+          text: '登入失敗，伺服器無回應。',
+        })
       } else {
-        alert('登入失敗，請檢查前端設定。')
+        Swal.fire({
+          icon: 'error',
+          text: '登入失敗，請檢查前端設定。',
+        })
       }
       console.error('登入失敗:', error)
     }
@@ -391,7 +399,10 @@
     if (!isValid) return
 
     if (!termsAccepted.value) {
-      alert('請先閱讀並同意服務條款與隱私政策')
+      Swal.fire({
+        icon: 'info',
+        title: '請先閱讀並同意服務條款與隱私政策',
+      })
       return
     }
 
@@ -405,15 +416,24 @@
 
     try {
       const response = await axios.post(`${API_BASE_URL}/members/register.php`, payload)
-      alert(response.data.message)
+      Swal.fire({
+        icon: 'success',
+        text: response.data.message,
+      })
       changeMode('login')
     } catch (error) {
       if (error.response) {
-        alert(error.response.data.error)
+        Swal.fire(error.response.data.error)
       } else if (error.request) {
-        alert('註冊失敗，伺服器無回應。')
+        Swal.fire({
+          icon: 'error',
+          text: '登入失敗，伺服器無回應。',
+        })
       } else {
-        alert('註冊失敗，請檢查前端設定。')
+        Swal.fire({
+          icon: 'error',
+          text: '登入失敗，請檢查前端設定。',
+        })
       }
       console.error('註冊失敗:', error)
     }
@@ -425,7 +445,10 @@
       return
     }
     console.log('Password reset requested for:', email.value)
-    alert('密碼重設信已寄出（此為展示訊息）')
+    Swal.fire({
+      icon: 'success',
+      title: '密碼重設信已寄出（此為展示訊息）',
+    })
   }
 </script>
 <style scoped lang="scss">

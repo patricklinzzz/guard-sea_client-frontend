@@ -1,6 +1,7 @@
 <script setup>
   import { ref } from 'vue'
   import axios from 'axios'
+  import Swal from 'sweetalert2'
   const passwordData = ref({
     oldPassword: '',
     newPassword: '',
@@ -13,15 +14,24 @@
       !passwordData.value.newPassword ||
       !passwordData.value.confirmPassword
     ) {
-      alert('請填寫所有欄位！')
+      Swal.fire({
+        icon: 'error',
+        title: '請填寫所有欄位！',
+      })
       return
     }
     if (passwordData.value.newPassword !== passwordData.value.confirmPassword) {
-      alert('新密碼與確認密碼不相符！')
+      Swal.fire({
+        icon: 'error',
+        title: '新密碼與確認密碼不相符！',
+      })
       return
     }
     if (passwordData.value.newPassword.length < 6) {
-      alert('密碼長度不能少於6個字元')
+      Swal.fire({
+        icon: 'error',
+        title: '密碼長度不能少於6個字元',
+      })
       return
     }
     console.log('正在更新密碼:', passwordData.value)
@@ -32,7 +42,10 @@
       resetForm()
     } catch (err) {
       console.error('Post Error:', err)
-      alert('修改失敗！')
+      Swal.fire({
+        icon: 'error',
+        title: '修改失敗！',
+      })
     }
   }
 

@@ -7,6 +7,7 @@
   import Button from '@/components/buttons/button.vue'
   import CouponCard from '@/components/product/coupon_card.vue'
   import { useAuthStore } from '@/stores/auth'
+  import Swal from 'sweetalert2'
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE
 
@@ -53,16 +54,19 @@
 
   const applyCoupon = async (coupon) => {
     if (!authStore.isLoggedIn) {
-      alert('請先登入以套用優惠券。')
+      Swal.fire({
+        icon: 'info',
+        title: '請先登入以套用優惠券。',
+      })
       return
     }
 
     const result = await couponStore.validateCoupon(coupon.coupon_code)
 
     if (result.success) {
-      alert(result.message)
+      Swal.fire(result.message)
     } else {
-      alert(result.error)
+      Swal.fire(result.error)
     }
   }
 
@@ -93,7 +97,10 @@
 
   const goToNextStep = () => {
     if (cartStore.items.length === 0) {
-      alert('您的購物車是空的，無法結帳！')
+      Swal.fire({
+        icon: 'error',
+        title: '您的購物車是空的，無法結帳！',
+      })
       return
     }
     router.push('/shippinginfo')

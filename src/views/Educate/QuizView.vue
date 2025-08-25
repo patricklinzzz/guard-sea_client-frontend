@@ -12,6 +12,7 @@
   import dolphin from '@/assets/images/dec/dolphin.svg'
   import axios from 'axios'
   import { useQuizStore } from '@/stores/quiz_state'
+  import Swal from 'sweetalert2'
 
   const quiz_cur = ref(null)
   const question_block_ref = ref(null)
@@ -140,7 +141,10 @@
       pass_grade.value = (q_num.value * quizzes.value[quiz_type_selected.value]['pass_grade']) / 10
       console.log(pass_grade.value)
     } else {
-      window.alert('pick a topic')
+      Swal.fire({
+        icon: 'info',
+        title: 'pick a topic',
+      })
     }
   }
   const nextQ = () => {
@@ -192,7 +196,10 @@
     if (quizStore.score >= pass_grade.value) {
       if (!(await check_login())) {
         quizStore.log_in_prompted = true
-        alert('登入領取優惠卷!')
+        Swal.fire({
+          icon: 'info',
+          title: '登入領取優惠卷',
+        })
         router.push({ path: '/login' })
         return
       } else {
@@ -413,7 +420,11 @@
       <Transition @before-enter="onBeforeEnter" @enter="onEnter" @leave="onLeave" :css="false">
         <div v-if="quizStore.show_result" class="final_result">
           <div class="bubble_score">
-            <ScoreBubble size="80" :score="quizStore.score" :max_score="quizStore.max_score"></ScoreBubble>
+            <ScoreBubble
+              size="80"
+              :score="quizStore.score"
+              :max_score="quizStore.max_score"
+            ></ScoreBubble>
           </div>
           <div class="text">
             <Transition

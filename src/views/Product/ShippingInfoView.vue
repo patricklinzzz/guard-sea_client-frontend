@@ -6,6 +6,7 @@
   import { useCouponStore } from '@/stores/coupon_store'
   import { validatePhone } from '@/utils/validators.js'
   import Button from '@/components/buttons/button.vue'
+  import Swal from 'sweetalert2'
 
   const cartStore = useCartStore()
   const authStore = useAuthStore()
@@ -54,7 +55,10 @@
   const submitOrder = async () => {
     const isFormValid = validateForm()
     if (!isFormValid) {
-      alert('表單資料有誤，請檢查填寫內容。')
+      Swal.fire({
+        icon: 'error',
+        title: '表單資料有誤，請檢查填寫內容。',
+      })
       return
     }
 
@@ -97,18 +101,27 @@
           window.location.href = responseData.redirect_url
         } else {
           // 貨到付款
-          alert('訂單已建立，感謝您的訂購！')
+          Swal.fire({
+            icon: 'success',
+            title: '訂單已建立，感謝您的訂購！',
+          })
           router.push({
             name: 'ordercomplete',
             query: { order_id: responseData.order_id },
           })
         }
       } else {
-        alert(responseData.error || '訂單建立失敗')
+        Swal.fire({
+          icon: 'error',
+          title: responseData.error || '訂單建立失敗',
+        })
       }
     } catch (error) {
       console.error('訂單提交失敗:', error)
-      alert('訂單提交失敗，請稍後再試。')
+      Swal.fire({
+        icon: 'error',
+        title: '訂單提交失敗，請稍後再試。',
+      })
     } finally {
       isLoading.value = false
     }
@@ -129,7 +142,10 @@
   watch(sameAsMember, (newValue) => {
     if (newValue) {
       if (!authStore.memberData) {
-        alert('無法獲取會員資料，請重新登入。')
+        Swal.fire({
+          icon: 'error',
+          title: '無法獲取會員資料，請重新登入。',
+        })
         sameAsMember.value = false
         return
       }
