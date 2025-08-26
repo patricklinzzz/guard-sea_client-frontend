@@ -40,7 +40,12 @@
         const matchCategory =
           events_cat_all.value === '全部活動' ||
           event.category_id === categoryMap[events_cat_all.value]
-        const matchStatus = status_filter.value === '全部' || event.status === status_filter.value
+
+        // 把後端的英文狀態轉換成中文
+      const eventStatus = statusMap[event.status] || event.status
+      const matchStatus =
+        status_filter.value === '全部' || eventStatus === status_filter.value
+
         return matchCategory && matchStatus
       })
       .sort((a, b) => {
@@ -62,6 +67,21 @@
     events_cat_all.value = item
     current_page.value = 1
   }
+
+  // 狀態映射表
+  const statusMap = {
+    closed: '已截止',
+    finished: '已結束',
+    canceled: '已取消',
+  }
+
+  // 映射狀態到顏色
+  const statusClassMap = {
+    ongoing: 'ongoing',
+    closed: 'closed',
+    finished: 'finished',
+    canceled: 'canceled',
+  };
 </script>
 
 <template>
@@ -91,46 +111,56 @@
     </div>
 
     <div class="card_list">
-      <div v-for="item in show_per_page_items" :key="item.activity_id" class="event_card">
-        <router-link
-          :to="{ name: 'EventDetail', params: { id: item.activity_id } }"
-          class="event_card_link"
+      <template v-if="show_per_page_items.length > 0">
+        <div
+          v-for="item in show_per_page_items"
+          :key="item.activity_id"
+          class="event_card"
         >
-          <div class="event_pic">
-            <img :src="item.main_image" :alt="item.title" />
-          </div>
-        </router-link>
-
-        <div class="card_content">
-          <div class="detail">
-            <span class="date">{{ formatEventDates(item).date }}</span>
-            <span class="tag" :class="item.status">{{ item.status }}</span>
-          </div>
-
           <router-link
             :to="{ name: 'EventDetail', params: { id: item.activity_id } }"
             class="event_card_link"
           >
-            <p class="title">{{ item.title }}</p>
+            <div class="event_pic">
+              <img :src="item.main_image" :alt="item.title" />
+            </div>
           </router-link>
 
-          <span class="location">
-            <img src="@/assets/images/event/location.svg" alt="locationIcon" />
-            {{ item.location }}
-          </span>
+          <div class="card_content">
+            <div class="detail">
+              <span class="date">{{ formatEventDates(item).date }}</span>
+              <span class="tag" :class="statusClassMap[item.status]">
+                {{ statusMap[item.status] || item.status }}
+              </span>
+            </div>
+
+            <router-link
+              :to="{ name: 'EventDetail', params: { id: item.activity_id } }"
+              class="event_card_link"
+            >
+              <p class="title">{{ item.title }}</p>
+            </router-link>
+
+            <span class="location">
+              <img src="@/assets/images/event/location.svg" alt="locationIcon" />
+              {{ item.location }}
+            </span>
+          </div>
         </div>
-      </div>
+      </template>
+
+      <div v-else class="no_event"><p>暫無活動，敬請期待！</p></div>
     </div>
   </div>
-
-  <nav>
-    <PageNumber
-      v-model="current_page"
-      :total-items="filter_items.length"
-      :items-per-page="items_per_page"
-      class="my_pagination"
-    />
-  </nav>
+  
+  <nav v-if="filter_items.length > 0">
+  <PageNumber
+    v-model="current_page"
+    :total-items="filter_items.length"
+    :items-per-page="items_per_page"
+    class="my_pagination"
+  />
+</nav>
 </template>
 
 <style lang="scss" scoped>
@@ -335,22 +365,27 @@
     text-align: center;
     font-size: v.$sub-mobile;
     border-radius: v.$border-radius-sm;
-
+    background-color: v.$color-orange;
     color: v.$color-white;
-    &.報名中 {
-      background-color: v.$color-orange;
-    }
-    &.已截止 {
+    
+    &.closed {
       background-color: v.$color-yellow;
     }
-    &.已結束 {
+    &.finished {
       background-color: v.$color-gray;
     }
-    &.已取消 {
+    &.canceled {
       background-color: v.$color-blue;
     }
   }
   .location {
     margin-top: auto;
+  }
+
+  .no_event {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 0;
+    color: #fff;
   }
 </style>

@@ -8,13 +8,13 @@ import { formatEventDates } from '@/utils/dateFormat'
 // 連結按鈕報名表單
 const route = useRoute()
 // 確保 eventId 是一個數字
-const eventId = parseInt(route.params.id) 
+const eventId = parseInt(route.params.id)
 const router = useRouter()
 
 // 導入所有活動數據
 const eventStore = useEventStore()
 
-// 根據 ID 查找對應的活動資料，使用 store 的 getter 
+// 根據 ID 查找對應的活動資料，使用 store 的 getter
 const current_event = computed(() => eventStore.getEventById(eventId))
 
 // 確保在元件載入時呼叫 API
@@ -52,7 +52,7 @@ const buttonInfo = computed(() => {
 
 const isButtonDisabled = computed(() => {
     if (!current_event.value) return true // 數據未載入時禁用
-    
+
     const status = current_event.value.status
     return status === '已截止' || status === '已取消' || status === '已結束'
 })
@@ -61,18 +61,12 @@ const isButtonDisabled = computed(() => {
 const go_back = () => {
     router.back()
 }
-
-// 圖片處理
-const getImageUrl = (path) => {
-    if (!path) return ''
-    return `http://localhost:8888/guard-sea_api${path}`
-}
 </script>
 
 <template>
     <div v-if="current_event">
         <div class="detail_pic">
-            <img :src="getImageUrl(current_event.image_url)" :alt="current_event.title">
+            <img :src="current_event.main_image" :alt="current_event.title">
         </div>
 
         <section class="event_info">
@@ -121,8 +115,11 @@ const getImageUrl = (path) => {
             </div>
             <div class="content">
                 <h3>活動內容</h3>
-                <div class="content-html"
-                v-html="current_event.description"></div>
+                <ul class="content-html">
+                    <li v-for="(line, i) in current_event.description.split('\n').filter(l => l.trim())" :key="i">
+                    {{ line }}
+                    </li>
+                </ul>
             </div>
         </section>
 
@@ -177,7 +174,10 @@ const getImageUrl = (path) => {
         }
         ul {
             list-style-type: disc;
-            margin-left: 3%;
+            padding-left: 1.5rem;
+            & li {
+                margin-bottom: 0.2rem;
+            }
         }
 
         @include respond(md) {
