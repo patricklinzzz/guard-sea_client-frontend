@@ -1,3 +1,74 @@
+<script setup>
+import { ref, onMounted, computed, watch } from 'vue'
+import axios from 'axios'
+import PageNumber from '@/components/buttons/page_number.vue'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
+
+const allEvents = ref([])
+const isLoading = ref(true)
+const error = ref(null)
+const selectedFilter = ref('registered')
+const currentPage = ref(1)
+const itemsPerPage = ref(3)
+
+// API URL
+const apiUrl = `${import.meta.env.VITE_API_BASE}/members/get_member_events.php`
+const api = `${import.meta.env.VITE_API_BASE}/events/get_event.php?activity_id=${authStore.activity_id}`
+
+// 取活動資料
+const fetchEvents = async () => {
+  isLoading.value = true
+  error.value = null
+  try {
+    const response = await axios.get(apiUrl, { withCredentials: true })
+
+    // 後端直接回傳陣列
+    allEvents.value = response.data.map(event => ({
+      id: event.id,      // 對應 reg_id
+      activity_id: event.activity_id,
+      name: event.name,      // 對應 title
+      image: event.image,
+      date: event.date,      // 活動日期合併
+      location: event.location,
+      status: event.status     // 已報名 / 已完成
+    }))
+  } catch (err) {
+    console.error('無法獲取活動資料:', err)
+    error.value = '讀取活動失敗，請稍後再試或聯繫客服。'
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(fetchEvents)
+
+// 篩選
+const filteredEvents = computed(() => {
+  switch (selectedFilter.value) {
+    case 'registered':
+      return allEvents.value.filter((e) => e.status === '已報名')
+    case 'completed':
+      return allEvents.value.filter((e) => e.status === '已完成')
+    case 'all':
+    default:
+      return allEvents.value
+  }
+})
+
+// 分頁
+const paginatedEvents = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  const end = start + itemsPerPage.value
+  return filteredEvents.value.slice(start, end)
+})
+
+watch(selectedFilter, () => {
+  currentPage.value = 1
+})
+</script>
+
 <template>
   <main class="event_content_area">
     <div class="event_content_header">
@@ -16,25 +87,34 @@
     </div>
 
     <div class="event_list">
-      <div class="event_card" v-for="event in paginatedEvents" :key="event.id">
-        <img :src="event.image" :alt="event.name" class="event_image" />
-        <div class="event_details">
-          <h3 class="event_detail_item name">{{ event.name }}</h3>
-          <div class="event_detail_item">
-            <span class="label">活動日期:</span>
-            {{ event.date }}
-          </div>
-          <div class="event_detail_item">
-            <span class="label">狀態:</span>
-            {{ event.status }}
-          </div>
-          <div class="event_detail_item">
-            <span class="label">時間:</span>
-            {{ event.time }}
-          </div>
-          <div class="event_detail_item">
-            <span class="label">集合地點:</span>
-            {{ event.location }}
+      <div v-if="isLoading">載入中...</div>
+      <div v-else-if="error" class="status-message error">
+        <p>{{ error }}</p>
+      </div>
+      <div v-else-if="paginatedEvents.length === 0">目前沒有活動紀錄</div>
+
+      <div v-else>
+        <div class="event_card" v-for="event in paginatedEvents" :key="event.id">
+          <router-link :to="{ name: 'EventDetail', params: { id: event.activity_id } }" class="event_card_link">
+            <div class="event_pic">
+              <img :src="event.image" :alt="event.name" class="event_image" />
+            </div>
+          </router-link>
+
+          <div class="event_details">
+            <h3 class="event_detail_item name">{{ event.name }}</h3>
+            <div class="event_detail_item">
+              <span class="label">活動日期:</span>
+              {{ event.date }}
+            </div>
+            <div class="event_detail_item">
+              <span class="label">狀態:</span>
+              {{ event.status }}
+            </div>
+            <div class="event_detail_item">
+              <span class="label">集合地點:</span>
+              {{ event.location }}
+            </div>
           </div>
         </div>
       </div>
@@ -49,92 +129,6 @@
     />
   </main>
 </template>
-
-<script setup>
-  import { ref, computed, watch } from 'vue'
-  import PageNumber from '@/components/buttons/page_number.vue'
-  import eventImage from '@/assets/images/member-system/beach.png'
-
-  const selectedFilter = ref('registered')
-  const currentPage = ref(1)
-  const itemsPerPage = ref(3)
-
-  const allEvents = ref([
-    {
-      id: 'evt001',
-      name: '台北淨灘',
-      date: '2025/07/25(五)',
-      status: '已報名',
-      time: '09:00 - 12:00',
-      location: '台北市大安區某海灘',
-      image: eventImage,
-    },
-    {
-      id: 'evt002',
-      name: '台中淨灘',
-      date: '2025/08/15(五)',
-      status: '已報名',
-      time: '09:00 - 12:00',
-      location: '台中市清水區某海灘',
-      image: eventImage,
-    },
-    {
-      id: 'evt003',
-      name: '高雄珊瑚保育講座',
-      date: '2025/09/01(一)',
-      status: '已報名',
-      time: '14:00 - 16:00',
-      location: '高雄市海洋生物博物館',
-      image: eventImage,
-    },
-    {
-      id: 'evt004',
-      name: '基隆淨灘',
-      date: '2024/11/20(三)',
-      status: '已完成',
-      time: '09:00 - 12:00',
-      location: '基隆市某海灘',
-      image: eventImage,
-    },
-    {
-      id: 'evt005',
-      name: '海洋廢棄物藝術展',
-      date: '2024/10/10(四)',
-      status: '已完成',
-      time: '10:00 - 18:00',
-      location: '台北市華山文創園區',
-      image: eventImage,
-    },
-    {
-      id: 'evt006',
-      name: '墾丁潛水淨海',
-      date: '2024/09/05(五)',
-      status: '已完成',
-      time: '08:00 - 13:00',
-      location: '屏東縣墾丁國家公園',
-      image: eventImage,
-    },
-  ])
-
-  const filteredEvents = computed(() => {
-    currentPage.value = 1
-    switch (selectedFilter.value) {
-      case 'registered':
-        return allEvents.value.filter((event) => event.status === '已報名')
-      case 'completed':
-        return allEvents.value.filter((event) => event.status === '已完成')
-      case 'all':
-      default:
-        return allEvents.value
-    }
-  })
-
-  const paginatedEvents = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage.value
-    const end = start + itemsPerPage.value
-    return filteredEvents.value.slice(start, end)
-  })
-</script>
 
 <style scoped lang="scss">
   @use '@/assets/style/variables' as *;
@@ -197,14 +191,33 @@
     margin-bottom: 20px;
     box-shadow: $shadow-sm;
   }
+  
+  .event_card_link {
+    text-decoration: none;
+    color: inherit;
+  }
 
-  .event_image {
+  .event_pic {
     width: 120px;
     height: 120px;
-    object-fit: cover;
+    overflow: hidden;
     border-radius: $border-radius-sm;
     flex-shrink: 0;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease-in-out;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+      filter: brightness(0.95);
+    }
   }
+
   .event_details {
     display: flex;
     flex-direction: column;
@@ -250,7 +263,7 @@
       padding: 15px;
       align-items: flex-start;
     }
-    .event_image {
+    .event_pic {
       width: 80px;
       height: 80px;
     }
