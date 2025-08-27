@@ -39,8 +39,6 @@
   const images = computed(() => {
     if (!info.value) return []
     const imageArray = []
-    if (info.value.main_image_url) imageArray.push(info.value.main_image_url)
-
     if (info.value.sub_image_1) imageArray.push(info.value.sub_image_1)
     if (info.value.sub_image_2) imageArray.push(info.value.sub_image_2)
     if (info.value.sub_image_3) imageArray.push(info.value.sub_image_3)
@@ -353,10 +351,19 @@
     .info_main {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      justify-content: center;
       gap: 2rem;
       max-width: 1200px;
       text-align: center;
+      :deep(img) {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+      :deep(figure.image) {
+        display: table;
+        margin: 1.5em auto;
+      }
       p {
         color: v.$color-text-main;
       }
