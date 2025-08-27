@@ -1,72 +1,80 @@
 <script setup>
-  import { ref, onMounted, computed, watch } from 'vue'
-  import axios from 'axios'
-  import PageNumber from '@/components/buttons/page_number.vue'
-  import { useAuthStore } from '@/stores/auth'
+    import { ref, onMounted, computed, watch } from 'vue'
+    import axios from 'axios'
+    import PageNumber from '@/components/buttons/page_number.vue'
+    import { useAuthStore } from '@/stores/auth'
 
-  const authStore = useAuthStore()
+    const authStore = useAuthStore()
 
-  const allEvents = ref([])
-  const isLoading = ref(true)
-  const error = ref(null)
-  const selectedFilter = ref('registered')
-  const currentPage = ref(1)
-  const itemsPerPage = ref(3)
+    const allEvents = ref([])
+    const isLoading = ref(true)
+    const error = ref(null)
+    const selectedFilter = ref('registered')
+    const currentPage = ref(1)
+    const itemsPerPage = ref(3)
 
   // API URL
   const apiUrl = `${import.meta.env.VITE_API_BASE}/members/get_member_events.php`
-  const api = `${import.meta.env.VITE_API_BASE}/events/get_event.php?activity_id=${authStore.activity_id}`
 
-  // 取活動資料
-  const fetchEvents = async () => {
-    isLoading.value = true
-    error.value = null
-    try {
-      const response = await axios.get(apiUrl, { withCredentials: true })
+  // 基底圖片網址處理
+  const baseImageUrl = import.meta.env.VITE_API_BASE || ''
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return ''
+    if (imagePath.startsWith('http')) {
+      return imagePath
+    }
+    return `${baseImageUrl}${imagePath}`
+  }
+
+    // 取活動資料
+    const fetchEvents = async () => {
+      isLoading.value = true
+      error.value = null
+      try {
+        const response = await axios.get(apiUrl, { withCredentials: true })
 
       // 後端直接回傳陣列
-      allEvents.value = response.data.map((event) => ({
-        id: event.id, // 對應 reg_id
+      allEvents.value = response.data.map(event => ({
+        id: event.id,      // 對應 reg_id
         activity_id: event.activity_id,
-        name: event.name, // 對應 title
+        name: event.name,      // 對應 title
         image: event.image,
-        date: event.date, // 活動日期合併
+        date: event.date,      // 活動日期合併
         location: event.location,
-        status: event.status, // 已報名 / 已完成
+        status: event.status   // 已報名 / 已完成
       }))
     } catch (err) {
-      //console.error('無法獲取活動資料:', err)
+      // console.error('無法獲取活動資料:', err)
       error.value = '讀取活動失敗，請稍後再試或聯繫客服。'
     } finally {
       isLoading.value = false
     }
-  }
+}
+    onMounted(fetchEvents)
 
-  onMounted(fetchEvents)
+    // 篩選
+    const filteredEvents = computed(() => {
+      switch (selectedFilter.value) {
+        case 'registered':
+          return allEvents.value.filter((e) => e.status === '已報名')
+        case 'completed':
+          return allEvents.value.filter((e) => e.status === '已完成')
+        case 'all':
+        default:
+          return allEvents.value
+      }
+    })
 
-  // 篩選
-  const filteredEvents = computed(() => {
-    switch (selectedFilter.value) {
-      case 'registered':
-        return allEvents.value.filter((e) => e.status === '已報名')
-      case 'completed':
-        return allEvents.value.filter((e) => e.status === '已完成')
-      case 'all':
-      default:
-        return allEvents.value
-    }
-  })
+    // 分頁
+    const paginatedEvents = computed(() => {
+      const start = (currentPage.value - 1) * itemsPerPage.value
+      const end = start + itemsPerPage.value
+      return filteredEvents.value.slice(start, end)
+    })
 
-  // 分頁
-  const paginatedEvents = computed(() => {
-    const start = (currentPage.value - 1) * itemsPerPage.value
-    const end = start + itemsPerPage.value
-    return filteredEvents.value.slice(start, end)
-  })
-
-  watch(selectedFilter, () => {
-    currentPage.value = 1
-  })
+    watch(selectedFilter, () => {
+      currentPage.value = 1
+    })
 </script>
 
 <template>
@@ -100,7 +108,7 @@
             class="event_card_link"
           >
             <div class="event_pic">
-              <img :src="event.image" :alt="event.name" class="event_image" />
+              <img :src="getImageUrl(event.image)" :alt="event.name" class="event_image" />
             </div>
           </router-link>
 
