@@ -28,7 +28,7 @@ export const useProductCategoryStore = defineStore('productCategoryAdmin', () =>
       categories.value = response.data.map(transformCategoryData)
     } catch (err) {
       error.value = err.response?.data?.error || err.message || '獲取商品分類失敗'
-      console.error('獲取商品分類失敗:', err)
+      //console.error('獲取商品分類失敗:', err)
     } finally {
       isLoading.value = false
     }

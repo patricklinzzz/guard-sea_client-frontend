@@ -46,14 +46,14 @@
       })
       return
     }
-    console.log('正在更新密碼:', passwordData.value)
+    //console.log('正在更新密碼:', passwordData.value)
     try {
       const apiUrl = `${baseUrl}/members/patch_password.php`
       const response = await axios.patch(apiUrl, passwordData.value)
-      console.log('edit successfully:', response.data)
+      //console.log('edit successfully:', response.data)
       resetForm()
     } catch (err) {
-      console.error('Post Error:', err)
+      //console.error('Post Error:', err)
       Swal.fire({
         icon: 'error',
         title: '修改失敗！',

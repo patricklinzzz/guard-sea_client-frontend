@@ -48,7 +48,7 @@ export const useNewsStore = defineStore('news', () => {
 
       allNews.value = processedNews
     } catch (err) {
-      console.error('讀取失敗', err)
+      //console.error('讀取失敗', err)
       error.value = '資料載入失敗，請稍後再試'
     } finally {
       loading.value = false

@@ -48,7 +48,7 @@
       forceQuizRefresh()
       quizStore.quizReset()
     } else {
-      console.warn('forceQuizRefresh not injected!')
+      //console.warn('forceQuizRefresh not injected!')
     }
   }
 
@@ -139,7 +139,7 @@
       shuffleArray(q_order.value)
       quiz_cur.value = quiz_chosen.value[q_order.value[q_index.value]]
       pass_grade.value = (q_num.value * quizzes.value[quiz_type_selected.value]['pass_grade']) / 10
-      console.log(pass_grade.value)
+      //console.log(pass_grade.value)
     } else {
       Swal.fire({
         icon: 'warning',
@@ -152,7 +152,7 @@
     }
   }
   const nextQ = () => {
-    console.log(q_index.value)
+    //console.log(q_index.value)
     if (q_index.value < q_num.value - 1) {
       question_num.value = 'Q' + (q_index.value + 2)
       const tl = gsap
@@ -191,7 +191,7 @@
       const login_status = login_r.data
       return login_status.isLoggedIn
     } catch (err) {
-      console.error('Fetch 錯誤：', err)
+      //console.error('Fetch 錯誤：', err)
       return false
     }
   }
@@ -223,7 +223,7 @@
             redeemable_date.value = coupon_r.data.redeemable_date
           }
         } catch (err) {
-          console.error('Fetch 錯誤：', err)
+          //console.error('Fetch 錯誤：', err)
         }
         quizStore.score = -1
       }
@@ -254,9 +254,9 @@
         map[quiz_cur.quiz_id] = quiz_cur.title
         return map
       }, quiz_map)
-      console.log(questions.value)
+      //console.log(questions.value)
     } catch (err) {
-      console.error('Fetch 錯誤：', err)
+      //console.error('Fetch 錯誤：', err)
     }
   }
   const quiz_slogan = computed(() => {

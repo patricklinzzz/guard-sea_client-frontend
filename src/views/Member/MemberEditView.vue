@@ -29,7 +29,7 @@
   })
 
   const handleProfileUpdate = async () => {
-    console.log('Updating profile:', formData.value)
+    //console.log('Updating profile:', formData.value)
     const formD = new FormData()
     formD.append('name', formData.value.name)
     formD.append('email', formData.value.email)
@@ -44,9 +44,9 @@
     try {
       const apiUrl = `${baseUrl}/members/edit_member.php`
       const response = await axios.post(apiUrl, formD)
-      console.log('edit successfully:', response.data)
+      //console.log('edit successfully:', response.data)
     } catch (err) {
-      console.error('Post Error:', err)
+      //console.error('Post Error:', err)
     }
     originalData = JSON.parse(JSON.stringify(formData.value))
 
@@ -62,7 +62,7 @@
 
   const cancelChanges = () => {
     formData.value = JSON.parse(JSON.stringify(originalData))
-    console.log('Changes cancelled and form has been reset.')
+    //console.log('Changes cancelled and form has been reset.')
   }
   const avatar_input = ref(null)
   const uploaded_avatar = ref(null)

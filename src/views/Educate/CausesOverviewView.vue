@@ -56,7 +56,7 @@
     inTransition.value = false
   }
   const handleSlideChange = (swiper) => {
-    // console.log('Active index:', swiper.activeIndex)
+    //console.log('Active index:', swiper.activeIndex)
   }
   const text_appear = ref(null)
   const text_out = ref(null)
@@ -84,7 +84,6 @@
       window.scrollTo({
         top: 0,
       })
-
     }
     anime_start.value = true
     nextTick(() => {

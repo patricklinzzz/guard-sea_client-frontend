@@ -67,9 +67,9 @@ export const useEventStore = defineStore('event', () => {
       const processedEvents = processEventData(response.data.data)
 
       allEvents.value = processedEvents
-      console.log('API 回傳資料:', response.data)
+      //console.log('API 回傳資料:', response.data)
     } catch (err) {
-      console.error('活動資料載入失敗', err)
+      //console.error('活動資料載入失敗', err)
       error.value = '資料載入失敗，請稍後再試'
       allEvents.value = []
     } finally {
@@ -99,7 +99,7 @@ export const useEventStore = defineStore('event', () => {
         return eventData
       }
     } catch (err) {
-      console.error(`活動 ID ${id} 資料載入失敗`, err)
+      //console.error(`活動 ID ${id} 資料載入失敗`, err)
       error.value = '資料載入失敗，請稍後再試'
     } finally {
       loading.value = false

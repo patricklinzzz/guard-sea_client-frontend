@@ -357,7 +357,7 @@
           text: '登入失敗，請檢查前端設定。',
         })
       }
-      console.error('登入失敗:', error)
+      //console.error('登入失敗:', error)
     }
   }
 
@@ -435,7 +435,7 @@
           text: '登入失敗，請檢查前端設定。',
         })
       }
-      console.error('註冊失敗:', error)
+      //console.error('註冊失敗:', error)
     }
   }
 
@@ -444,7 +444,7 @@
       emailError.value = '請輸入電子郵件'
       return
     }
-    console.log('Password reset requested for:', email.value)
+    //console.log('Password reset requested for:', email.value)
     Swal.fire({
       icon: 'success',
       title: '密碼重設信已寄出（此為展示訊息）',

@@ -13,7 +13,7 @@ export const useCartStore = defineStore('cart', () => {
 
   const loadCartFromStorage = () => {
     const storedCart = localStorage.getItem('cart_items')
-    console.log('storedCart', storedCart)
+    //console.log('storedCart', storedCart)
     if (storedCart) {
       try {
         items.value = JSON.parse(storedCart)
@@ -39,7 +39,7 @@ export const useCartStore = defineStore('cart', () => {
         localStorage.removeItem('cart_items')
       }
     } catch (error) {
-      console.error('從後端獲取購物車失敗:', error)
+      //console.error('從後端獲取購物車失敗:', error)
     }
   }
 
@@ -59,10 +59,10 @@ export const useCartStore = defineStore('cart', () => {
       if (response.status === 200) {
         localStorage.removeItem('cart_items')
         await fetchCartItemsFromBackend()
-        console.log('購物車已與會員資料同步！')
+        //console.log('購物車已與會員資料同步！')
       }
     } catch (error) {
-      console.error('購物車同步失敗:', error)
+      //console.error('購物車同步失敗:', error)
     }
   }
 
@@ -81,7 +81,7 @@ export const useCartStore = defineStore('cart', () => {
     saveCartToStorage()
 
     if (authStore.isLoggedIn) {
-      console.log('123')
+      //console.log('123')
       try {
         await axios.post(
           `${CART_API_URL}/post_cart.php`,
@@ -95,7 +95,7 @@ export const useCartStore = defineStore('cart', () => {
         )
         await fetchCartItemsFromBackend()
       } catch (error) {
-        console.error('新增商品到後端購物車失敗:', error)
+        //console.error('新增商品到後端購物車失敗:', error)
       }
     }
   }
@@ -115,14 +115,14 @@ export const useCartStore = defineStore('cart', () => {
         )
         items.value.splice(index, 1)
         saveCartToStorage()
-        console.log('商品已成功從購物車中移除')
+        //console.log('商品已成功從購物車中移除')
       } catch (error) {
-        console.error('從後端移除購物車項目失敗:', error)
+        //console.error('從後端移除購物車項目失敗:', error)
       }
     } else {
       items.value.splice(index, 1)
       saveCartToStorage()
-      console.log('商品已成功從購物車中移除')
+      //console.log('商品已成功從購物車中移除')
     }
   }
 
@@ -143,10 +143,10 @@ export const useCartStore = defineStore('cart', () => {
           )
           await fetchCartItemsFromBackend()
         } catch (error) {
-          console.error('更新購物車項目數量失敗:', error)
+          //console.error('更新購物車項目數量失敗:', error)
         }
       } else {
-        console.log('fail')
+        //console.log('fail')
         item.quantity = newQuantity
         saveCartToStorage()
       }
@@ -162,7 +162,7 @@ export const useCartStore = defineStore('cart', () => {
         finalOrder.value = null
         localStorage.removeItem('cart_items')
       } catch (error) {
-        console.error('清空購物車失敗:', error)
+        //console.error('清空購物車失敗:', error)
       }
     } else {
       items.value = []
@@ -187,7 +187,7 @@ export const useCartStore = defineStore('cart', () => {
       }
       return response.data
     } catch (error) {
-      console.error('建立訂單失敗:', error)
+      //console.error('建立訂單失敗:', error)
       return { success: false, error: error.response?.data?.error || '建立訂單失敗' }
     }
   }

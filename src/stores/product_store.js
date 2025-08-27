@@ -43,7 +43,7 @@ export const useProductStore = defineStore('product', () => {
       products.value = response.data.map(transformProductData)
     } catch (err) {
       error.value = err.response?.data?.error || err.message || '獲取商品資料失敗'
-      console.error('獲取商品資料失敗:', err.response?.data || err)
+      //console.error('獲取商品資料失敗:', err.response?.data || err)
     } finally {
       isLoading.value = false
     }

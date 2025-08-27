@@ -38,7 +38,7 @@ export const useAuthStore = defineStore('auth', () => {
         return true
       }
     } catch (error) {
-      console.error('獲取會員資料失敗:', error)
+      //console.error('獲取會員資料失敗:', error)
       memberData.value = null
       return false
     }
@@ -55,13 +55,13 @@ export const useAuthStore = defineStore('auth', () => {
 
       if (response.data.success) {
         user.value = null
-        memberData.value = null 
+        memberData.value = null
         return true
       } else {
         throw new Error('登出失敗')
       }
     } catch (error) {
-      console.error(error.message)
+      //console.error(error.message)
       return false
     }
   }

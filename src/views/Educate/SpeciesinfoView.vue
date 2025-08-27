@@ -18,7 +18,7 @@
     () => route.params.id,
     (newId) => {
       animal.value = speciesData.find((item) => item.id === Number(newId))
-      console.log('切換動物 id:', newId)
+      //console.log('切換動物 id:', newId)
     }
   )
   const shuffledSpecies = speciesData

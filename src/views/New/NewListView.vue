@@ -94,7 +94,7 @@
 
   //     //以下是真正串api要寫的 結束
   //   } catch (err) {
-  //     console.error('讀取失敗', err)
+  //     //console.error('讀取失敗', err)
   //     errorMsg.value = '資料載入失敗，請稍後再試'
   //   } finally {
   //     loading.value = false

@@ -12,10 +12,10 @@ function transformCouponData(coupon) {
     ...coupon,
     id: Number(coupon.id),
     coupon_id: Number(coupon.id),
-    coupon_code: coupon.code, 
+    coupon_code: coupon.code,
     min_order_amount: Number(coupon.min_order_amount),
     value: Number(coupon.value),
-    valid_days: 0, 
+    valid_days: 0,
     expiration_date: coupon.validityPeriod,
   }
 }
@@ -33,7 +33,7 @@ export const useCouponStore = defineStore('coupon', () => {
   const formattedAvailableCoupons = computed(() => {
     if (!coupons.value) return []
     return coupons.value
-      .filter((c) => c.status === '1') 
+      .filter((c) => c.status === '1')
       .map((coupon) => {
         const validityPeriod = coupon.expiration_date
           ? `使用期限: ${coupon.expiration_date}`
@@ -63,7 +63,7 @@ export const useCouponStore = defineStore('coupon', () => {
       coupons.value = response.data.coupons.map(transformCouponData)
     } catch (err) {
       error.value = err.response?.data?.error || err.message || '獲取優惠券失敗'
-      console.error('獲取優惠券失敗:', err)
+      //console.error('獲取優惠券失敗:', err)
     } finally {
       isLoading.value = false
     }
@@ -92,7 +92,7 @@ export const useCouponStore = defineStore('coupon', () => {
       }
     } catch (err) {
       appliedCoupon.value = { coupon_id: null, coupon_code: null, discount_amount: 0 }
-      console.error('優惠券驗證失敗:', err)
+      //console.error('優惠券驗證失敗:', err)
       return { success: false, error: err.response?.data?.error || '優惠券驗證失敗' }
     }
   }
@@ -109,12 +109,12 @@ export const useCouponStore = defineStore('coupon', () => {
       if (response.status === 200) {
         const coupon = coupons.value.find((c) => c.coupon_id === couponId)
         if (coupon) {
-          coupon.status = '0' 
+          coupon.status = '0'
         }
         return true
       }
     } catch (err) {
-      console.error('標記優惠券為已使用失敗:', err)
+      //console.error('標記優惠券為已使用失敗:', err)
       return false
     }
   }

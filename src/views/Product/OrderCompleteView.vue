@@ -34,10 +34,10 @@
         order.value = response.data.order
       } else {
         hasError.value = true
-        console.error('API 回傳資料格式錯誤')
+        //console.error('API 回傳資料格式錯誤')
       }
     } catch (error) {
-      console.error('獲取訂單資料失敗:', error)
+      //console.error('獲取訂單資料失敗:', error)
       hasError.value = true
       if (error.response && error.response.status === 404) {
         router.replace('/')

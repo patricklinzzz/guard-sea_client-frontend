@@ -117,7 +117,7 @@
         })
       }
     } catch (error) {
-      console.error('訂單提交失敗:', error)
+      //console.error('訂單提交失敗:', error)
       Swal.fire({
         icon: 'error',
         title: '訂單提交失敗，請稍後再試。',
@@ -135,7 +135,7 @@
     try {
       await authStore.fetchMemberData()
     } catch (error) {
-      console.error('載入會員資料失敗：', error)
+      //console.error('載入會員資料失敗：', error)
     }
   })
 

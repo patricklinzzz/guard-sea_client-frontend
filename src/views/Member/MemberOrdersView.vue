@@ -131,13 +131,13 @@
     error.value = null
     try {
       const response = await axios.get(apiUrl)
-      console.log('API 回傳的原始 response.data:', response.data)
+      //console.log('API 回傳的原始 response.data:', response.data)
       allOrders.value = response.data.map((order) => ({
         ...order,
         isExpanded: false,
       }))
     } catch (err) {
-      console.error('無法獲取訂單資料:', err)
+      //console.error('無法獲取訂單資料:', err)
       error.value = '讀取訂單失敗，請稍後再試或聯繫客服。'
     } finally {
       isLoading.value = false

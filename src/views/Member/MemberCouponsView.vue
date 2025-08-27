@@ -9,17 +9,17 @@
   const itemsPerPage = ref(5)
   const baseUrl = import.meta.env.VITE_API_BASE
   const allCoupons = ref([])
-  const fetch_coupon = async() => {
+  const fetch_coupon = async () => {
     try {
       const api = `${baseUrl}/coupon/member_coupon_front.php`
 
       const r = await axios.get(api)
       allCoupons.value = r.data.map((coupon) => ({
         ...coupon,
-        validityPeriod: `使用期限: ${coupon.validityPeriod ? coupon.validityPeriod : '沒有限制'}`
+        validityPeriod: `使用期限: ${coupon.validityPeriod ? coupon.validityPeriod : '沒有限制'}`,
       }))
     } catch (err) {
-      console.error('Fetch 錯誤：', err)
+      //console.error('Fetch 錯誤：', err)
     }
   }
 
