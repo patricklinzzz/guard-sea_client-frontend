@@ -15,7 +15,16 @@ const itemsPerPage = ref(3)
 
 // API URL
 const apiUrl = `${import.meta.env.VITE_API_BASE}/members/get_member_events.php`
-const api = `${import.meta.env.VITE_API_BASE}/events/get_event.php?activity_id=${authStore.activity_id}`
+
+// 基底圖片網址處理
+const baseImageUrl = import.meta.env.VITE_API_BASE || ''
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return ''
+  if (imagePath.startsWith('http')) {
+    return imagePath
+  }
+  return `${baseImageUrl}${imagePath}`
+}
 
 // 取活動資料
 const fetchEvents = async () => {
@@ -32,7 +41,7 @@ const fetchEvents = async () => {
       image: event.image,
       date: event.date,      // 活動日期合併
       location: event.location,
-      status: event.status     // 已報名 / 已完成
+      status: event.status   // 已報名 / 已完成
     }))
   } catch (err) {
     console.error('無法獲取活動資料:', err)
@@ -97,7 +106,7 @@ watch(selectedFilter, () => {
         <div class="event_card" v-for="event in paginatedEvents" :key="event.id">
           <router-link :to="{ name: 'EventDetail', params: { id: event.activity_id } }" class="event_card_link">
             <div class="event_pic">
-              <img :src="event.image" :alt="event.name" class="event_image" />
+              <img :src="getImageUrl(event.image)" :alt="event.name" class="event_image" />
             </div>
           </router-link>
 
