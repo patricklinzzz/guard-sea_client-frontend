@@ -53,6 +53,10 @@
     Swal.fire({
       icon: 'success',
       title: '會員資料已儲存',
+      scrollbarPadding: false,
+      didOpen: () => {
+        document.body.style.overflow = 'auto'
+      },
     })
   }
 

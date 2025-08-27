@@ -142,8 +142,12 @@
       console.log(pass_grade.value)
     } else {
       Swal.fire({
-        icon: 'info',
-        title: 'pick a topic',
+        icon: 'warning',
+        title: '選擇測驗!',
+        scrollbarPadding: false,
+        didOpen: () => {
+          document.body.style.overflow = 'auto'
+        },
       })
     }
   }
@@ -197,10 +201,16 @@
       if (!(await check_login())) {
         quizStore.log_in_prompted = true
         Swal.fire({
-          icon: 'info',
-          title: '登入領取優惠卷',
+          icon: 'warning',
+          title: '登入領取優惠卷!',
+          scrollbarPadding: false,
+          didOpen: () => {
+            document.body.style.overflow = 'auto'
+          },
+        }).then((result) => {
+          router.push({ path: '/login' })
         })
-        router.push({ path: '/login' })
+
         return
       } else {
         quizStore.log_in_prompted = false

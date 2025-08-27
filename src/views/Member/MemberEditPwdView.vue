@@ -17,6 +17,10 @@
       Swal.fire({
         icon: 'error',
         title: '請填寫所有欄位！',
+        scrollbarPadding: false,
+        didOpen: () => {
+          document.body.style.overflow = 'auto'
+        },
       })
       return
     }
@@ -24,6 +28,10 @@
       Swal.fire({
         icon: 'error',
         title: '新密碼與確認密碼不相符！',
+        scrollbarPadding: false,
+        didOpen: () => {
+          document.body.style.overflow = 'auto'
+        },
       })
       return
     }
@@ -31,6 +39,10 @@
       Swal.fire({
         icon: 'error',
         title: '密碼長度不能少於6個字元',
+        scrollbarPadding: false,
+        didOpen: () => {
+          document.body.style.overflow = 'auto'
+        },
       })
       return
     }
@@ -45,6 +57,10 @@
       Swal.fire({
         icon: 'error',
         title: '修改失敗！',
+        scrollbarPadding: false,
+        didOpen: () => {
+          document.body.style.overflow = 'auto'
+        },
       })
     }
   }
