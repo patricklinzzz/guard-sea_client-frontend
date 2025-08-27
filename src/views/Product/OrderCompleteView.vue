@@ -94,15 +94,15 @@
             </li>
             <li>
               <h3>付款方式:</h3>
+              <span>{{ paymentMethodsMap[order.payment_method] || order.payment_method }}</span>
+            </li>
+            <li>
+              <h3>付款狀態:</h3>
               {{
                 order.payment_method === 'credit_card' || order.payment_method === 'linepay'
                   ? '已付款'
                   : '未付款'
               }}
-            </li>
-            <li>
-              <h3>付款狀態:</h3>
-              <span class="payment-status">{{ order.payment_status }}</span>
             </li>
             <li class="total">
               <h3>商品總計:</h3>
